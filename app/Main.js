@@ -1,27 +1,39 @@
 import React from "react";
-import ReactDoM from "react-dom/client";
+import ReactDOM from "react-dom/client";
+import DispatchContext from "./DispatchContext";
+
 
 function MainComponent() {
 
     return (
-        <>
-            {/*  header */}
+        <DispatchContext.Provider value={dispatch}>
+            
             <header>
-                {/* logo */}
-                <img src="./logo.webp"/>
+                <img src="logo.webp"/>
                 {/* logged in ? button */}
                 <button>
-                    {/* profile icon, username, dropdown arrow */}
-                    <img src="./profile.png" />
-                    <h1>username</h1>
+                    <img src="profile.png" />
+                    <h1>username &#9660;</h1>
                 </button>
-                    {/* edit profile overlay */}
-                        {/* edit profile form */}
+                {/* profile drop down modal*/}
+                <div>
+                    {/* edit profile */}
+                    <div>
+                        <img src="edit.png"/>
+                        <h3>edit profile</h3>
+                    </div>
+                    {/* logout */}
+                    <div>
+                        <img src="logout.png"/>
+                        <h3>log out</h3>
+                    </div>
+                </div>
             </header>
             {/* main body */}
             <div>
                 {/* log in ?  */}
                     {/* log in form */}
+
                 {/* logged in ? */}
                     {/* left side bar */}
                         {/* sidebar nav */}
@@ -41,9 +53,13 @@ function MainComponent() {
             </div>
             {/* footer */}
             <footer></footer>
-        </>
+        </DispatchContext>
     )
 }
 
 const root = ReactDOM.createRoot(document.querySelector("#app"))
 root.render(<MainComponent />)
+
+if (module.hot) {
+    module.hot.accept()
+}
