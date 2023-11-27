@@ -1,7 +1,7 @@
 import React from "react"
 
-function HeaderLoggedOut() {
+function Profile() {
   return <Container></Container>
 }
 
-export default HeaderLoggedOut
+export default Profile

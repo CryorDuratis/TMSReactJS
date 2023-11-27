@@ -1,5 +1,5 @@
-import React from "react"
+import { createContext } from "react"
 
-function StateContext() {}
+const StateContext = createContext()
 
 export default StateContext
