@@ -17,6 +17,9 @@ import Login from "./components/Login"
 import Dashboard from "./components/Dashboard"
 import AppList from "./components/AppList"
 import UserList from "./components/UserList"
+import UnAuth from "./components/UnAuth"
+import NotFound from "./components/ErrorPage"
+import ErrorPage from "./components/ErrorPage"
 
 function MainComponent() {
   const initialState = {
@@ -92,8 +95,9 @@ function MainComponent() {
                 )
               }
             />
-            <Route path="/logout" element={<Login />} />
-            <Route element={<NotFound />} />
+            <Route path="/logout" component={Login} />
+            <Route path="/error" component={ErrorPage} />
+            <Route component={ErrorPage} />
           </Routes>
           {/* footer */}
           <footer></footer>
