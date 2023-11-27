@@ -1,10 +1,9 @@
 // import node modules
 import React, { useEffect } from "react"
 import ReactDOM from "react-dom/client"
-import Cookies from "js-cookie"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useImmerReducer } from "use-immer"
-import { Axios } from "axios"
+import Axios from "axios"
 
 Axios.defaults.baseURL = "http://localhost:3000"
 
@@ -17,17 +16,20 @@ import Login from "./components/Login"
 import Dashboard from "./components/Dashboard"
 import AppList from "./components/AppList"
 import UserList from "./components/UserList"
-import UnAuth from "./components/UnAuth"
-import NotFound from "./components/ErrorPage"
 import ErrorPage from "./components/ErrorPage"
+import Footer from "./components/Footer"
+import Toast from "./components/Toast"
 
 function MainComponent() {
   const initialState = {
-    loggedIn: Boolean(state.user.token),
+    loggedIn: Boolean(localStorage.getItem("kanbanToken")),
     toasts: [],
     user: {
-      token: Cookies.get("token")
-    }
+      token: localStorage.getItem("kanbanToken"),
+      username: localStorage.getItem("kanbanUsername"),
+      email: localStorage.getItem("kanbanEmail"),
+      groups: localStorage.getItem("kanbanGroups"),
+    },
   }
 
   function reducer(draft, action) {
@@ -62,7 +64,7 @@ function MainComponent() {
             <Route
               path="/login"
               element={
-                loggedIn ? (
+                state.loggedIn ? (
                   <Dashboard>
                     <AppList />
                   </Dashboard>
@@ -74,7 +76,7 @@ function MainComponent() {
             <Route
               path="/"
               element={
-                loggedIn ? (
+                state.loggedIn ? (
                   <Dashboard>
                     <AppList />
                   </Dashboard>
@@ -86,7 +88,7 @@ function MainComponent() {
             <Route
               path="/admin"
               element={
-                loggedIn ? (
+                state.loggedIn ? (
                   <Dashboard>
                     <UserList />
                   </Dashboard>
@@ -99,8 +101,7 @@ function MainComponent() {
             <Route path="/error" component={ErrorPage} />
             <Route component={ErrorPage} />
           </Routes>
-          {/* footer */}
-          <footer></footer>
+          <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
     </StateContext.Provider>

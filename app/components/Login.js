@@ -1,7 +1,7 @@
 // import node modules
 import React, { useContext, useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { Axios } from "axios"
+import Axios from "axios"
 
 // import components
 import Page from "./Page"
@@ -35,13 +35,20 @@ function Login() {
 
   function renderComponent() {
     if (pathname === "/logout") {
+      // appDispatch()
     } else if (pathname !== "/login") {
     }
   }
   return (
     <Page>
       <Container>
-        <form action=""></form>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username">Username: </label>
+          <input type="text" name="username" onChange={(e) => setUsername(e.target.value)} />
+          <label htmlFor="password">Password: </label>
+          <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
+          <button>Log in</button>
+        </form>
       </Container>
     </Page>
   )

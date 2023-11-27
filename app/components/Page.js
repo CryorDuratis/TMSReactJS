@@ -1,7 +1,11 @@
+// import node modules
 import React from "react"
 
-function Page() {
-  return <Container></Container>
+// import components
+import Container from "./Container"
+
+function Page(props) {
+  return <Container>{props.children}</Container>
 }
 
 export default Page

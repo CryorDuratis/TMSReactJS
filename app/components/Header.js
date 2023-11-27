@@ -1,5 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import Container from "./Container"
+import HeaderLoggedIn from "./HeaderLoggedIn"
 
 function Header() {
   return (
