@@ -5,9 +5,10 @@ import HeaderLoggedIn from "./HeaderLoggedIn"
 
 function Header() {
   return (
-    <Container>
-      <Link to="/">
-        <img src="logo.webp" />
+    <Container class={"header-bar padding-sm header-bar-colour"} height={"3rem"} width={"100vw"}>
+      <Link to="/" className="logo">
+        {/* <img src="logo.png" /> */}
+        KANBAN
       </Link>
       <HeaderLoggedIn />
     </Container>

@@ -20,7 +20,7 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      const response = await Axios.post("/login", { username, password })
+      const response = await Axios.post("/admin", { username, password })
       appDispatch({ type: "toast", value: response.message })
       if (response.data) {
         useNavigate("/")
@@ -44,9 +44,9 @@ function Login() {
       <Container>
         <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username: </label>
-          <input type="text" name="username" onChange={(e) => setUsername(e.target.value)} />
+          <input type="text" name="username" onChange={e => setUsername(e.target.value)} />
           <label htmlFor="password">Password: </label>
-          <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" name="password" onChange={e => setPassword(e.target.value)} />
           <button>Log in</button>
         </form>
       </Container>

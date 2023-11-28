@@ -3,11 +3,14 @@ import React from "react"
 
 function Container(props) {
   const styled = {
-    width: props.width || "",
     height: props.height || "",
+    width: props.width || ""
   }
-
-  return <div style={styled}>{props.children}</div>
+  return (
+    <div className={props.class} style={styled}>
+      {props.children}
+    </div>
+  )
 }
 
 export default Container
