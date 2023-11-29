@@ -2,7 +2,7 @@ import React from "react"
 import Container from "./Container"
 
 function Footer() {
-  return <Container>Copyright &copy; {new Date().getFullYear()}</Container>
+  return <Container class="footer center-children bgclr-accent">Copyright &copy; {new Date().getFullYear()}</Container>
 }
 
 export default Footer

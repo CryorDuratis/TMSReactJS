@@ -1,8 +1,20 @@
 /* background colour */
-.header-bar-colour {
+.bgclr-accent {
   background-color: #2b7a78;
+  /* background-color: #787878; */
 }
-
+.bgclr-base {
+  background-color: #3aafa9;
+  /* background-color: #b2b2b2; */
+}
+.bgclr-light2 {
+  background-color: #def2f1;
+  /* background-color: #eeeeee; */
+}
+.bgclr-light1 {
+  background-color: #feffff;
+  /* background-color: #ffffff; */
+}
 .bgclr-n {
   background-color: transparent;
 }
@@ -11,10 +23,10 @@
 .colr-dark {
   color: #17252a;
 }
-.colr-light {
+.colr-light1 {
   color: #feffff;
 }
-.colr-light-50 {
+.colr-light2 {
   color: #def2f1;
 }
 

@@ -5,7 +5,7 @@ import React from "react"
 import Container from "./Container"
 
 function Page(props) {
-  return <Container>{props.children}</Container>
+  return <Container class={props.class}>{props.children}</Container>
 }
 
 export default Page

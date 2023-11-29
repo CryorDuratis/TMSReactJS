@@ -39,15 +39,20 @@ function Login() {
     } else if (pathname !== "/login") {
     }
   }
+
   return (
-    <Page>
-      <Container>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username: </label>
-          <input type="text" name="username" onChange={e => setUsername(e.target.value)} />
-          <label htmlFor="password">Password: </label>
-          <input type="password" name="password" onChange={e => setPassword(e.target.value)} />
-          <button>Log in</button>
+    <Page class="body-content center-children">
+      <Container class="card bgclr-light2">
+        <form onSubmit={handleSubmit} className="form-container">
+          <h1>Log In</h1>
+          <div className="form-group">
+            <label htmlFor="username">Username: </label>
+            <input type="text" name="username" onChange={(e) => setUsername(e.target.value)} />
+            <label htmlFor="password">Password: </label>
+            <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <br />
+          <button className="submit-btn">Log in</button>
         </form>
       </Container>
     </Page>
