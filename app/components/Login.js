@@ -51,7 +51,6 @@ function Login() {
             <label htmlFor="password">Password: </label>
             <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <br />
           <button className="submit-btn">Log in</button>
         </form>
       </Container>

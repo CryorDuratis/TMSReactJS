@@ -91,6 +91,7 @@ button:hover {
 .form-container {
   display: flex;
   flex-direction: column;
+  margin-bottom: 40px;
 }
 .form-group {
   display: grid;
@@ -217,7 +218,7 @@ textarea.tall-textarea {
   /* background-color: rgba(0, 0, 0, .79); */
 /* } */
 
-.search-overlay-top .container {
+/* .search-overlay-top .container {
   position: relative;
   display: flex;
   align-items: center;
