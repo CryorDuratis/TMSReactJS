@@ -1,77 +1,66 @@
 :root {
-  --parent-padding-l: 3rem;
-  --parent-padding-m: 2rem;
-  --parent-padding-s: 1rem;
-}
-
-a,
-a:visited,
-a:hover,
-a:active {
-  text-decoration: none;
-  color: inherit;
+  --parent-padding-l: 30px;
+  --parent-padding-m: 20px;
+  --parent-padding-s: 10px;
 }
 
 /* margin and padding */
-.body-content p,
+/* .body-content p,
 .body-content ul,
 .body-content ol {
   margin-bottom: 1.75rem;
-}
+} */
 
 .padding-sm {
   padding: var(--parent-padding-s);
 }
 
-.custom-tooltip {
+/* .custom-tooltip {
   padding: 8px 10px !important;
-}
+} */
 
 /* border and shadow */
+.border-n {
+  border: none;
+}
 
-/* @media (min-width: 768px) {
-  .input-dark {
-    width: auto;
-  }
-} */
+/* button styles */
+button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+}
+button:hover {
+  cursor: pointer;
+}
+
+.transp-btn {
+  height: 3rem;
+  background: none;
+}
+.transp-btn:hover {
+  outline: 1px solid #17252a;
+}
 
 /* header bar */
 .header-bar {
   box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
   justify-content: space-between;
+  grid-column-gap: 10px;
 }
-.header-bar button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  max-height: 100%;
-  height: 6rem;
-}
-.header-bar img {
-  display: block;
-  max-height: 100%;
-  height: auto;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-height: 100%;
-  padding: 1rem;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  font-size: 2rem;
-  border: 3px solid #292929;
-}
+
 /* body content - left nav */
 
 /* body content - left nav list */
 
 /* body content - board */
-.container--narrow {
-  max-width: 732px;
-}
 
 /* body content - card list */
 
@@ -134,15 +123,6 @@ textarea.tall-textarea {
   textarea.tall-textarea {
     height: 320px;
   }
-}
-
-/* button styles */
-.delete-post-button {
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
 }
 
 /* footer bar */

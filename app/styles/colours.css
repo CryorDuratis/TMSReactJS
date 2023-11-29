@@ -1,5 +1,21 @@
+/* background colour */
 .header-bar-colour {
-  background-color: #2969a8;
+  background-color: #2b7a78;
+}
+
+.bgclr-n {
+  background-color: transparent;
+}
+
+/* text colour */
+.colr-dark {
+  color: #17252a;
+}
+.colr-light {
+  color: #feffff;
+}
+.colr-light-50 {
+  color: #def2f1;
 }
 
 .input-dark {
