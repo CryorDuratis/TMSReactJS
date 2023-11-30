@@ -1,0 +1,130 @@
+/* remove default link styles */
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* image styles */
+img {
+  max-height: 100%;
+  margin-left: 5px;
+}
+
+.logo {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 4px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 24px;
+  border: 3px solid #292929;
+}
+
+.avatar {
+  max-height: 70%;
+  margin-right: 10px;
+}
+
+.icon {
+  height: 1rem;
+  margin-right: 5px;
+}
+
+/* body content - board */
+
+/* body content - bar */
+
+/* body content - card */
+.card {
+  padding: 50px;
+  width: max-content;
+  border-radius: 10px;
+  text-align: center;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+.form-group {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 10px;
+  text-align: end;
+  row-gap: 24px;
+  margin: 32px;
+}
+
+.center-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* body content - form input */
+.form-group input,
+.form-group textarea {
+  position: relative;
+  z-index: 2;
+}
+
+/* body content - form textarea */
+textarea.tall-textarea {
+  height: 160px;
+}
+
+@media (min-width: 768px) {
+  textarea.tall-textarea {
+    height: 320px;
+  }
+}
+
+/* button styles */
+button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+}
+button:hover {
+  cursor: pointer;
+}
+
+/* background colour */
+.bgclr-accent {
+  background-color: #2b7a78;
+  /* background-color: #787878; */
+}
+.bgclr-base {
+  background-color: #3aafa9;
+  /* background-color: #b2b2b2; */
+}
+.bgclr-light2 {
+  background-color: #def2f1;
+  /* background-color: #eeeeee; */
+}
+.bgclr-light1 {
+  background-color: #feffff;
+  /* background-color: #ffffff; */
+}
+.bgclr-n {
+  background-color: transparent;
+}
+
+/* text colour */
+.colr-dark {
+  color: #17252a;
+}
+.colr-light1 {
+  color: #feffff;
+}
+.colr-light2 {
+  color: #def2f1;
+}

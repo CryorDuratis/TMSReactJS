@@ -47,11 +47,11 @@ function Login() {
           <h1>Log In</h1>
           <div className="form-group">
             <label htmlFor="username">Username: </label>
-            <input type="text" name="username" onChange={(e) => setUsername(e.target.value)} />
+            <input type="text" name="username" onChange={e => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>
-            <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" name="password" onChange={e => setPassword(e.target.value)} />
           </div>
-          <button className="submit-btn">Log in</button>
+          <button className="login-btn">Log in</button>
         </form>
       </Container>
     </Page>
