@@ -13,6 +13,7 @@ function Login() {
   const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
 
+  // state of form input fields
   const [username, setUsername] = useState()
   const [password, setPassword] = useState()
 
@@ -20,11 +21,19 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      const response = await Axios.post("/admin", { username, password })
-      appDispatch({ type: "toast", value: response.message })
-      if (response.data) {
-        useNavigate("/")
+      // validate password
+
+      // send request
+      const response = await Axios.post("/login/check", { username, password })
+
+      // update state
+      if (!response.loggedin) {
+        appDispatch({
+          type: "logout"
+        })
       }
+
+      appDispatch({ type: "toast", value: response.message })
     } catch (e) {
       console.log("There was a problem")
     }

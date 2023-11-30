@@ -1,7 +1,7 @@
 // import node modules
 import React, { useEffect } from "react"
 import ReactDOM from "react-dom/client"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 import { useImmerReducer } from "use-immer"
 import Axios from "axios"
 
@@ -21,37 +21,71 @@ import Footer from "./components/Footer"
 import Toast from "./components/Toast"
 
 function MainComponent() {
+  // immerReducer enables state to be accessed throughout app
+  // initial state is empty
   const initialState = {
-    loggedIn: !Boolean(localStorage.getItem("kanbanToken")),
+    loggedIn: false,
     toasts: [],
-    user: {
-      token: localStorage.getItem("kanbanToken"),
-      username: localStorage.getItem("kanbanUsername"),
-      email: localStorage.getItem("kanbanEmail"),
-      groups: localStorage.getItem("kanbanGroups")
-    }
+    username: "",
+    usergroups: [],
+    redirect: ""
   }
 
   function reducer(draft, action) {
     switch (action.type) {
       case "login":
         draft.loggedIn = true
+        draft.username = action.username
+        draft.usergroups = action.usergroups
         return
       case "logout":
         draft.loggedIn = false
+        draft.username = ""
+        draft.usergroups = []
+        return
+      case "setrdt":
+        draft.redirect = action.url
+        return
+      case "clearrdt":
+        draft.redirect = ""
         return
       case "toast":
-        draft.toasts.push(action.value)
+        draft.toasts.push(action.message)
         return
     }
   }
 
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
-  useEffect(() => {
-    if (state.loggedIn) {
+  // used to set initial login state on page load from browser URL bar
+  useEffect(async () => {
+    try {
+      const { pathname } = useLocation()
+      const response = await Axios.post("/login")
+      if (!response.loggedin && pathname !== "/login") {
+        appDispatch({
+          type: "toast",
+          message: "Please log in first",
+          url: pathname
+        })
+      }
+      if (response.loggedin && pathname === "/login") {
+        appDispatch({
+          type: "toast",
+          message: "Logged in"
+        })
+      }
+      if (response.loggedin) {
+        appDispatch({
+          type: "login",
+          username: response.username,
+          usergroups: response.usergroups
+        })
+      }
+    } catch (e) {
+      console.log("There was a problem")
     }
-  }, [state.loggedIn])
+  }, [])
 
   return (
     <StateContext.Provider value={state}>
@@ -62,7 +96,7 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route
-              path="/login"
+              path={["/login", "/"]}
               element={
                 state.loggedIn ? (
                   <Dashboard>
@@ -74,19 +108,7 @@ function MainComponent() {
               }
             />
             <Route
-              path="/"
-              element={
-                state.loggedIn ? (
-                  <Dashboard>
-                    <AppList />
-                  </Dashboard>
-                ) : (
-                  <Login />
-                )
-              }
-            />
-            <Route
-              path="/admin"
+              path="/usermgmt"
               element={
                 state.loggedIn ? (
                   <Dashboard>
