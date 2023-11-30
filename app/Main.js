@@ -22,14 +22,14 @@ import Toast from "./components/Toast"
 
 function MainComponent() {
   const initialState = {
-    loggedIn: Boolean(localStorage.getItem("kanbanToken")),
+    loggedIn: !Boolean(localStorage.getItem("kanbanToken")),
     toasts: [],
     user: {
       token: localStorage.getItem("kanbanToken"),
       username: localStorage.getItem("kanbanUsername"),
       email: localStorage.getItem("kanbanEmail"),
-      groups: localStorage.getItem("kanbanGroups"),
-    },
+      groups: localStorage.getItem("kanbanGroups")
+    }
   }
 
   function reducer(draft, action) {

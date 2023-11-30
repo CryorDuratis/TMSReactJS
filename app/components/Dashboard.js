@@ -2,10 +2,16 @@
 import React from "react"
 
 // import components
-import Container from "./Container"
+import Page from "./Page"
+import Sidebar from "./Sidebar"
 
-function Dashboard() {
-  return <Container>{props.children}</Container>
+function Dashboard(props) {
+  return (
+    <Page>
+      <Sidebar />
+      {props.children}
+    </Page>
+  )
 }
 
 export default Dashboard

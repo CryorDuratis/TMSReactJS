@@ -41,7 +41,7 @@ function Login() {
   }
 
   return (
-    <Page class="body-content center-children">
+    <Page class="center-children">
       <Container class="card bgclr-light2">
         <form onSubmit={handleSubmit} className="form-container">
           <h1>Log In</h1>

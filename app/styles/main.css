@@ -1,9 +1,10 @@
 /* overall */
 body {
-  font-family: "Public Sans", sans-serif;
+  min-width: 500px;
   margin: 0;
   padding: 0;
   background-color: #3aafa9;
+  font-family: "Public Sans", sans-serif;
   /* background-color: #b2b2b2; */
 }
 #app {
@@ -38,7 +39,7 @@ body {
   outline: 1px solid #17252a;
 }
 
-/* body content */
+/* body content container*/
 .body-content {
   display: flex;
   flex-direction: row;
@@ -55,20 +56,33 @@ body {
 .login-btn:hover {
   background-color: #3aafa9;
 }
-.cancel-btn {
-}
-.promote-btn {
-}
-.demote-btn {
-}
 
 /* body content - left nav */
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  width: 210px;
+  position: relative;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-align: center;
+}
+.protected-links {
+  position: absolute;
+  bottom: 80px;
+  right: 40px;
+  font-weight: bold;
+}
 
 /* body content - left nav list */
+
+/* overlay - right container */
+
+/* app list */
+
+/* user management */
 
 /* footer bar */
 .footer {
   height: 50px;
 }
-
-/* overlay - right container */
