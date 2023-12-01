@@ -32,7 +32,7 @@ function HeaderLoggedIn(props) {
       // else on success
       appDispatch({ type: "logout" })
       appDispatch({ type: "toast", value: "Logged out" })
-      console.log(appState.loggedIn)
+      console.log("after logout: ", appState)
       navigate("/login")
     } catch (e) {
       console.log(e)

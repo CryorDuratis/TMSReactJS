@@ -30,7 +30,7 @@ function Login() {
       }
       // send request -- check login
       var response = await Axios.post("/login/check")
-      console.log(response.data)
+
       // if request fails
       if (response.data.error) {
         appDispatch({ type: "logerror", error: response.data.error })
@@ -39,7 +39,7 @@ function Login() {
       if (!response.data.loggedin) {
         // send request -- login form
         response = await Axios.post("/login", { username, password })
-        console.log(response.data)
+        console.log("login response: ", response.data)
 
         // if request fails
         if (response.data.error) {
@@ -56,9 +56,8 @@ function Login() {
       // else on success
       setError(false)
       appDispatch({ type: "login", username: response.data.username, usergroups: response.data.usergroups })
-      console.log(appDispatch({ type: "login", username: response.data.username, usergroups: response.data.usergroups }))
       appDispatch({ type: "toast", value: "Logged in" })
-      console.log(appState.loggedIn)
+      console.log("after login: ", appState)
       navigate("/")
     } catch (e) {
       console.log(e)
@@ -74,9 +73,9 @@ function Login() {
           {error === "invalid" && <div className="login-error">Invalid login details. Please try again.</div>}
           <div className="form-group">
             <label htmlFor="username">Username: </label>
-            <input className={error && "error-outline"} type="text" placeholder="Username" name="username" onChange={e => setUsername(e.target.value)} />
+            <input className={error && "error-outline"} type="text" placeholder="Username" name="username" onChange={(e) => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>
-            <input className={error && "error-outline"} type="password" placeholder="Password" name="password" onChange={e => setPassword(e.target.value)} />
+            <input className={error && "error-outline"} type="password" placeholder="Password" name="password" onChange={(e) => setPassword(e.target.value)} />
           </div>
           <button className="login-btn">Log in</button>
         </form>
