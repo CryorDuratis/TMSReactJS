@@ -1,6 +1,7 @@
 /* overall */
 body {
   min-width: 500px;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   background-color: #3aafa9;

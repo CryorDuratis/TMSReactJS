@@ -1,11 +1,11 @@
 // import node modules
 import React, { useEffect } from "react"
 import ReactDOM from "react-dom/client"
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import { useImmerReducer } from "use-immer"
 import Axios from "axios"
 
-Axios.defaults.baseURL = "http://localhost:3000"
+Axios.defaults.baseURL = "http://localhost:3001"
 
 import DispatchContext from "./DispatchContext"
 import StateContext from "./StateContext"
@@ -23,16 +23,21 @@ import Toast from "./components/Toast"
 function MainComponent() {
   // immerReducer enables state to be accessed throughout app
   // initial state is empty
+
   const initialState = {
     loggedIn: false,
     toasts: [],
     username: "",
     usergroups: [],
-    redirect: ""
+    redirect: "",
+    error: ""
   }
 
   function reducer(draft, action) {
     switch (action.type) {
+      case "logerror":
+        draft.error = action.error
+        return
       case "login":
         draft.loggedIn = true
         draft.username = action.username
@@ -58,34 +63,35 @@ function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
   // used to set initial login state on page load from browser URL bar
-  useEffect(async () => {
-    try {
-      const { pathname } = useLocation()
-      const response = await Axios.post("/login")
-      if (!response.loggedin && pathname !== "/login") {
-        appDispatch({
-          type: "toast",
-          message: "Please log in first",
-          url: pathname
-        })
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await Axios.post("/login/check")
+        console.log(response.data)
+        console.log(
+          dispatch({
+            type: "logout"
+          })
+        )
+        if (response.data.error) {
+          dispatch({
+            type: "logerror",
+            error: response.data.error
+          })
+        }
+        if (response.data.loggedin) {
+          dispatch({
+            type: "login",
+            username: response.data.username,
+            usergroups: response.data.usergroups
+          })
+        }
+      } catch (e) {
+        console.log(e)
       }
-      if (response.loggedin && pathname === "/login") {
-        appDispatch({
-          type: "toast",
-          message: "Logged in"
-        })
-      }
-      if (response.loggedin) {
-        appDispatch({
-          type: "login",
-          username: response.username,
-          usergroups: response.usergroups
-        })
-      }
-    } catch (e) {
-      console.log("There was a problem")
     }
-  }, [])
+    fetchData()
+  }, [state.error])
 
   return (
     <StateContext.Provider value={state}>
@@ -96,7 +102,7 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route
-              path={["/login", "/"]}
+              path="/"
               element={
                 state.loggedIn ? (
                   <Dashboard>
@@ -107,6 +113,7 @@ function MainComponent() {
                 )
               }
             />
+            <Route path="/login" element={<Login />} />
             <Route
               path="/usermgmt"
               element={
@@ -119,9 +126,9 @@ function MainComponent() {
                 )
               }
             />
-            <Route path="/logout" component={Login} />
-            <Route path="/error" component={ErrorPage} />
-            <Route component={ErrorPage} />
+            <Route path="/logout" element={<Login />} />
+            <Route path="/error" element={<ErrorPage />} />
+            <Route element={<ErrorPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>

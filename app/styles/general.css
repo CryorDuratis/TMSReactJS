@@ -51,8 +51,11 @@ img {
 
 /* body content - card */
 .card {
+  margin: 50px;
   padding: 50px;
-  width: max-content;
+  min-height: max-content;
+  min-width: min-content;
+  width: 20vw;
   border-radius: 10px;
   text-align: center;
 }
@@ -63,11 +66,25 @@ img {
 }
 .form-group {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  column-gap: 10px;
-  text-align: end;
-  row-gap: 24px;
-  margin: 32px;
+  grid-template-rows: repeat(2, auto auto);
+  margin-bottom: 32px;
+  text-align: start;
+}
+.form-group input {
+  font-size: 20px;
+  padding: 10px 5px;
+  margin-bottom: 4px;
+}
+.error-outline {
+  border: 1px solid red;
+}
+.login-error {
+  border: 1px solid rgb(255, 70, 70);
+  background-color: rgba(255, 216, 216, 0.596);
+  color: rgb(255, 70, 70);
+  padding: 4px;
+  margin-bottom: 20px;
+  text-wrap: wrap;
 }
 
 .center-children {
