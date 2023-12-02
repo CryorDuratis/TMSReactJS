@@ -30,7 +30,7 @@ function Login() {
         return
       }
       // send request -- check login
-      appDispatch({ type: "update" })
+      // appDispatch({ type: "update" })
 
       if (!appState.user) {
         // send request -- login form
@@ -63,8 +63,8 @@ function Login() {
 
   // navigate to protected pages once user is logged in
   useEffect(() => {
-    console.log("login useeffect called: ", appState)
     if (appState.user) {
+      console.log("login useeffect called: ", appState)
       appDispatch({ type: "toast", value: "Logged in" })
       navigate(url)
     }

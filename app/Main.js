@@ -25,7 +25,7 @@ import Toast from "./components/Toast"
 // initial state is empty
 
 const initialState = {
-  updatelogin: true,
+  updatelogin: 0,
   user: "",
   usergroups: [],
   toasts: [],
@@ -37,7 +37,7 @@ const initialState = {
 function reducer(draft, action) {
   switch (action.type) {
     case "update":
-      draft.updatelogin = !draft.updatelogin
+      draft.updatelogin++
       return
     case "logerror":
       draft.error = action.error
@@ -71,6 +71,9 @@ function MainComponent() {
       try {
         // check if localstorage indicates logged in
         if (!localStorage.getItem("kanbanloggedin")) {
+          dispatch({
+            type: "logout",
+          })
           return
         }
         // check if token possessed is valid

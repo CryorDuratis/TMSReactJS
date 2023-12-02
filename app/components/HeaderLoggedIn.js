@@ -3,17 +3,18 @@ import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 function HeaderLoggedIn(props) {
   const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   async function logout() {
     try {
       // send request -- check login
-      appDispatch({ type: "update" })
+      // appDispatch({ type: "update" })
 
       // if logged in, send request -- logout
       const response = await Axios.post("/logout")
@@ -26,9 +27,7 @@ function HeaderLoggedIn(props) {
       // else on success
       appDispatch({ type: "toast", value: "Logged out" })
       localStorage.removeItem("kanbanloggedin")
-      appDispatch({
-        type: "logout",
-      })
+      appDispatch({ type: "update" })
     } catch (e) {
       console.log(e)
     }
@@ -37,7 +36,7 @@ function HeaderLoggedIn(props) {
   // navigate to login once user is logged out
   useEffect(() => {
     console.log("logout useeffect called: ", appState)
-    if (!appState.user) {
+    if (!appState.user && pathname !== "/login") {
       navigate("/login")
     }
   }, [appState.user])
