@@ -30,7 +30,7 @@ function Login() {
         return
       }
       // send request -- check login
-      // appDispatch({ type: "update" })
+      appDispatch({ type: "update" })
 
       if (!appState.user) {
         // send request -- login form

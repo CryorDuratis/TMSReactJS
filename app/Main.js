@@ -92,7 +92,12 @@ function MainComponent() {
             usergroups: response.data.usergroups,
           })
         }
-        localStorage.removeItem("kanbanloggedin")
+        if (!response) {
+          localStorage.removeItem("kanbanloggedin")
+          dispatch({
+            type: "logout",
+          })
+        }
       } catch (e) {
         console.log(e)
       }

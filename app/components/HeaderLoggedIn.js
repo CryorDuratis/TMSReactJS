@@ -14,7 +14,7 @@ function HeaderLoggedIn(props) {
   async function logout() {
     try {
       // send request -- check login
-      // appDispatch({ type: "update" })
+      appDispatch({ type: "update" })
 
       // if logged in, send request -- logout
       const response = await Axios.post("/logout")
