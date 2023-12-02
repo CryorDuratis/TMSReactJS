@@ -1,7 +1,7 @@
 // import node modules
 import React, { useEffect } from "react"
 import ReactDOM from "react-dom/client"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useImmerReducer } from "use-immer"
 import Axios from "axios"
 
@@ -25,27 +25,29 @@ import Toast from "./components/Toast"
 // initial state is empty
 
 const initialState = {
-  loggedIn: false,
-  toasts: [],
-  username: "",
+  updatelogin: true,
+  user: "",
   usergroups: [],
+  toasts: [],
   redirect: "",
+  isloading: false,
   error: "",
 }
 
 function reducer(draft, action) {
   switch (action.type) {
+    case "update":
+      draft.updatelogin = !draft.updatelogin
+      return
     case "logerror":
       draft.error = action.error
       return
     case "login":
-      draft.loggedIn = true
-      draft.username = action.username
+      draft.user = action.username
       draft.usergroups = action.usergroups
       return
     case "logout":
-      draft.loggedIn = false
-      draft.username = ""
+      draft.user = ""
       draft.usergroups = []
       return
     case "setrdt":
@@ -63,12 +65,16 @@ function reducer(draft, action) {
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
-  // used to set initial login state on page load from browser URL bar
+  // used to update login state based on localstorage - matches cookie token
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // check if localstorage indicates logged in
+        if (!localStorage.getItem("kanbanloggedin")) {
+          return
+        }
+        // check if token possessed is valid
         const response = await Axios.post("/login/check")
-        console.log("initial log in: ", response.data)
         if (response.data.error) {
           dispatch({
             type: "logerror",
@@ -76,19 +82,21 @@ function MainComponent() {
           })
         }
         if (response.data.loggedin) {
+          // update login user details
           dispatch({
             type: "login",
             username: response.data.username,
             usergroups: response.data.usergroups,
           })
         }
-        console.log("intial state: ", state)
+        localStorage.removeItem("kanbanloggedin")
       } catch (e) {
         console.log(e)
       }
     }
     fetchData()
-  }, [dispatch])
+    console.log("main useeffect: ", state)
+  }, [state.updatelogin])
 
   return (
     <StateContext.Provider value={state}>
@@ -98,34 +106,33 @@ function MainComponent() {
           <Header />
           {/* main body */}
           <Routes>
+            {state.error && <Route element={<ErrorPage />} />}
+            <Route path="/login" element={<Login />} />
             <Route
               path="/"
               element={
-                state.loggedIn ? (
+                state.user ? (
                   <Dashboard>
                     <AppList />
                   </Dashboard>
                 ) : (
-                  <Login />
+                  <Navigate to="/login" url="/" replace />
                 )
               }
             />
-            <Route path="/login" element={<Login />} />
             <Route
               path="/usermgmt"
               element={
-                state.loggedIn ? (
+                state.user ? (
                   <Dashboard>
                     <UserList />
                   </Dashboard>
                 ) : (
-                  <Login />
+                  <Navigate to="/login" url="/usermgmt" replace />
                 )
               }
             />
-            <Route path="/logout" element={<Login />} />
-            <Route path="/error" element={<ErrorPage />} />
-            <Route element={<ErrorPage />} />
+            <Route path="/logout" element={<Navigate to="/login" replace />} />
           </Routes>
           <Footer />
         </BrowserRouter>

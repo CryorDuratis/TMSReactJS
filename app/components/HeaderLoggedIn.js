@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
@@ -13,37 +13,40 @@ function HeaderLoggedIn(props) {
   async function logout() {
     try {
       // send request -- check login
-      const response = await Axios.post("/login/check")
+      appDispatch({ type: "update" })
+
+      // if logged in, send request -- logout
+      const response = await Axios.post("/logout")
+
       // if request fails
       if (response.data.error) {
         appDispatch({ type: "logerror", error: response.data.error })
         return
       }
-      if (!response.data.loggedin) {
-        // send request -- logout
-        response = await Axios.post("/logout")
-
-        // if request fails
-        if (response.data.error) {
-          appDispatch({ type: "logerror", error: response.data.error })
-          return
-        }
-      }
       // else on success
-      appDispatch({ type: "logout" })
       appDispatch({ type: "toast", value: "Logged out" })
-      console.log("after logout: ", appState)
-      navigate("/login")
+      localStorage.removeItem("kanbanloggedin")
+      appDispatch({
+        type: "logout",
+      })
     } catch (e) {
       console.log(e)
     }
   }
 
+  // navigate to login once user is logged out
+  useEffect(() => {
+    console.log("logout useeffect called: ", appState)
+    if (!appState.user) {
+      navigate("/login")
+    }
+  }, [appState.user])
+
   return (
     <Container class={"header-grp"}>
       <button className="header-btn">
         <img src="profile.png" className="avatar" />
-        Username &#9660;
+        {appState.user} &#9660;
       </button>
       <button className="header-btn" onClick={logout}>
         <img src="logout.png" className="icon" />

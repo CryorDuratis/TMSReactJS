@@ -1,5 +1,5 @@
 // import node modules
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Axios from "axios"
 
@@ -18,9 +18,10 @@ function Login() {
   const [username, setUsername] = useState()
   const [password, setPassword] = useState()
   const [error, setError] = useState("") // for login page error rendering
+  const url = navigate?.location?.state?.url || "/"
 
   const ourRequest = Axios.CancelToken.source()
-  async function handleSubmit(e) {
+  async function handleLogin(e) {
     e.preventDefault()
     try {
       // if required fields blank
@@ -29,16 +30,11 @@ function Login() {
         return
       }
       // send request -- check login
-      var response = await Axios.post("/login/check")
+      appDispatch({ type: "update" })
 
-      // if request fails
-      if (response.data.error) {
-        appDispatch({ type: "logerror", error: response.data.error })
-        return
-      }
-      if (!response.data.loggedin) {
+      if (!appState.user) {
         // send request -- login form
-        response = await Axios.post("/login", { username, password })
+        const response = await Axios.post("/login", { username, password })
         console.log("login response: ", response.data)
 
         // if request fails
@@ -51,31 +47,41 @@ function Login() {
           setError(response.data.message)
           return
         }
+        // else on success, set login details
+        setError(false)
+        localStorage.setItem("kanbanloggedin", "true")
+        appDispatch({
+          type: "login",
+          username: response.data.username,
+          usergroups: response.data.usergroups,
+        })
       }
-
-      // else on success
-      setError(false)
-      appDispatch({ type: "login", username: response.data.username, usergroups: response.data.usergroups })
-      appDispatch({ type: "toast", value: "Logged in" })
-      console.log("after login: ", appState)
-      navigate("/")
     } catch (e) {
       console.log(e)
     }
   }
 
+  // navigate to protected pages once user is logged in
+  useEffect(() => {
+    console.log("login useeffect called: ", appState)
+    if (appState.user) {
+      appDispatch({ type: "toast", value: "Logged in" })
+      navigate(url)
+    }
+  }, [appState.user])
+
   return (
     <Page class="center-children">
       <Container class="card bgclr-light2">
-        <form onSubmit={handleSubmit} className="form-container">
+        <form onSubmit={handleLogin} className="form-container">
           <h1>Log In</h1>
           {error === "required" && <div className="login-error">Please enter login details.</div>}
           {error === "invalid" && <div className="login-error">Invalid login details. Please try again.</div>}
           <div className="form-group">
             <label htmlFor="username">Username: </label>
-            <input className={error && "error-outline"} type="text" placeholder="Username" name="username" onChange={(e) => setUsername(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" name="username" onChange={(e) => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>
-            <input className={error && "error-outline"} type="password" placeholder="Password" name="password" onChange={(e) => setPassword(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" name="password" onChange={(e) => setPassword(e.target.value)} />
           </div>
           <button className="login-btn">Log in</button>
         </form>
