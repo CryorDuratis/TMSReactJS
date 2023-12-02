@@ -12,10 +12,13 @@ nav {
   text-align: center;
   font-weight: bold;
 }
-nav a {
+nav span {
   display: block;
   width: 100%;
   padding: 5px;
+}
+span {
+  cursor: pointer;
 }
 
 /* image styles */

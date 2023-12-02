@@ -11,7 +11,7 @@ function HeaderLoggedIn(props) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
-  async function logout() {
+  const logout = async () => {
     try {
       // send request -- check login
       appDispatch({ type: "update" })

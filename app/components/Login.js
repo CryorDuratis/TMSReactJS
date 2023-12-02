@@ -21,7 +21,7 @@ function Login() {
   const url = navigate?.location?.state?.url || "/"
 
   const ourRequest = Axios.CancelToken.source()
-  async function handleLogin(e) {
+  const handleLogin = async (e) => {
     e.preventDefault()
     try {
       // if required fields blank

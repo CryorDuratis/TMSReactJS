@@ -17,10 +17,12 @@ function Header() {
 
   return (
     <Container class={"header-bar bgclr-accent colr-dark"} height={"60px"}>
-      <span onClick={() => protectedLink("/")} className="logo">
-        KANBAN
-      </span>
-      {appState.user && <HeaderLoggedIn />}
+      <div className="header-container">
+        <span onClick={() => protectedLink("/")} className="logo">
+          KANBAN
+        </span>
+        {appState.user && <HeaderLoggedIn />}
+      </div>
     </Container>
   )
 }
