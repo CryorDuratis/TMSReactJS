@@ -52,27 +52,16 @@ function UserList() {
     <Container class="bgclr-light1 content-container">
       <h2>User List</h2>
       <Container class="content-wrapper">
-        <div className="grid-header">username email usergroups status</div>
-        {isLoading
-          ? "loading"
-          : userList.map((user) => (
-              <UserCard user>
-                <form className="user-form">
-                  <input type="text" placeholder={user.username} readOnly onChange={(e) => setUsername(e.target.value)} className="form-username" />
-                  <input type="password" placeholder="********" readOnly onChange={(e) => setUsername(e.target.value)} className="form-password" />
-                  <input type="email" placeholder={user.email} readOnly onChange={(e) => setUsername(e.target.value)} className="form-email" />
-                  <select className="form-role">
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                  </select>
-                  <input type="text" placeholder={user.isactive ? "Active" : "Disabled"} readOnly className="form-status" />
-                  <div className="form-edit">
-                    <button type="button">Edit</button>
-                  </div>
-                </form>
-              </UserCard>
-            ))}
+        <div className="grid-header">
+          <strong>Username</strong>
+          <strong>Password</strong>
+          <strong>Email</strong>
+          <strong>User Groups</strong>
+          <strong>Status</strong>
+        </div>
+        {isLoading ? "loading" : userList.map((user) => <UserCard user={user} map={user.username} />)}
       </Container>
+      <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} />
     </Container>
   )
 }

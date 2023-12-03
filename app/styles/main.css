@@ -111,28 +111,24 @@ body {
 
 /* user management */
 .content-wrapper {
-  width: "100%";
-  display: "flex";
-  align-items: "center";
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .grid-header {
-  width: "100%";
-  display: "flex";
-  align-items: "center";
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 100px 100px 150px 100px 100px 1fr 150px;
+  gap: 10px 10px;
+  align-items: center;
+  padding: 0 10px;
 }
 .user-form {
   display: grid;
-  grid-template-areas: "username password email status cancel edit" "role role role role cancel edit";
-  grid-template-columns: auto auto auto auto 50px 50px;
+  grid-template-areas: "username password email role status gap cancel edit";
+  grid-template-columns: 100px 100px 150px 100px 100px 1fr 70px 70px;
   gap: 10px 10px;
   width: 100%;
   margin: 0;
-}
-.user-form input {
-  display: inline;
-  width: 100%;
-  margin-right: 10px;
 }
 .form-password {
   grid-area: password;
@@ -142,6 +138,7 @@ body {
 }
 .form-status {
   grid-area: status;
+  width: min-content;
 }
 .form-cancel {
   grid-area: cancel;
@@ -149,11 +146,36 @@ body {
 .form-edit {
   grid-area: edit;
 }
+.form-cancel button,
+.form-edit button {
+  width: 70px;
+  display: flex;
+  justify-content: center;
+}
 .form-username {
   grid-area: username;
 }
 .form-role {
   grid-area: role;
+  display: flex;
+  gap: 0 10px;
+  text-align: start;
+}
+.form-role button {
+  border-radius: 5px;
+  padding: 3px 5px;
+  border: none;
+  background-color: lightgray;
+  font-size: 14px;
+}
+.user-form input:disabled,
+.user-form select:disabled {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: black;
+  cursor: default;
 }
 
 /* footer bar */

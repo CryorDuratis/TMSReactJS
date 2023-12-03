@@ -20,7 +20,7 @@ function Login() {
   const [error, setError] = useState("") // for login page error rendering
   const url = navigate?.location?.state?.url || "/"
 
-  const ourRequest = Axios.CancelToken.source()
+  // const ourRequest = Axios.CancelToken.source()
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
