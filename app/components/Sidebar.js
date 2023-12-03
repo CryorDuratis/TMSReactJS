@@ -13,30 +13,35 @@ function Sidebar() {
   const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
 
+  const [UMButton, setUMButton] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // check authentication on navigation
   const protectedLink = (pathname) => {
     appDispatch({ type: "update" })
     navigate(pathname)
   }
 
-  const [UMButton, setUMButton] = useState(false)
-
+  // check authorzation on mount component
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUMButton = async () => {
       try {
-        // Make a request to the server
+        // check permissions: in this case only admin
+
+        // Make authorization request to the server
         const response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin" })
 
         // Set the state based on the server response
         setUMButton(response.data.authorized)
-        console.log(UMButton)
+        console.log("show umbutton ", UMButton)
       } catch (error) {
         console.error("Error fetching data:", error)
         // Handle errors as needed
       }
     }
 
-    // Call the fetchData function when the component mounts
-    fetchData()
+    // Call the fetch function when the component mounts
+    fetchUMButton()
   }, [])
 
   return (

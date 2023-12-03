@@ -14,6 +14,7 @@ nav {
 }
 nav span {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   padding: 5px;
 }
@@ -56,7 +57,6 @@ img {
 
 /* body content - card */
 .card {
-  margin: 50px;
   padding: 50px;
   min-height: max-content;
   min-width: min-content;

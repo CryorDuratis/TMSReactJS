@@ -16,7 +16,7 @@ function Header() {
   }
 
   return (
-    <Container class={"header-bar bgclr-accent colr-dark"} height={"60px"}>
+    <Container class={"header-bar bgclr-accent colr-dark"}>
       <div className="header-container">
         <span onClick={() => protectedLink("/")} className="logo">
           KANBAN

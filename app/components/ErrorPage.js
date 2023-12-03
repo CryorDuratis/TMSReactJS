@@ -1,8 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Container from "./Container"
 
 function ErrorPage() {
-  return <Container></Container>
+  useEffect(() => {
+    console.log("errorpage was loaded")
+  }, [])
+
+  return <Container>something</Container>
 }
 
 export default ErrorPage

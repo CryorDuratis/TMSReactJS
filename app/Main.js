@@ -1,5 +1,5 @@
 // import node modules
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import ReactDOM from "react-dom/client"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useImmerReducer } from "use-immer"
@@ -27,10 +27,7 @@ import Toast from "./components/Toast"
 const initialState = {
   updatelogin: 0,
   user: "",
-  usergroups: [],
   toasts: [],
-  redirect: "",
-  isloading: false,
   error: "",
 }
 
@@ -44,18 +41,13 @@ function reducer(draft, action) {
       return
     case "login":
       draft.user = action.username
-      draft.usergroups = action.usergroups
+
       return
     case "logout":
       draft.user = ""
-      draft.usergroups = []
+
       return
-    case "setrdt":
-      draft.redirect = action.url
-      return
-    case "clearrdt":
-      draft.redirect = ""
-      return
+
     case "toast":
       draft.toasts.push(action.message)
       return
@@ -64,6 +56,7 @@ function reducer(draft, action) {
 
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
+  const [isLoading, setIsLoading] = useState(true)
 
   // used to update login state based on localstorage - matches cookie token
   useEffect(() => {
@@ -74,6 +67,7 @@ function MainComponent() {
           dispatch({
             type: "logout",
           })
+          setIsLoading(false)
           return
         }
         // check if token possessed is valid
@@ -86,10 +80,10 @@ function MainComponent() {
         }
         if (response.data.loggedin) {
           // update login user details
+
           dispatch({
             type: "login",
             username: response.data.username,
-            usergroups: response.data.usergroups,
           })
         }
         if (!response) {
@@ -98,12 +92,15 @@ function MainComponent() {
             type: "logout",
           })
         }
+        setIsLoading(false)
       } catch (e) {
         console.log(e)
       }
     }
     fetchData()
+
     console.log("main useeffect: ", state)
+    console.log("main loading: ", isLoading)
   }, [state.updatelogin])
 
   return (
@@ -114,12 +111,13 @@ function MainComponent() {
           <Header />
           {/* main body */}
           <Routes>
-            {state.error && <Route element={<ErrorPage />} />}
             <Route path="/login" element={<Login />} />
             <Route
               path="/"
               element={
-                state.user ? (
+                isLoading ? (
+                  <ErrorPage />
+                ) : state.user ? (
                   <Dashboard>
                     <AppList />
                   </Dashboard>
@@ -131,7 +129,9 @@ function MainComponent() {
             <Route
               path="/usermgmt"
               element={
-                state.user ? (
+                isLoading ? (
+                  <ErrorPage />
+                ) : state.user ? (
                   <Dashboard>
                     <UserList />
                   </Dashboard>
@@ -141,6 +141,7 @@ function MainComponent() {
               }
             />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
+            <Route element={<ErrorPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>
