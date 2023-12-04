@@ -6,6 +6,7 @@ import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import { useNavigate } from "react-router-dom"
+import Axios from "axios"
 
 function UserCard(props) {
   const appState = useContext(StateContext)
@@ -15,14 +16,40 @@ function UserCard(props) {
   // state of fields
   const [formData, setFormData] = useState(props.user)
   const [editing, setEditing] = useState(props.create)
+  const [error, setError] = useState("")
   // const initrole = props.user.role.split(",")
 
-  const handleClick = e => {
+  const handleClick = async e => {
     e.preventDefault()
     // if edit
     setEditing(true)
     // if create
     if (props.create) {
+      try {
+        const { username, password, email, role } = formData
+        // if required fields blank
+        if (!username || !password) {
+          setError("required")
+          return
+        }
+        // send request -- create
+        const response = await Axios.post("/user/create", { username, password, email, role })
+
+        // if request fails
+        if (response.data.error) {
+          appDispatch({ type: "logerror", error: response.data.error })
+          return
+        }
+        // if create fails
+        if (!response.data.success) {
+          setError(response.data.message)
+          return
+        }
+        // else on success
+        setError(false)
+      } catch (e) {
+        console.log(e)
+      }
       console.log("create form was submitted")
     }
   }
