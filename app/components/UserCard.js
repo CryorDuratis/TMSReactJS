@@ -49,15 +49,15 @@ function UserCard(props) {
   }
 
   return (
-    <div key={props.map} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px", display: "flex" }}>
+    <div key={props.map} className={props.class}>
       <form className="user-form">
-        <input type="text" name="username" placeholder={props.user.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
+        <input type="text" name="username" placeholder={formData.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
 
         <input type="password" name="password" placeholder="********" disabled={!editing} onChange={e => handleInputChange(e)} className="form-password" />
 
-        <input type="email" name="email" placeholder={props.user.email} disabled={!editing} onChange={e => handleInputChange(e)} className="form-email" />
+        <input type="email" name="email" placeholder={formData.email} disabled={!editing} onChange={e => handleInputChange(e)} className="form-email" />
 
-        <select className="form-role" name="role" placeholder={props.user.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
+        <select className="form-role" name="role" placeholder={formData.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>
@@ -69,7 +69,7 @@ function UserCard(props) {
           <button type="button">Add Group +</button>
         </div> */}
 
-        <select className="form-status" name="isactive" placeholder={props.user.isactive ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
+        <select className="form-status" name="isactive" placeholder={formData.isactive ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>

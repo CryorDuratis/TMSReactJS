@@ -17,7 +17,7 @@ function UserList() {
   const [userList, setUserList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const protectedLink = (pathname) => {
+  const protectedLink = pathname => {
     appDispatch({ type: "update" })
     navigate(pathname)
   }
@@ -59,9 +59,11 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        {isLoading ? "loading" : userList.map((user) => <UserCard user={user} map={user.username} />)}
+        {isLoading ? "loading" : userList.map(user => <UserCard user={user} map={user.username} class="edit-form-container" />)}
       </Container>
-      <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} />
+      <div className="create-form-container">
+        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} class="edit-form-container" />
+      </div>
     </Container>
   )
 }
