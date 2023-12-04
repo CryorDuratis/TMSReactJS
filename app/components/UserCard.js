@@ -57,7 +57,7 @@ function UserCard(props) {
 
         <input type="email" name="email" placeholder={formData.email} disabled={!editing} onChange={e => handleInputChange(e)} className="form-email" />
 
-        <select className="form-role" name="role" placeholder={formData.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
+        <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>
@@ -69,7 +69,7 @@ function UserCard(props) {
           <button type="button">Add Group +</button>
         </div> */}
 
-        <select className="form-status" name="isactive" placeholder={formData.isactive ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
+        <select className="form-status" name="isactive" value={formData.isactive ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
