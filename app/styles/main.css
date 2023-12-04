@@ -106,6 +106,10 @@ body {
   min-height: calc(100% - 20px);
   overflow-x: auto;
 }
+.content-container::before {
+  box-shadow: inset -5px 0px 10px 10px black;
+  z-index: 1;
+}
 
 /* app list */
 

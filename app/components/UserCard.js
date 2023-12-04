@@ -49,7 +49,7 @@ function UserCard(props) {
   }
 
   return (
-    <div key={props.map} className={props.class}>
+    <Container key={props.key} class={props.class}>
       <form className="user-form">
         <input type="text" name="username" placeholder={formData.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
 
@@ -96,7 +96,7 @@ function UserCard(props) {
           )}
         </div>
       </form>
-    </div>
+    </Container>
   )
 }
 

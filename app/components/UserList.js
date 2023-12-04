@@ -59,7 +59,7 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        {isLoading ? "loading" : userList.map(user => <UserCard user={user} map={user.username} class="edit-form-container" />)}
+        {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} key={index} class="edit-form-container" />)}
       </Container>
       <div className="create-form-container">
         <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} class="edit-form-container" />
