@@ -13,10 +13,7 @@ function HeaderLoggedIn(props) {
 
   const logout = async () => {
     try {
-      // send request -- check login
-      appDispatch({ type: "update" })
-
-      // if logged in, send request -- logout
+      // send request -- logout
       const response = await Axios.post("/logout")
 
       // if request fails
@@ -26,8 +23,8 @@ function HeaderLoggedIn(props) {
       }
       // else on success
       appDispatch({ type: "toast", value: "Logged out" })
-      localStorage.removeItem("kanbanloggedin")
-      appDispatch({ type: "update" })
+      console.log("state has no user, rendering logged out")
+      appDispatch({ type: "logout" })
     } catch (e) {
       console.log(e)
     }
@@ -35,8 +32,8 @@ function HeaderLoggedIn(props) {
 
   // navigate to login once user is logged out
   useEffect(() => {
-    console.log("logout useeffect called: ", appState)
     if (!appState.user && pathname !== "/login") {
+      console.log("state has no user, rendering logged out")
       navigate("/login")
     }
   }, [appState.user])

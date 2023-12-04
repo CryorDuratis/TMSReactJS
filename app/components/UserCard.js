@@ -17,14 +17,14 @@ function UserCard(props) {
   const [editing, setEditing] = useState(props.create)
   // const initrole = props.user.role.split(",")
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     e.preventDefault()
     // if edit
     setEditing(true)
     // if create
   }
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async e => {
     e.preventDefault()
     setEditing(false)
 
@@ -35,29 +35,29 @@ function UserCard(props) {
     console.log("edit form was submitted")
   }
 
-  const handleCancel = (e) => {
+  const handleCancel = e => {
     setFormData(props.user)
     setEditing(false)
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }))
   }
 
   return (
     <div key={props.map} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px", display: "flex" }}>
       <form className="user-form">
-        <input type="text" name="username" placeholder={props.user.username} disabled={!editing} onChange={(e) => handleInputChange(e)} className="form-username" />
+        <input type="text" name="username" placeholder={props.user.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
 
-        <input type="password" name="password" placeholder="********" disabled={!editing} onChange={(e) => handleInputChange(e)} className="form-password" />
+        <input type="password" name="password" placeholder="********" disabled={!editing} onChange={e => handleInputChange(e)} className="form-password" />
 
-        <input type="email" name="email" placeholder={props.user.email} disabled={!editing} onChange={(e) => handleInputChange(e)} className="form-email" />
+        <input type="email" name="email" placeholder={props.user.email} disabled={!editing} onChange={e => handleInputChange(e)} className="form-email" />
 
-        <select className="form-role" name="role" value={props.user.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={(e) => handleInputChange(e)}>
+        <select className="form-role" name="role" placeholder={props.user.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>
@@ -69,7 +69,7 @@ function UserCard(props) {
           <button type="button">Add Group +</button>
         </div> */}
 
-        <select className="form-status" name="isactive" value={props.user.isactive ? "1" : "0"} disabled={!editing} onChange={(e) => setIsactive(e.target.value)}>
+        <select className="form-status" name="isactive" placeholder={props.user.isactive ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
@@ -78,7 +78,7 @@ function UserCard(props) {
 
         <div className="form-cancel">
           {editing && !props.create && (
-            <button type="reset" onClick={(e) => handleCancel(e)}>
+            <button type="reset" onClick={e => handleCancel(e)}>
               Cancel
             </button>
           )}
@@ -86,11 +86,11 @@ function UserCard(props) {
 
         <div className="form-edit">
           {editing && !props.create ? (
-            <button type="submit" onClick={(e) => handleUpdate(e)}>
+            <button type="submit" onClick={e => handleUpdate(e)}>
               Update
             </button>
           ) : (
-            <button type="button" onClick={(e) => handleClick(e)}>
+            <button type="button" onClick={e => handleClick(e)}>
               {props.create ? "Create" : "Edit"}
             </button>
           )}

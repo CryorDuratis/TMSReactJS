@@ -28,7 +28,7 @@ const initialState = {
   updatelogin: 0,
   user: "",
   toasts: [],
-  error: "",
+  error: ""
 }
 
 function reducer(draft, action) {
@@ -41,13 +41,10 @@ function reducer(draft, action) {
       return
     case "login":
       draft.user = action.username
-
       return
     case "logout":
       draft.user = ""
-
       return
-
     case "toast":
       draft.toasts.push(action.message)
       return
@@ -58,38 +55,28 @@ function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
   const [isLoading, setIsLoading] = useState(true)
 
-  // used to update login state based on localstorage - matches cookie token
+  // used to update login state based on cookie token
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // check if localstorage indicates logged in
-        if (!localStorage.getItem("kanbanloggedin")) {
-          dispatch({
-            type: "logout",
-          })
-          setIsLoading(false)
-          return
-        }
         // check if token possessed is valid
         const response = await Axios.post("/login/check")
         if (response.data.error) {
           dispatch({
             type: "logerror",
-            error: response.data.error,
+            error: response.data.error
           })
         }
         if (response.data.loggedin) {
           // update login user details
-
           dispatch({
             type: "login",
-            username: response.data.username,
+            username: response.data.username
           })
         }
-        if (!response) {
-          localStorage.removeItem("kanbanloggedin")
+        if (!response || !response.data.loggedin) {
           dispatch({
-            type: "logout",
+            type: "logout"
           })
         }
         setIsLoading(false)
@@ -98,9 +85,7 @@ function MainComponent() {
       }
     }
     fetchData()
-
-    console.log("main useeffect: ", state)
-    console.log("main loading: ", isLoading)
+    console.log("main updated")
   }, [state.updatelogin])
 
   return (

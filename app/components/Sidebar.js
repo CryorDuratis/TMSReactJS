@@ -17,7 +17,7 @@ function Sidebar() {
   const [isLoading, setIsLoading] = useState(true)
 
   // check authentication on navigation
-  const protectedLink = (pathname) => {
+  const protectedLink = pathname => {
     appDispatch({ type: "update" })
     navigate(pathname)
   }
@@ -33,7 +33,6 @@ function Sidebar() {
 
         // Set the state based on the server response
         setUMButton(response.data.authorized)
-        console.log("show umbutton ", UMButton)
       } catch (error) {
         console.error("Error fetching data:", error)
         // Handle errors as needed

@@ -21,7 +21,7 @@ function Login() {
   const url = navigate?.location?.state?.url || "/"
 
   // const ourRequest = Axios.CancelToken.source()
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault()
     try {
       // if required fields blank
@@ -29,33 +29,27 @@ function Login() {
         setError("required")
         return
       }
-      // send request -- check login
-      appDispatch({ type: "update" })
 
-      if (!appState.user) {
-        // send request -- login form
-        const response = await Axios.post("/login", { username, password })
-        console.log("login response: ", response.data)
+      // send request -- login form
+      const response = await Axios.post("/login", { username, password })
+      console.log("login response: ", response.data)
 
-        // if request fails
-        if (response.data.error) {
-          appDispatch({ type: "logerror", error: response.data.error })
-          return
-        }
-        // if login fails
-        if (!response.data.success) {
-          setError(response.data.message)
-          return
-        }
-        // else on success, set login details
-        setError(false)
-        localStorage.setItem("kanbanloggedin", "true")
-        appDispatch({
-          type: "login",
-          username: response.data.username,
-          usergroups: response.data.usergroups,
-        })
+      // if request fails
+      if (response.data.error) {
+        appDispatch({ type: "logerror", error: response.data.error })
+        return
       }
+      // if login fails
+      if (!response.data.success) {
+        setError(response.data.message)
+        return
+      }
+      // else on success, set login details
+      setError(false)
+      appDispatch({
+        type: "login",
+        username: response.data.username
+      })
     } catch (e) {
       console.log(e)
     }
@@ -64,7 +58,7 @@ function Login() {
   // navigate to protected pages once user is logged in
   useEffect(() => {
     if (appState.user) {
-      console.log("login useeffect called: ", appState)
+      console.log("state has user, rendering logged in")
       appDispatch({ type: "toast", value: "Logged in" })
       navigate(url)
     }
@@ -79,9 +73,9 @@ function Login() {
           {error === "invalid" && <div className="login-error">Invalid login details. Please try again.</div>}
           <div className="form-group">
             <label htmlFor="username">Username: </label>
-            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>
-            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
           </div>
           <button className="login-btn">Log in</button>
         </form>
