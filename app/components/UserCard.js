@@ -22,6 +22,9 @@ function UserCard(props) {
     // if edit
     setEditing(true)
     // if create
+    if (props.create) {
+      console.log("create form was submitted")
+    }
   }
 
   const handleUpdate = async e => {
@@ -48,8 +51,9 @@ function UserCard(props) {
     }))
   }
 
+  console.log("key is: ", props.listkey, " and user is ", props.user.username)
   return (
-    <Container key={props.key} class={props.class}>
+    <Container listkey={props.listkey} class={props.class}>
       <form className="user-form">
         <input type="text" name="username" placeholder={formData.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
 

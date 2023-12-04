@@ -2,13 +2,13 @@
 import React from "react"
 
 function Container(props) {
-  if (props.key)
+  if (props.listkey) {
     return (
-      <div key={props.key} className={props.class}>
+      <div key={props.listkey} className={props.class}>
         {props.children}
       </div>
     )
-  else return <div className={props.class}>{props.children}</div>
+  } else return <div className={props.class}>{props.children}</div>
 }
 
 export default Container

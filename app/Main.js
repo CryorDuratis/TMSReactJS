@@ -15,7 +15,6 @@ import StateContext from "./StateContext"
 import Header from "./components/Header"
 import Login from "./components/Login"
 import Dashboard from "./components/Dashboard"
-import AppList from "./components/AppList"
 import UserList from "./components/UserList"
 import ErrorPage from "./components/ErrorPage"
 import Footer from "./components/Footer"
@@ -97,20 +96,7 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                isLoading ? (
-                  <ErrorPage />
-                ) : state.user ? (
-                  <Dashboard>
-                    <AppList />
-                  </Dashboard>
-                ) : (
-                  <Navigate to="/login" url="/" replace />
-                )
-              }
-            />
+            <Route path="/" element={isLoading ? <ErrorPage /> : state.user ? <Dashboard></Dashboard> : <Navigate to="/login" url="/" replace />} />
             <Route
               path="/usermgmt"
               element={

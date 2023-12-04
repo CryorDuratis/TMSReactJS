@@ -1,12 +1,15 @@
-import React, { useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import Container from "./Container"
+import StateContext from "../StateContext"
 
 function ErrorPage() {
   useEffect(() => {
     console.log("errorpage was loaded")
   }, [])
 
-  return <Container>something</Container>
+  const appState = useContext(StateContext)
+
+  return <Container>{appState.error ? "loading..." : appState.error}</Container>
 }
 
 export default ErrorPage
