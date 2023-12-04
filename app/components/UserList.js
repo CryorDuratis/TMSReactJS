@@ -16,10 +16,11 @@ function UserList() {
 
   const [userList, setUserList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [updateFlag, setUpdateFlag] = useState(false)
 
-  const protectedLink = pathname => {
-    appDispatch({ type: "update" })
-    navigate(pathname)
+  const updateUserList = () => {
+    console.log("update user list called")
+    setUpdateFlag((prev) => !prev)
   }
 
   useEffect(() => {
@@ -29,6 +30,11 @@ function UserList() {
         var response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin" })
 
         // If unauthorized
+        if (!response.data.authorized) {
+          appDispatch({ type: "toast", message: "Unauthorized page, redirecting to home" })
+          navigate("/")
+          return
+        }
 
         // Make fetch request to the server
         response = await Axios.post("/user/getall")
@@ -46,7 +52,7 @@ function UserList() {
 
     // Call the fetch function when the component mounts
     fetchUsers()
-  }, [])
+  }, [updateFlag])
 
   return (
     <Container class="bgclr-light1 content-container">
@@ -59,10 +65,10 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} class="edit-form-container" />)}
+        {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" />)}
       </Container>
       <div className="create-form-container">
-        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} class="edit-form-container" />
+        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" />
       </div>
     </Container>
   )
