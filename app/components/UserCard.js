@@ -119,7 +119,7 @@ function UserCard(props) {
           <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>
             {selectedRoles ? selectedRoles : "user"} {props.editing === editkey || props.create ? <>&#9660;</> : ""}
           </button>
-          <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef} />
+          <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef} roles={selectedRoles} setRoles={setSelectedRoles} />
         </div>
 
         <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={e => handleInputChange(e)}>

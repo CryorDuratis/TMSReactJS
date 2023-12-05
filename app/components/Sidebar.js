@@ -22,7 +22,7 @@ function Sidebar() {
     navigate(pathname)
   }
 
-  // check authorzation on mount component
+  // check authorization on mount component
   useEffect(() => {
     const fetchUMButton = async () => {
       try {

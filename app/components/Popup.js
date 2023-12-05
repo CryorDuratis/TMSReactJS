@@ -32,15 +32,10 @@ const Popup = ({ isOpen, onClose, buttonRef }) => {
 
   return (
     <div className={`popup ${isOpen ? "open" : ""}`} style={{ bottom: position.bottom, left: position.left }} ref={popupRef}>
-      <p>This is a popup</p>
-      <button
-        onClick={e => {
-          e.preventDefault()
-          onClose()
-        }}
-      >
-        options
-      </button>
+      Select Roles:
+      <label>
+        <input type="checkbox" name="fruits" value="apple" /> Apple
+      </label>
     </div>
   )
 }
