@@ -20,11 +20,13 @@ function UserList() {
   const [updateFlag, setUpdateFlag] = useState(false)
   const [editing, setEditing] = useState(0)
 
+  // updates list when new user is created
   const updateUserList = () => {
     console.log("update user list called")
     setUpdateFlag((prev) => !prev)
   }
 
+  // display user information on load, and on update
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -67,8 +69,6 @@ function UserList() {
     fetchUsers()
   }, [updateFlag])
 
-  console.log("editing now: ", editing)
-
   return (
     <Container class="bgclr-light1 content-container">
       <h2>User List</h2>
@@ -82,7 +82,7 @@ function UserList() {
         </div>
         {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} />)}
       </Container>
-      <div className="create-form-container">
+      <Container class="create-form-container">
         <div className="grid-header">
           <strong>Username</strong>
           <strong>Password</strong>
@@ -91,7 +91,7 @@ function UserList() {
           <strong>Status</strong>
         </div>
         <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" />
-      </div>
+      </Container>
     </Container>
   )
 }

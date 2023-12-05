@@ -39,7 +39,7 @@ function UserCard(props) {
     props.setEditing(editkey)
   }
 
-  // submit to backend
+  // submit to backend and update user list state
   const handleUpdate = async (e) => {
     e.preventDefault()
 
@@ -99,15 +99,15 @@ function UserCard(props) {
     }))
   }
 
-  //
+  // pass to each user form to handle roles in a multiselect dropdown
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen)
   }
   const handleClosePopup = () => {
+    // close popup
     setIsPopupOpen(false)
   }
 
-  console.log("key is: ", props.listkey, " and user is ", props.user.username)
   return (
     <Container listkey={props.listkey} class={props.class}>
       <form className="user-form">
