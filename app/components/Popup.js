@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 
-const Popup = ({ onClose }) => {
+const Popup = ({ isOpen, onClose, buttonRef }) => {
+  const [position, setPosition] = useState({ top: 0, left: 0 })
   const popupRef = useRef(null)
 
   useEffect(() => {
@@ -17,10 +18,29 @@ const Popup = ({ onClose }) => {
     }
   }, [onClose])
 
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const buttonRect = buttonRef.current.getBoundingClientRect()
+      const popupRect = popupRef.current.getBoundingClientRect()
+
+      const bottom = buttonRect.top + window.scrollY
+      const left = buttonRect.left + window.scrollX + buttonRect.width / 2 - popupRect.width / 2
+
+      setPosition({ bottom, left })
+    }
+  }, [isOpen, buttonRef])
+
   return (
-    <div ref={popupRef} className="popup">
-      {/* Popup content */}
+    <div className={`popup ${isOpen ? "open" : ""}`} style={{ bottom: position.bottom, left: position.left }} ref={popupRef}>
       <p>This is a popup</p>
+      <button
+        onClick={e => {
+          e.preventDefault()
+          onClose()
+        }}
+      >
+        options
+      </button>
     </div>
   )
 }

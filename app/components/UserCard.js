@@ -1,5 +1,5 @@
 // import node modules
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Axios from "axios"
 
@@ -7,6 +7,7 @@ import Axios from "axios"
 import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
+import Popup from "./Popup"
 
 function UserCard(props) {
   const appState = useContext(StateContext)
@@ -15,13 +16,20 @@ function UserCard(props) {
 
   // state of fields
   const [formData, setFormData] = useState(props.user)
+  const [selectedRoles, setSelectedRoles] = useState(formData.role)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [error, setError] = useState("")
   const editkey = props.listkey + 1
+  const buttonRef = useRef(null)
 
-  // set default formdata if not editing current user
+  // set default formdata and close popup if not editing current user
   useEffect(() => {
     if (!props.create) {
-      if (props.editing !== editkey) setFormData(props.user)
+      if (props.editing !== editkey) {
+        setIsPopupOpen(false)
+        setFormData(props.user)
+      }
+      // close popup
     }
   }, [props.editing])
 
@@ -80,7 +88,7 @@ function UserCard(props) {
     props.setEditing(0)
   }
 
-  //
+  // updates form values for axios submission since single page react cant use default form actions
   const handleInputChange = e => {
     const { name, value } = e.target
     setFormData(prevData => ({
@@ -89,7 +97,13 @@ function UserCard(props) {
     }))
   }
 
-  const handleRole = () => {}
+  //
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen)
+  }
+  const handleClosePopup = () => {
+    setIsPopupOpen(false)
+  }
 
   console.log("key is: ", props.listkey, " and user is ", props.user.username)
   return (
@@ -101,22 +115,17 @@ function UserCard(props) {
 
         <input type="email" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-email" />
 
-        {/* <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={editing !== editkey} onChange={e => handleInputChange(e)}>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select> */}
-
-        <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={props.editing !== editkey && !props.create} className="form-role">
-          {formData.role ? formData.role : "user"}
-          <img src="edit.png" className={props.editing === editkey || props.create ? "icon" : "icon hidden"} />
-        </button>
+        <div className="form-role">
+          <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>
+            {selectedRoles ? selectedRoles : "user"} {props.editing === editkey || props.create ? <>&#9660;</> : ""}
+          </button>
+          <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef} />
+        </div>
 
         <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
-
-        {/* <input type="checkbox" name="Active" checked={props.user.isactive} disabled className="form-status" onChange={(e) => setIsactive(e.target.checked)} /> */}
 
         <div className="form-cancel">
           {props.editing === editkey ? (
