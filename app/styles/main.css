@@ -180,6 +180,9 @@ body {
 }
 .form-role button {
   font-size: 14px;
+  background-color: transparent;
+  border: 1px solid grey;
+  border-radius: 2px;
 }
 .popup {
   position: absolute;
