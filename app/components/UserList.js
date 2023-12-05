@@ -17,10 +17,11 @@ function UserList() {
   const [userList, setUserList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [updateFlag, setUpdateFlag] = useState(false)
+  const [editing, setEditing] = useState(0)
 
   const updateUserList = () => {
     console.log("update user list called")
-    setUpdateFlag((prev) => !prev)
+    setUpdateFlag(prev => !prev)
   }
 
   useEffect(() => {
@@ -54,6 +55,8 @@ function UserList() {
     fetchUsers()
   }, [updateFlag])
 
+  console.log("editing now: ", editing)
+
   return (
     <Container class="bgclr-light1 content-container">
       <h2>User List</h2>
@@ -65,9 +68,16 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" />)}
+        {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} />)}
       </Container>
       <div className="create-form-container">
+        <div className="grid-header">
+          <strong>Username</strong>
+          <strong>Password</strong>
+          <strong>Email</strong>
+          <strong>User Groups</strong>
+          <strong>Status</strong>
+        </div>
         <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" />
       </div>
     </Container>

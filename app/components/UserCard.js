@@ -1,12 +1,12 @@
 // import node modules
 import React, { useContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import Axios from "axios"
 
 // import components
 import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
-import { useNavigate } from "react-router-dom"
-import Axios from "axios"
 
 function UserCard(props) {
   const appState = useContext(StateContext)
@@ -15,14 +15,33 @@ function UserCard(props) {
 
   // state of fields
   const [formData, setFormData] = useState(props.user)
-  const [editing, setEditing] = useState(props.create)
   const [error, setError] = useState("")
-  // const initrole = props.user.role.split(",")
+  const editkey = props.listkey + 1
 
+  // set default formdata if not editing current user
+  useEffect(() => {
+    if (!props.create) {
+      if (props.editing !== editkey) setFormData(props.user)
+    }
+  }, [props.editing])
+
+  // set editing to this item
   const handleClick = async e => {
     e.preventDefault()
-    // if edit
-    setEditing(props.listkey)
+    props.setEditing(editkey)
+  }
+
+  // submit to backend
+  const handleUpdate = async e => {
+    e.preventDefault()
+    props.setEditing(0)
+
+    // check if authorized
+
+    // submit values
+    if (props.editing === editkey) {
+      console.log("edit form was submitted")
+    }
     // if create
     if (props.create) {
       try {
@@ -50,26 +69,18 @@ function UserCard(props) {
       } catch (e) {
         console.log(e)
       }
+      props.update()
       console.log("create form was submitted")
     }
   }
 
-  const handleUpdate = async e => {
-    e.preventDefault()
-    setEditing(0)
-
-    // check if authorized
-
-    // submit values
-
-    console.log("edit form was submitted")
-  }
-
+  // set default form data if canceled or cleared
   const handleCancel = e => {
     setFormData(props.user)
-    setEditing(0)
+    props.setEditing(0)
   }
 
+  //
   const handleInputChange = e => {
     const { name, value } = e.target
     setFormData(prevData => ({
@@ -80,31 +91,27 @@ function UserCard(props) {
 
   const handleRole = () => {}
 
-  useEffect(() => {
-    console.log("formdata: ", formData.isactive)
-  }, [formData])
-
   console.log("key is: ", props.listkey, " and user is ", props.user.username)
   return (
     <Container listkey={props.listkey} class={props.class}>
       <form className="user-form">
         <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} className="form-username" />
 
-        <input type="password" name="password" placeholder="********" disabled={editing !== props.listkey || !props.create} onChange={e => handleInputChange(e)} className="form-password" />
+        <input type="password" name="password" placeholder="********" disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-password" />
 
-        <input type="email" name="email" value={formData.email} disabled={editing !== props.listkey || !props.create} onChange={e => handleInputChange(e)} className="form-email" />
+        <input type="email" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-email" />
 
-        {/* <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={editing !== props.listkey} onChange={e => handleInputChange(e)}>
+        {/* <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={editing !== editkey} onChange={e => handleInputChange(e)}>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select> */}
 
-        <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={editing !== props.listkey || !props.create} className="form-role">
+        <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={props.editing !== editkey && !props.create} className="form-role">
           {formData.role ? formData.role : "user"}
-          <img src="edit.png" className={editing === props.listkey || !props.create ? "icon" : "icon hidden"} />
+          <img src="edit.png" className={props.editing === editkey || props.create ? "icon" : "icon hidden"} />
         </button>
 
-        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={editing !== props.listkey} onChange={e => handleInputChange(e)}>
+        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
@@ -112,20 +119,26 @@ function UserCard(props) {
         {/* <input type="checkbox" name="Active" checked={props.user.isactive} disabled className="form-status" onChange={(e) => setIsactive(e.target.checked)} /> */}
 
         <div className="form-cancel">
-          {editing && !props.create && (
-            <button type="reset" onClick={e => handleCancel(e)}>
+          {props.editing === editkey ? (
+            <button type="button" onClick={e => handleCancel(e)}>
               Cancel
             </button>
+          ) : (
+            props.create && (
+              <button type="button" onClick={e => handleCancel(e)}>
+                Clear
+              </button>
+            )
           )}
         </div>
 
         <div className="form-edit">
-          {editing && !props.create ? (
+          {props.editing === editkey ? (
             <button type="submit" onClick={e => handleUpdate(e)}>
               Update
             </button>
           ) : (
-            <button type="button" onClick={e => handleClick(e)}>
+            <button type="button" onClick={props.create ? e => handleUpdate(e) : e => handleClick(e)}>
               {props.create ? "Create" : "Edit"}
             </button>
           )}
