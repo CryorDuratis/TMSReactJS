@@ -5,7 +5,7 @@ const Popup = ({ isOpen, onClose, buttonRef }) => {
   const popupRef = useRef(null)
 
   useEffect(() => {
-    const handleOutsideClick = event => {
+    const handleOutsideClick = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         onClose()
       }
@@ -33,6 +33,7 @@ const Popup = ({ isOpen, onClose, buttonRef }) => {
   return (
     <div className={`popup ${isOpen ? "open" : ""}`} style={{ bottom: position.bottom, left: position.left }} ref={popupRef}>
       Select Roles:
+      <br />
       <label>
         <input type="checkbox" name="fruits" value="apple" /> Apple
       </label>

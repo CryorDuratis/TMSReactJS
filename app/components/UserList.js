@@ -8,6 +8,7 @@ import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import UserCard from "./UserCard"
+import Cookies from "js-cookie"
 
 function UserList() {
   const appState = useContext(StateContext)
@@ -21,14 +22,25 @@ function UserList() {
 
   const updateUserList = () => {
     console.log("update user list called")
-    setUpdateFlag(prev => !prev)
+    setUpdateFlag((prev) => !prev)
   }
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         // Make authorization request to the server
-        var response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin" })
+        const token = Cookies.get("token")
+        var response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin", token })
+
+        // if not logged in
+        if (response.data.unauth) {
+          appDispatch({
+            type: "logout",
+            message: "Logged out",
+          })
+          navigate("/login")
+          return
+        }
 
         // If unauthorized
         if (!response.data.authorized) {
@@ -38,7 +50,7 @@ function UserList() {
         }
 
         // Make fetch request to the server
-        response = await Axios.post("/user/getall")
+        response = await Axios.post("/user/getall", { token })
 
         // Set the state based on the server response
         setUserList(response.data.usersData)

@@ -10,7 +10,6 @@ function HeaderLoggedIn(props) {
   const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
-  const { pathname } = useLocation()
 
   const logout = async () => {
     try {
@@ -19,27 +18,26 @@ function HeaderLoggedIn(props) {
 
       // if request fails
       if (response.data.error) {
-        appDispatch({ type: "logerror", error: response.data.error })
+        appDispatch({
+          type: "toast",
+          message: "An error was encountered",
+        })
         return
       }
       // else on success
       Cookies.remove("token")
+      Cookies.remove("kanbanuser")
+      console.log("logout is called")
 
-      appDispatch({ type: "toast", value: "Logged out" })
-      console.log("state has no user, rendering logged out")
-      appDispatch({ type: "logout" })
+      appDispatch({
+        type: "logout",
+        message: "Logged out",
+      })
+      navigate("/login")
     } catch (e) {
       console.log(e)
     }
   }
-
-  // navigate to login once user is logged out
-  useEffect(() => {
-    if (!appState.user && pathname !== "/login") {
-      console.log("state has no user, rendering logged out")
-      navigate("/login")
-    }
-  }, [appState.user])
 
   return (
     <Container class={"header-grp"}>

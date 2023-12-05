@@ -7,6 +7,7 @@ import Axios from "axios"
 import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
+import Cookies from "js-cookie"
 
 function Sidebar() {
   const appState = useContext(StateContext)
@@ -14,22 +15,25 @@ function Sidebar() {
   const navigate = useNavigate()
 
   const [UMButton, setUMButton] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // check authentication on navigation
-  const protectedLink = pathname => {
-    appDispatch({ type: "update" })
-    navigate(pathname)
-  }
 
   // check authorization on mount component
   useEffect(() => {
     const fetchUMButton = async () => {
       try {
         // check permissions: in this case only admin
-
         // Make authorization request to the server
-        const response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin" })
+        const token = Cookies.get("token")
+        const response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin", token })
+
+        // if not logged in
+        if (response.data.unauth) {
+          appDispatch({
+            type: "logout",
+            message: "Logged out",
+          })
+          navigate("/login")
+          return
+        }
 
         // Set the state based on the server response
         setUMButton(response.data.authorized)
@@ -48,7 +52,7 @@ function Sidebar() {
       <div className="sidebar-container">
         <nav>
           <h2>Dashboard</h2>
-          {UMButton && <span onClick={() => protectedLink("/usermgmt")}>Users Management</span>}
+          {UMButton && <span onClick={() => navigate("/usermgmt")}>Users Management</span>}
         </nav>
       </div>
     </Container>

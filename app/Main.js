@@ -25,25 +25,19 @@ import Toast from "./components/Toast"
 // initial state is empty
 
 const initialState = {
-  updatelogin: 0,
-  user: "",
+  user: Cookies.get("kanbanuser"),
   toasts: [],
-  error: ""
 }
 
 function reducer(draft, action) {
   switch (action.type) {
-    case "update":
-      draft.updatelogin++
-      return
-    case "logerror":
-      draft.error = action.error
-      return
     case "login":
-      draft.user = action.username
+      draft.user = action.user
+      draft.toasts.push(action.message)
       return
     case "logout":
       draft.user = ""
+      draft.toasts.push(action.message)
       return
     case "toast":
       draft.toasts.push(action.message)
@@ -53,64 +47,28 @@ function reducer(draft, action) {
 
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
-  const [isLoading, setIsLoading] = useState(true)
 
-  // used to update login state based on cookie token
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = Cookies.get("token")
-        // check if token possessed is valid
-        const response = await Axios.post("/login/check", { token })
-        console.log("response: ", response.data)
-        if (response.data.error) {
-          dispatch({
-            type: "logerror",
-            error: response.data.error
-          })
-        }
-        if (response.data.loggedin) {
-          // update login user details
-          dispatch({
-            type: "login",
-            username: response.data.username
-          })
-        }
-        if (!response || !response.data.loggedin) {
-          dispatch({
-            type: "logout"
-          })
-        }
-        setIsLoading(false)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-    fetchData()
-    console.log("main updated")
-  }, [state.updatelogin])
+  console.log("main state ", state)
 
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Toast messages={state.toasts} />
+          {/* <Toast messages={state.toasts} /> */}
           <Header />
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={isLoading ? <ErrorPage /> : state.user ? <Dashboard></Dashboard> : <Navigate to="/login" url="/" replace />} />
+            <Route path="/" element={state.user ? <Dashboard /> : <Login />} />
             <Route
               path="/usermgmt"
               element={
-                isLoading ? (
-                  <ErrorPage />
-                ) : state.user ? (
+                state.user ? (
                   <Dashboard>
                     <UserList />
                   </Dashboard>
                 ) : (
-                  <Navigate to="/login" url="/usermgmt" replace />
+                  <Login />
                 )
               }
             />
