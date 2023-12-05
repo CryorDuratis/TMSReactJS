@@ -48,7 +48,7 @@ function Sidebar() {
       <div className="sidebar-container">
         <nav>
           <h2>Dashboard</h2>
-          {UMButton && <span onClick={() => protectedLink("/usermgmt")}>User Management</span>}
+          {UMButton && <span onClick={() => protectedLink("/usermgmt")}>Users Management</span>}
         </nav>
       </div>
     </Container>

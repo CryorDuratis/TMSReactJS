@@ -4,6 +4,7 @@ import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Axios from "axios"
 import { useNavigate, useLocation } from "react-router-dom"
+import Cookies from "js-cookie"
 
 function HeaderLoggedIn(props) {
   const appState = useContext(StateContext)
@@ -22,6 +23,8 @@ function HeaderLoggedIn(props) {
         return
       }
       // else on success
+      Cookies.remove("token")
+
       appDispatch({ type: "toast", value: "Logged out" })
       console.log("state has no user, rendering logged out")
       appDispatch({ type: "logout" })

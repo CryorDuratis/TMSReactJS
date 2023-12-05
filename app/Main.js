@@ -60,6 +60,7 @@ function MainComponent() {
       try {
         // check if token possessed is valid
         const response = await Axios.post("/login/check")
+        console.log("response: ", response.data)
         if (response.data.error) {
           dispatch({
             type: "logerror",
@@ -124,6 +125,6 @@ function MainComponent() {
 const root = ReactDOM.createRoot(document.querySelector("#app"))
 root.render(<MainComponent />)
 
-if (module.hot) {
-  module.hot.accept()
-}
+// if (module.hot) {
+//   module.hot.accept()
+// }

@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Axios from "axios"
+import Cookies from "js-cookie"
 
 // import components
 import Page from "./Page"
@@ -46,6 +47,9 @@ function Login() {
       }
       // else on success, set login details
       setError(false)
+      // set cookie
+      Cookies.set("token", response.data.token, { expires: 7, path: "/" })
+
       appDispatch({
         type: "login",
         username: response.data.username

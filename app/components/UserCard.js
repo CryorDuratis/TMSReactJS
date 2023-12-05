@@ -1,12 +1,12 @@
 // import node modules
 import React, { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import Axios from "axios"
 
 // import components
 import Container from "./Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
+import { useNavigate } from "react-router-dom"
+import Axios from "axios"
 
 function UserCard(props) {
   const appState = useContext(StateContext)
@@ -19,7 +19,7 @@ function UserCard(props) {
   const [error, setError] = useState("")
   // const initrole = props.user.role.split(",")
 
-  const handleClick = async (e) => {
+  const handleClick = async e => {
     e.preventDefault()
     // if edit
     setEditing(true)
@@ -27,24 +27,13 @@ function UserCard(props) {
     if (props.create) {
       try {
         const { username, password, email, role } = formData
-        // Make authorization request to the server
-        var response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin" })
-
-        // If unauthorized
-        if (!response.data.authorized) {
-          appDispatch({ type: "toast", message: "Unauthorized page, redirecting to home" })
-          navigate("/")
-          return
-        }
-
         // if required fields blank
         if (!username || !password) {
           setError("required")
           return
         }
         // send request -- create
-        response = await Axios.post("/user/create", { username, password, email, role })
-        console.log("create user: ", response)
+        const response = await Axios.post("/user/create", { username, password, email, role })
 
         // if request fails
         if (response.data.error) {
@@ -58,15 +47,14 @@ function UserCard(props) {
         }
         // else on success
         setError(false)
-        console.log("create form was submitted")
-        props.update()
       } catch (e) {
         console.log(e)
       }
+      console.log("create form was submitted")
     }
   }
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async e => {
     e.preventDefault()
     setEditing(false)
 
@@ -77,42 +65,46 @@ function UserCard(props) {
     console.log("edit form was submitted")
   }
 
-  const handleCancel = (e) => {
+  const handleCancel = e => {
     setFormData(props.user)
     setEditing(false)
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }))
   }
 
-  // console.log("key is: ", props.listkey, " and user is ", props.user.username)
+  const handleRole = () => {}
+
+  useEffect(() => {
+    console.log("formdata: ", formData.isactive)
+  }, [formData])
+
+  console.log("key is: ", props.listkey, " and user is ", props.user.username)
   return (
     <Container listkey={props.listkey} class={props.class}>
       <form className="user-form">
-        <input type="text" name="username" placeholder={formData.username} disabled={!editing} onChange={(e) => handleInputChange(e)} className="form-username" />
+        <input type="text" name="username" value={formData.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
 
-        <input type="password" name="password" placeholder="********" disabled={!editing} onChange={(e) => handleInputChange(e)} className="form-password" />
+        <input type="password" name="password" placeholder="********" disabled={!editing} onChange={e => handleInputChange(e)} className="form-password" />
 
-        <input type="email" name="email" placeholder={formData.email} disabled={!editing} onChange={(e) => handleInputChange(e)} className="form-email" />
+        <input type="email" name="email" value={formData.email} disabled={!editing} onChange={e => handleInputChange(e)} className="form-email" />
 
-        <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={(e) => handleInputChange(e)}>
+        {/* <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="user">User</option>
           <option value="admin">Admin</option>
-        </select>
+        </select> */}
 
-        {/* <div className="form-role">
-          {initrole.map((role) => (
-            <button type="button">{role} &times;</button>
-          ))}
-          <button type="button">Add Group +</button>
-        </div> */}
+        <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={!editing} className="form-role">
+          {formData.role ? formData.role : "user"}
+          <img src="edit.png" className={editing ? "icon" : "icon hidden"} />
+        </button>
 
-        <select className="form-status" name="isactive" value={formData.isactive ? "1" : "0"} disabled={!editing} onChange={(e) => handleInputChange(e)}>
+        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
@@ -121,7 +113,7 @@ function UserCard(props) {
 
         <div className="form-cancel">
           {editing && !props.create && (
-            <button type="reset" onClick={(e) => handleCancel(e)}>
+            <button type="reset" onClick={e => handleCancel(e)}>
               Cancel
             </button>
           )}
@@ -129,11 +121,11 @@ function UserCard(props) {
 
         <div className="form-edit">
           {editing && !props.create ? (
-            <button type="submit" onClick={(e) => handleUpdate(e)}>
+            <button type="submit" onClick={e => handleUpdate(e)}>
               Update
             </button>
           ) : (
-            <button type="button" onClick={(e) => handleClick(e)}>
+            <button type="button" onClick={e => handleClick(e)}>
               {props.create ? "Create" : "Edit"}
             </button>
           )}
