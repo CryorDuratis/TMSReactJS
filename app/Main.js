@@ -4,9 +4,10 @@ import ReactDOM from "react-dom/client"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useImmerReducer } from "use-immer"
 import Axios from "axios"
+import Cookies from "js-cookie"
 
 Axios.defaults.baseURL = "http://localhost:3001"
-Axios.defaults.withCredentials = true
+// Axios.defaults.withCredentials = true
 
 import DispatchContext from "./DispatchContext"
 import StateContext from "./StateContext"
@@ -58,8 +59,9 @@ function MainComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = Cookies.get("token")
         // check if token possessed is valid
-        const response = await Axios.post("/login/check")
+        const response = await Axios.post("/login/check", { token })
         console.log("response: ", response.data)
         if (response.data.error) {
           dispatch({

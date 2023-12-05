@@ -22,7 +22,7 @@ function UserCard(props) {
   const handleClick = async e => {
     e.preventDefault()
     // if edit
-    setEditing(true)
+    setEditing(props.listkey)
     // if create
     if (props.create) {
       try {
@@ -56,7 +56,7 @@ function UserCard(props) {
 
   const handleUpdate = async e => {
     e.preventDefault()
-    setEditing(false)
+    setEditing(0)
 
     // check if authorized
 
@@ -67,7 +67,7 @@ function UserCard(props) {
 
   const handleCancel = e => {
     setFormData(props.user)
-    setEditing(false)
+    setEditing(0)
   }
 
   const handleInputChange = e => {
@@ -88,23 +88,23 @@ function UserCard(props) {
   return (
     <Container listkey={props.listkey} class={props.class}>
       <form className="user-form">
-        <input type="text" name="username" value={formData.username} disabled={!editing} onChange={e => handleInputChange(e)} className="form-username" />
+        <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} className="form-username" />
 
-        <input type="password" name="password" placeholder="********" disabled={!editing} onChange={e => handleInputChange(e)} className="form-password" />
+        <input type="password" name="password" placeholder="********" disabled={editing !== props.listkey || !props.create} onChange={e => handleInputChange(e)} className="form-password" />
 
-        <input type="email" name="email" value={formData.email} disabled={!editing} onChange={e => handleInputChange(e)} className="form-email" />
+        <input type="email" name="email" value={formData.email} disabled={editing !== props.listkey || !props.create} onChange={e => handleInputChange(e)} className="form-email" />
 
-        {/* <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={!editing} onChange={e => handleInputChange(e)}>
+        {/* <select className="form-role" name="role" value={formData.role === "admin" ? "admin" : "user"} disabled={editing !== props.listkey} onChange={e => handleInputChange(e)}>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select> */}
 
-        <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={!editing} className="form-role">
+        <button type="button" name="role" value={formData.role ? formData.role : "user"} disabled={editing !== props.listkey || !props.create} className="form-role">
           {formData.role ? formData.role : "user"}
-          <img src="edit.png" className={editing ? "icon" : "icon hidden"} />
+          <img src="edit.png" className={editing === props.listkey || !props.create ? "icon" : "icon hidden"} />
         </button>
 
-        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={!editing} onChange={e => handleInputChange(e)}>
+        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={editing !== props.listkey} onChange={e => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
