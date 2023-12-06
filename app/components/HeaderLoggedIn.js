@@ -39,9 +39,15 @@ function HeaderLoggedIn(props) {
     }
   }
 
+  const toggleProfile = () => {
+    appDispatch({
+      type: "profile"
+    })
+  }
+
   return (
     <Container class={"header-grp"}>
-      <button className="header-btn">
+      <button className="header-btn" onClick={toggleProfile}>
         <img src="profile.png" className="avatar" />
         {appState.user} &#9660;
       </button>

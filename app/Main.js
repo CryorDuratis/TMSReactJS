@@ -27,6 +27,7 @@ import Profile from "./components/Profile"
 
 const initialState = {
   user: Cookies.get("kanbanuser"),
+  overlay: false,
   gtoasts: [],
   btoasts: []
 }
@@ -39,6 +40,7 @@ function reducer(draft, action) {
       return
     case "logout":
       draft.user = ""
+      draft.overlay = false
       draft.gtoasts.push(action.message)
       return
     case "gtoast":
@@ -47,18 +49,15 @@ function reducer(draft, action) {
     case "btoast":
       draft.btoasts.push(action.message)
       return
+    case "profile":
+      draft.overlay = !draft.overlay
   }
 }
 
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
-  const [overlay, setOverlay] = useState(false)
 
   console.log("main state ", state)
-
-  const toggleOverlay = () => {
-    setOverlay(prev => !prev)
-  }
 
   return (
     <StateContext.Provider value={state}>
@@ -66,7 +65,7 @@ function MainComponent() {
         <BrowserRouter>
           <Toast gmessages={state.gtoasts} bmessages={state.btoasts} />
           <Header />
-          <Profile />
+          {state.overlay && <Profile />}
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
