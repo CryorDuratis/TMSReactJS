@@ -20,6 +20,7 @@ import UserList from "./components/UserList"
 import ErrorPage from "./components/ErrorPage"
 import Footer from "./components/Footer"
 import Toast from "./components/Toast"
+import Profile from "./components/Profile"
 
 // immerReducer enables state to be accessed throughout app
 // initial state is empty
@@ -51,8 +52,13 @@ function reducer(draft, action) {
 
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
+  const [overlay, setOverlay] = useState(false)
 
   console.log("main state ", state)
+
+  const toggleOverlay = () => {
+    setOverlay(prev => !prev)
+  }
 
   return (
     <StateContext.Provider value={state}>
@@ -60,6 +66,7 @@ function MainComponent() {
         <BrowserRouter>
           <Toast gmessages={state.gtoasts} bmessages={state.btoasts} />
           <Header />
+          <Profile />
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />

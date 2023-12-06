@@ -67,16 +67,6 @@ function UserList() {
   return (
     <Container class="bgclr-light1 content-container">
       <h2>User List</h2>
-      <Container class="content-wrapper">
-        <div className="grid-header">
-          <strong>Username</strong>
-          <strong>Password</strong>
-          <strong>Email</strong>
-          <strong>User Groups</strong>
-          <strong>Status</strong>
-        </div>
-        {isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} />)}
-      </Container>
       <Container class="create-form-container">
         <div className="grid-header">
           <strong>Username</strong>
@@ -87,6 +77,7 @@ function UserList() {
         </div>
         <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" />
       </Container>
+      <Container class="content-wrapper">{isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} />)}</Container>
     </Container>
   )
 }
