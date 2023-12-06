@@ -202,6 +202,14 @@ body {
   background-color: transparent;
   border: 1px solid grey;
   border-radius: 2px;
+  width: 100%;
+  justify-content: space-between;
+  text-align: start;
+}
+.form-role span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .popup {
   position: absolute;

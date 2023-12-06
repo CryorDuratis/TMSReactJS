@@ -110,7 +110,7 @@ function UserList() {
 
   return (
     <Container class="bgclr-light1 content-container">
-      <div className="flex-row" style={{ justifyContent: "space-between" }}>
+      <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>User List</h2>
         <form className="flex-row" onSubmit={(e) => createGroup(e)}>
           <label htmlFor="group">Create User Group: </label>
