@@ -26,21 +26,25 @@ import Toast from "./components/Toast"
 
 const initialState = {
   user: Cookies.get("kanbanuser"),
-  toasts: []
+  gtoasts: [],
+  btoasts: []
 }
 
 function reducer(draft, action) {
   switch (action.type) {
     case "login":
       draft.user = action.user
-      draft.toasts.push(action.message)
+      draft.gtoasts.push(action.message)
       return
     case "logout":
       draft.user = ""
-      draft.toasts.push(action.message)
+      draft.gtoasts.push(action.message)
       return
-    case "toast":
-      draft.toasts.push(action.message)
+    case "gtoast":
+      draft.gtoasts.push(action.message)
+      return
+    case "btoast":
+      draft.btoasts.push(action.message)
       return
   }
 }
@@ -54,7 +58,7 @@ function MainComponent() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Toast messages={state.toasts} />
+          <Toast gmessages={state.gtoasts} bmessages={state.btoasts} />
           <Header />
           {/* main body */}
           <Routes>

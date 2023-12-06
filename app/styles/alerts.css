@@ -6,16 +6,29 @@
   top: 38px;
   left: 50%;
   transform: translateX(-50%);
-  -moz-animation: floatingAlert ease-in 5s forwards;
-  -webkit-animation: floatingAlert ease-in 5s forwards;
-  -o-animation: floatingAlert ease-in 5s forwards;
-  animation: floatingAlert ease-in 5s forwards;
+  -moz-animation: floatingAlert ease-in 3s forwards;
+  -webkit-animation: floatingAlert ease-in 3s forwards;
+  -o-animation: floatingAlert ease-in 3s forwards;
+  animation: floatingAlert ease-in 3s forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
 .toasts .toast:last-of-type {
   display: block;
+}
+
+.toast-success {
+  background-color: lightgreen;
+  border: 1px solid forestgreen;
+  color: forestgreen;
+  padding: 20px;
+}
+.toast-error {
+  background-color: lightcoral;
+  border: 1px solid maroon;
+  color: maroon;
+  padding: 20px;
 }
 
 @keyframes floatingAlert {
@@ -40,7 +53,7 @@
   100% {
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-50%) scale(1.2);
+    transform: translateX(-50%) scale(1);
   }
 }
 
@@ -66,6 +79,6 @@
   100% {
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-50%) scale(1.2);
+    transform: translateX(-50%) scale(1);
   }
 }

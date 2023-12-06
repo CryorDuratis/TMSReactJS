@@ -27,13 +27,14 @@ function Sidebar() {
 
         // if not logged in
         if (response.data.unauth) {
-          console.log("this is called")
-          appDispatch({
-            type: "logout",
-            message: "Logged out"
-          })
+          if (response.data.unauth === "login") {
+            appDispatch({
+              type: "logout",
+              message: "Logged out"
+            })
+            navigate("/login")
+          }
           setUMButton(false)
-          navigate("/login")
           return
         }
         // Set the state based on the server response

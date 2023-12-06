@@ -79,7 +79,7 @@ img {
   margin-bottom: 4px;
 }
 .error-outline {
-  border: 1px solid red;
+  border-color: 1px solid red;
 }
 .login-error {
   border: 1px solid rgb(255, 70, 70);

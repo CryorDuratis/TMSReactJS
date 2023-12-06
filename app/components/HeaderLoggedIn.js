@@ -19,8 +19,8 @@ function HeaderLoggedIn(props) {
       // if request fails
       if (response.data.error) {
         appDispatch({
-          type: "toast",
-          message: "An error was encountered",
+          type: "btoast",
+          message: "An error was encountered"
         })
         return
       }
@@ -31,7 +31,7 @@ function HeaderLoggedIn(props) {
 
       appDispatch({
         type: "logout",
-        message: "Logged out",
+        message: "Logged out"
       })
       navigate("/login")
     } catch (e) {

@@ -43,7 +43,7 @@ function UserList() {
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
-            appDispatch({ type: "toast", message: "Unauthorized page, redirecting to home" })
+            appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
             navigate("/")
           }
           return
