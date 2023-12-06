@@ -137,7 +137,7 @@ body {
   min-width: min-content;
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
+  margin-top: 80px;
   margin-bottom: 80px;
 }
 .grid-header {

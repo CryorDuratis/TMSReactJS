@@ -95,23 +95,18 @@ img {
   justify-content: center;
   align-items: center;
 }
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+}
 
 /* body content - form input */
 .form-group input,
 .form-group textarea {
   position: relative;
   z-index: 2;
-}
-
-/* body content - form textarea */
-textarea.tall-textarea {
-  height: 160px;
-}
-
-@media (min-width: 768px) {
-  textarea.tall-textarea {
-    height: 320px;
-  }
 }
 
 /* button styles */
@@ -126,6 +121,12 @@ button {
 }
 button:hover {
   cursor: pointer;
+}
+.gobutton:hover {
+  background-color: greenyellow;
+}
+.backbutton:hover {
+  background-color: salmon;
 }
 
 /* background colour */

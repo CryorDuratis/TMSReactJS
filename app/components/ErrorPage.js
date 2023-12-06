@@ -9,7 +9,7 @@ function ErrorPage() {
 
   const appState = useContext(StateContext)
 
-  return <Container>{appState.error ? "loading..." : appState.error}</Container>
+  return <Container>{appState.error ? appState.error : "loading..."}</Container>
 }
 
 export default ErrorPage

@@ -252,12 +252,12 @@ function UserCard(props) {
 
         <div className="form-cancel">
           {props.editing === editkey ? (
-            <button type="reset" onClick={(e) => handleCancel(e)}>
+            <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
               Cancel
             </button>
           ) : (
             props.create && (
-              <button type="reset" onClick={(e) => handleCancel(e)}>
+              <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
                 Clear
               </button>
             )
@@ -266,11 +266,11 @@ function UserCard(props) {
 
         <div className="form-edit">
           {props.editing === editkey ? (
-            <button type="submit" onClick={(e) => handleUpdate(e)}>
+            <button type="submit" onClick={(e) => handleUpdate(e)} className="gobutton">
               Update
             </button>
           ) : (
-            <button type="button" onClick={props.create ? (e) => handleUpdate(e) : (e) => handleClick(e)}>
+            <button type="button" onClick={props.create ? (e) => handleUpdate(e) : (e) => handleClick(e)} className="gobutton">
               {props.create ? "Create" : "Edit"}
             </button>
           )}
