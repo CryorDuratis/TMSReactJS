@@ -39,13 +39,13 @@ function UserCard(props) {
   }, [props.editing])
 
   // set editing to this item
-  const handleClick = async e => {
+  const handleClick = async (e) => {
     e.preventDefault()
     props.setEditing(editkey)
   }
 
   // submit to backend and update user list state
-  const handleUpdate = async e => {
+  const handleUpdate = async (e) => {
     e.preventDefault()
     console.log("selectedroles: ", selectedRoles)
 
@@ -66,7 +66,7 @@ function UserCard(props) {
           setError("invalid")
           appDispatch({
             type: "btoast",
-            message: "Password must have letters, numbers and special characters, and 8-10 characters long"
+            message: "Password must have letters, numbers and special characters, and 8-10 characters long",
           })
           props.update()
           return
@@ -84,7 +84,7 @@ function UserCard(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -106,13 +106,17 @@ function UserCard(props) {
           setError("invalid")
           appDispatch({
             type: "btoast",
-            message: "Password must have letters, numbers and special characters, and 8-10 characters long"
+            message: "Password must have letters, numbers and special characters, and 8-10 characters long",
           })
           props.update()
           return
         }
         // else on success
         setError(false)
+        appDispatch({
+          type: "gtoast",
+          message: "User account edited successfully",
+        })
       } catch (e) {
         console.log(e)
       }
@@ -130,7 +134,7 @@ function UserCard(props) {
           setError("required")
           appDispatch({
             type: "btoast",
-            message: "Username and Password are required"
+            message: "Username and Password are required",
           })
           props.update()
           return
@@ -142,7 +146,7 @@ function UserCard(props) {
           setError("invalid")
           appDispatch({
             type: "btoast",
-            message: "Password must have letters, numbers and special characters, and 8-10 characters long"
+            message: "Password must have letters, numbers and special characters, and 8-10 characters long",
           })
           props.update()
           return
@@ -156,7 +160,7 @@ function UserCard(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -178,13 +182,17 @@ function UserCard(props) {
           setError("conflict")
           appDispatch({
             type: "btoast",
-            message: "Username already exists"
+            message: "Username already exists",
           })
           props.update()
           return
         }
         // else on success
         setError(false)
+        appDispatch({
+          type: "gtoast",
+          message: "New user created successfully",
+        })
       } catch (e) {
         console.log(e)
       }
@@ -194,7 +202,7 @@ function UserCard(props) {
   }
 
   // set default form data if canceled or cleared
-  const handleCancel = e => {
+  const handleCancel = (e) => {
     setFormData(props.user)
     setPassword("")
     setSelectedRoles(props.user.role)
@@ -204,15 +212,12 @@ function UserCard(props) {
   }
 
   // updates form values for axios submission since single page react cant use default form actions
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }))
-  }
-  const handlePasswordChange = e => {
-    setPassword(e.target.value)
   }
 
   // pass to each user form to handle roles in a multiselect dropdown
@@ -227,32 +232,32 @@ function UserCard(props) {
   return (
     <Container listkey={props.listkey} class={props.class}>
       <form className="user-form">
-        <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} className={error ? "form-username error-outline" : "form-username"} />
+        <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={(e) => handleInputChange(e)} className={error ? "form-username error-outline" : "form-username"} />
 
-        <input type="password" name="password" value={password} placeholder="********" disabled={props.editing !== editkey && !props.create} onChange={e => handlePasswordChange(e)} className={error ? "form-password error-outline" : "form-password"} />
+        <input type="password" name="password" value={password} placeholder="********" disabled={props.editing !== editkey && !props.create} onChange={(e) => setPassword(e.target.value)} className={error ? "form-password error-outline" : "form-password"} />
 
-        <input type="text" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-email" />
+        <input type="text" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} className="form-email" />
 
         <div className="form-role">
-          <button type="button" name="role" value={selectedRoles ? selectedRoles : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>
+          <button type="button" name="role" value={selectedRoles ? selectedRoles : "user"} disabled={props.editing !== editkey && !props.create} onClick={(e) => togglePopup(e)}>
             {selectedRoles ? selectedRoles : "user"} {props.editing === editkey || props.create ? <>&#9660;</> : ""}
           </button>
           <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef} roles={selectedRoles} setRoles={setSelectedRoles} />
         </div>
 
-        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={e => handleInputChange(e)}>
+        <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={(e) => handleInputChange(e)}>
           <option value="1">Active</option>
           <option value="0">Disabled</option>
         </select>
 
         <div className="form-cancel">
           {props.editing === editkey ? (
-            <button type="reset" onClick={e => handleCancel(e)}>
+            <button type="reset" onClick={(e) => handleCancel(e)}>
               Cancel
             </button>
           ) : (
             props.create && (
-              <button type="reset" onClick={e => handleCancel(e)}>
+              <button type="reset" onClick={(e) => handleCancel(e)}>
                 Clear
               </button>
             )
@@ -261,11 +266,11 @@ function UserCard(props) {
 
         <div className="form-edit">
           {props.editing === editkey ? (
-            <button type="submit" onClick={e => handleUpdate(e)}>
+            <button type="submit" onClick={(e) => handleUpdate(e)}>
               Update
             </button>
           ) : (
-            <button type="button" onClick={props.create ? e => handleUpdate(e) : e => handleClick(e)}>
+            <button type="button" onClick={props.create ? (e) => handleUpdate(e) : (e) => handleClick(e)}>
               {props.create ? "Create" : "Edit"}
             </button>
           )}

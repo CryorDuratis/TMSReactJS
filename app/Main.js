@@ -29,7 +29,7 @@ const initialState = {
   user: Cookies.get("kanbanuser"),
   overlay: false,
   gtoasts: [],
-  btoasts: []
+  btoasts: [],
 }
 
 function reducer(draft, action) {
@@ -51,6 +51,10 @@ function reducer(draft, action) {
       return
     case "profile":
       draft.overlay = !draft.overlay
+      return
+    case "closeprofile":
+      draft.overlay = false
+      return
   }
 }
 
@@ -59,13 +63,17 @@ function MainComponent() {
 
   console.log("main state ", state)
 
+  const handleClosePopup = () => {
+    dispatch({ type: "closeprofile" })
+  }
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
           <Toast gmessages={state.gtoasts} bmessages={state.btoasts} />
           <Header />
-          {state.overlay && <Profile />}
+          {state.overlay && <Profile isOpen={state.overlay} onClose={handleClosePopup} />}
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />

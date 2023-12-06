@@ -10,7 +10,7 @@ function Popup(props) {
 
   // closes popup if clicked outside, sends selected roles array as string to parent
   useEffect(() => {
-    const handleOutsideClick = event => {
+    const handleOutsideClick = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         props.onClose()
       }
@@ -25,17 +25,17 @@ function Popup(props) {
   }, [props.onClose])
 
   // position the popup below button
-  useEffect(() => {
-    if (props.isOpen && props.buttonRef.current) {
-      const buttonRect = props.buttonRef.current.getBoundingClientRect()
-      const popupRect = popupRef.current.getBoundingClientRect()
+  // useEffect(() => {
+  //   if (props.isOpen && props.buttonRef.current) {
+  //     const buttonRect = props.buttonRef.current.getBoundingClientRect()
+  //     const popupRect = popupRef.current.getBoundingClientRect()
 
-      const bottom = buttonRect.top + window.scrollY
-      const left = buttonRect.left + window.scrollX + buttonRect.width / 2 - popupRect.width / 2
+  //     const bottom = buttonRect.top + window.scrollY
+  //     const left = buttonRect.left + window.scrollX + buttonRect.width / 2 - popupRect.width / 2
 
-      setPosition({ bottom, left })
-    }
-  }, [props.isOpen, props.buttonRef])
+  //     setPosition({ bottom, left })
+  //   }
+  // }, [props.isOpen, props.buttonRef])
 
   // get list of groups
   useEffect(() => {
@@ -51,7 +51,7 @@ function Popup(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -62,7 +62,7 @@ function Popup(props) {
         }
 
         // Set the grouplist based on the server response
-        setgrouplist(response.data.groupsData.map(obj => obj.groupname))
+        setgrouplist(response.data.groupsData.map((obj) => obj.groupname))
 
         // console.log("groups obtained ", grouplist)
       } catch (error) {
@@ -76,11 +76,11 @@ function Popup(props) {
   }, [])
 
   // update selected list array
-  const handleCheckboxChange = event => {
+  const handleCheckboxChange = (event) => {
     const value = event.target.value
-    setselectedlist(prevselect => {
+    setselectedlist((prevselect) => {
       if (prevselect.includes(value)) {
-        return prevselect.filter(selected => selected !== value)
+        return prevselect.filter((selected) => selected !== value)
       } else {
         return [...prevselect, value]
       }
@@ -92,7 +92,7 @@ function Popup(props) {
       Select Roles:
       <br />
       {grouplist.map((groupname, index) => (
-        <label key={index}>
+        <label key={index} style={{ display: "flex", flexDirection: "row" }}>
           <input type="checkbox" name="roles" value={groupname} checked={selectedlist.includes(groupname)} onChange={handleCheckboxChange} /> {groupname}
         </label>
       ))}

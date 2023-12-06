@@ -23,12 +23,10 @@ function Login() {
   // const ourRequest = Axios.CancelToken.source()
   const handleLogin = async (e) => {
     e.preventDefault()
-    appDispatch({ type: "loading" })
     try {
       // if required fields blank
       if (!username || !password) {
         setError("required")
-        appDispatch({ type: "done" })
         return
       }
 
@@ -39,13 +37,11 @@ function Login() {
       // if request fails
       if (response.data.error) {
         appDispatch({ type: "logerror", error: response.data.error })
-        appDispatch({ type: "done" })
         return
       }
       // if login fails
       if (!response.data.success) {
         setError(response.data.message)
-        appDispatch({ type: "done" })
         return
       }
       // else on success, set login details
