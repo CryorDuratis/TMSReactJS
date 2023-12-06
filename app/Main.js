@@ -26,7 +26,7 @@ import Toast from "./components/Toast"
 
 const initialState = {
   user: Cookies.get("kanbanuser"),
-  toasts: [],
+  toasts: []
 }
 
 function reducer(draft, action) {
@@ -54,7 +54,7 @@ function MainComponent() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          {/* <Toast messages={state.toasts} /> */}
+          <Toast messages={state.toasts} />
           <Header />
           {/* main body */}
           <Routes>

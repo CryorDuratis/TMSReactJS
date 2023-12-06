@@ -1,5 +1,5 @@
 /* alerts */
-.floating-alert {
+.toast {
   display: none;
   position: absolute;
   z-index: 999;
@@ -14,7 +14,7 @@
   animation-fill-mode: forwards;
 }
 
-.floating-alerts .floating-alert:last-of-type {
+.toasts .toast:last-of-type {
   display: block;
 }
 

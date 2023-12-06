@@ -5,7 +5,7 @@ function Toast(props) {
     <div className="toasts">
       {props.messages.map((msg, index) => {
         return (
-          <div key={index} className="toast toast-success text-center shadow-sm">
+          <div key={index} className="toast alert alert-success text-center shadow-sm">
             {msg}
           </div>
         )

@@ -193,7 +193,8 @@ body {
   z-index: 1000;
 }
 .popup.open {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .hidden {

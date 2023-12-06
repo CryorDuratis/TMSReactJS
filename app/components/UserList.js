@@ -23,7 +23,7 @@ function UserList() {
   // updates list when new user is created
   const updateUserList = () => {
     console.log("update user list called")
-    setUpdateFlag((prev) => !prev)
+    setUpdateFlag(prev => !prev)
   }
 
   // display user information on load, and on update
@@ -32,27 +32,22 @@ function UserList() {
       try {
         // Make authorization request to the server
         const token = Cookies.get("token")
-        var response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin", token })
+        var response = await Axios.post("/user/getall", { groupname: "admin", token })
 
         // if not logged in
         if (response.data.unauth) {
-          appDispatch({
-            type: "logout",
-            message: "Logged out",
-          })
-          navigate("/login")
+          if (response.data.unauth === "login") {
+            appDispatch({
+              type: "logout",
+              message: "Logged out"
+            })
+            navigate("/login")
+          } else if (response.data.unauth === "role") {
+            appDispatch({ type: "toast", message: "Unauthorized page, redirecting to home" })
+            navigate("/")
+          }
           return
         }
-
-        // If unauthorized
-        if (!response.data.authorized) {
-          appDispatch({ type: "toast", message: "Unauthorized page, redirecting to home" })
-          navigate("/")
-          return
-        }
-
-        // Make fetch request to the server
-        response = await Axios.post("/user/getall", { token })
 
         // Set the state based on the server response
         setUserList(response.data.usersData)

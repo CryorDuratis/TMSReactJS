@@ -23,20 +23,21 @@ function Sidebar() {
         // check permissions: in this case only admin
         // Make authorization request to the server
         const token = Cookies.get("token")
-        const response = await Axios.post("/checkgroup", { userid: appState.user, groupname: "admin", token })
+        const response = await Axios.post("/checkgroup", { groupname: "admin", token })
 
         // if not logged in
         if (response.data.unauth) {
+          console.log("this is called")
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
+          setUMButton(false)
           navigate("/login")
           return
         }
-
         // Set the state based on the server response
-        setUMButton(response.data.authorized)
+        else setUMButton(true)
       } catch (error) {
         console.error("Error fetching data:", error)
         // Handle errors as needed
