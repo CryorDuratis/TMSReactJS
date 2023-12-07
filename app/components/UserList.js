@@ -27,6 +27,7 @@ function UserList() {
   const updateUserList = () => {
     console.log("update user list called")
     setUpdateFlag(prev => !prev)
+    navigate("/usermgmt")
   }
 
   // display user information on load, and on update
@@ -173,9 +174,9 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" grouplist={grouplist} setgrouplist={setgrouplist} />
+        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} userlist={userList} class="edit-form-container" grouplist={grouplist} setgrouplist={setgrouplist} />
       </Container>
-      <Container class="content-wrapper">{isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} grouplist={grouplist} setgrouplist={setgrouplist} />)}</Container>
+      <Container class="content-wrapper">{isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} userlist={userList} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} grouplist={grouplist} setgrouplist={setgrouplist} />)}</Container>
     </Container>
   )
 }

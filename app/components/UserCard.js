@@ -16,7 +16,12 @@ function UserCard(props) {
   const navigate = useNavigate()
 
   // state of fields
-  const [formData, setFormData] = useState(props.user)
+  var defaultuser = {}
+  if (props.listkey) {
+    defaultuser = props.userlist[props.listkey]
+  } else defaultuser = props.user
+
+  const [formData, setFormData] = useState(defaultuser)
   const [password, setPassword] = useState("")
   const [selectedRoles, setSelectedRoles] = useState(formData.role)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -30,13 +35,13 @@ function UserCard(props) {
     if (!props.create) {
       if (props.editing !== editkey) {
         setIsPopupOpen(false)
-        setFormData(props.user)
+        setFormData(defaultuser)
         setPassword("")
-        setSelectedRoles(props.user.role)
+        setSelectedRoles(defaultuser.role)
       }
       // close popup
     }
-  }, [props.editing])
+  }, [props.editing, props.userlist])
 
   // set editing to this item
   const handleClick = async e => {
@@ -203,9 +208,9 @@ function UserCard(props) {
 
   // set default form data if canceled or cleared
   const handleCancel = e => {
-    setFormData(props.user)
+    setFormData(defaultuser)
     setPassword("")
-    setSelectedRoles(props.user.role)
+    setSelectedRoles(defaultuser.role)
     if (!props.create) {
       props.setEditing(0)
     }
