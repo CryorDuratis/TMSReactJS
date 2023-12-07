@@ -15,7 +15,7 @@ import StateContext from "./StateContext"
 // import components
 import Header from "./components/Header"
 import Login from "./components/Login"
-import Dashboard from "./components/Dashboard"
+import Dashboard from "./templates/Dashboard"
 import UserList from "./components/UserList"
 import ErrorPage from "./components/ErrorPage"
 import Footer from "./components/Footer"
@@ -26,28 +26,33 @@ import Profile from "./components/Profile"
 // initial state is empty
 
 const initialState = {
-  user: Cookies.get("kanbanuser"),
+  user: "",
+  usergroup: "",
   overlay: false,
-  gtoasts: [],
-  btoasts: [],
+  toasts: [],
+  toasttype: false,
 }
 
 function reducer(draft, action) {
   switch (action.type) {
     case "login":
       draft.user = action.user
-      draft.gtoasts.push(action.message)
+      draft.toasts.push(action.message)
+      draft.toasttype = true
       return
     case "logout":
       draft.user = ""
       draft.overlay = false
-      draft.gtoasts.push(action.message)
+      draft.toasts.push(action.message)
+      draft.toasttype = true
       return
     case "gtoast":
-      draft.gtoasts.push(action.message)
+      draft.toasts.push(action.message)
+      draft.toasttype = true
       return
     case "btoast":
-      draft.btoasts.push(action.message)
+      draft.toasts.push(action.message)
+      draft.toasttype = false
       return
     case "profile":
       draft.overlay = !draft.overlay
@@ -71,7 +76,7 @@ function MainComponent() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Toast gmessages={state.gtoasts} bmessages={state.btoasts} />
+          <Toast messages={state.toasts} />
           <Header />
           {state.overlay && <Profile isOpen={state.overlay} onClose={handleClosePopup} />}
           {/* main body */}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react"
-import Container from "./Container"
+import Container from "../templates/Container"
 import StateContext from "../StateContext"
 
 function ErrorPage() {

@@ -3,7 +3,7 @@ import React, { useEffect } from "react"
 
 // import components
 import Page from "./Page"
-import Sidebar from "./Sidebar"
+import Sidebar from "../components/Sidebar"
 
 const generateuniqueKey = () => {
   return new Date().getTime().toString()

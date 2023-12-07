@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react"
-import Container from "./Container"
+import Container from "../templates/Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Axios from "axios"
@@ -20,7 +20,7 @@ function HeaderLoggedIn(props) {
       if (response.data.error) {
         appDispatch({
           type: "btoast",
-          message: "An error was encountered"
+          message: "An error was encountered",
         })
         return
       }
@@ -31,7 +31,7 @@ function HeaderLoggedIn(props) {
 
       appDispatch({
         type: "logout",
-        message: "Logged out"
+        message: "Logged out",
       })
       navigate("/login")
     } catch (e) {
@@ -41,7 +41,7 @@ function HeaderLoggedIn(props) {
 
   const toggleProfile = () => {
     appDispatch({
-      type: "profile"
+      type: "profile",
     })
   }
 

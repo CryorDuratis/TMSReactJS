@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import Axios from "axios"
 
 // import components
-import Container from "./Container"
+import Container from "../templates/Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
@@ -30,7 +30,7 @@ function Sidebar() {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           }

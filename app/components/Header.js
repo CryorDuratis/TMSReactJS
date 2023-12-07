@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { useNavigate } from "react-router-dom"
-import Container from "./Container"
+import Container from "../templates/Container"
 import HeaderLoggedIn from "./HeaderLoggedIn"
 import StateContext from "../StateContext"
 
