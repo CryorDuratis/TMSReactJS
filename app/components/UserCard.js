@@ -54,7 +54,7 @@ function UserCard(props) {
       props.setEditing(0)
       console.log("edit form was submitted")
       try {
-        const { username, email } = formData
+        const { username, email, isactive } = formData
         const role = selectedRoles ? selectedRoles : ""
 
         const token = Cookies.get("token")
@@ -73,7 +73,7 @@ function UserCard(props) {
         }
 
         // send request -- edit
-        const requestbody = { groupname: "admin", username, email, role, token }
+        const requestbody = { groupname: "admin", username, email, role, token, isactive }
         if (password.length > 0) {
           requestbody.password = password
         }
