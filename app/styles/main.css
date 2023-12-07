@@ -142,7 +142,7 @@ body {
 }
 .grid-header {
   display: grid;
-  grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px 20px 150px;
+  grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px minmax(20px, 2fr) 150px;
   gap: 10px 10px;
   align-items: center;
   padding: 0 10px;
@@ -163,7 +163,7 @@ body {
 .user-form {
   display: grid;
   grid-template-areas: "username password email role status gap cancel edit";
-  grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px 20px 70px 70px;
+  grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px minmax(20px, 2fr) 70px 70px;
   gap: 10px 10px;
   width: 100%;
   margin: 0;
@@ -218,6 +218,7 @@ body {
   padding: 10px;
   display: none;
   z-index: 1000;
+  white-space: nowrap;
 }
 .popup.open {
   display: flex;

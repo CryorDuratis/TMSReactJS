@@ -18,7 +18,7 @@ function Profile() {
 
   // closes profile overlay if clicked outside
   useEffect(() => {
-    const handleOutsideClick = (event) => {
+    const handleOutsideClick = event => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         console.log("detected outside click")
         appDispatch({ type: "closeprofile" })
@@ -44,7 +44,7 @@ function Profile() {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
           return
@@ -62,7 +62,7 @@ function Profile() {
   }, [])
 
   // handle submit edit form
-  const handleEdit = async (e) => {
+  const handleEdit = async e => {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
@@ -74,7 +74,7 @@ function Profile() {
         setError("invalid")
         appDispatch({
           type: "btoast",
-          message: "Password must have letters, numbers and special characters, and 8-10 characters long",
+          message: "Password must have letters, numbers and special characters, and 8-10 characters long"
         })
         return
       }
@@ -92,7 +92,7 @@ function Profile() {
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
         navigate("/login")
         return
@@ -108,7 +108,7 @@ function Profile() {
         setError("invalid")
         appDispatch({
           type: "btoast",
-          message: "Password must have letters, numbers and special characters, and 8-10 characters long",
+          message: "Password must have letters, numbers and special characters, and 8-10 characters long"
         })
         return
       }
@@ -116,7 +116,7 @@ function Profile() {
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "Personal details updated",
+        message: "Personal details updated"
       })
     } catch (error) {
       console.log("error is ", error)
@@ -128,13 +128,17 @@ function Profile() {
       <h2 style={{ width: "max-content" }}>Update Personal Details</h2>
       {error === "invalid" && <div className="login-error">Invalid login details.</div>}
       <form onSubmit={handleEdit} style={{ display: "flex", flexDirection: "column" }}>
+        <label>
+          Username: <br />
+          <input type="text" value={appState.user} style={{ border: "none" }} />
+        </label>
         <label htmlFor="email">
           Update Email:
-          <input type="text" name="email" value={email} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+          <input type="text" name="email" value={email} placeholder="email" onChange={e => setEmail(e.target.value)} />
         </label>
         <label htmlFor="password">
           Change Password:
-          <input type="password" name="password" placeholder="password" className={error ? "error-outline" : undefined} onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" name="password" placeholder="password" className={error ? "error-outline" : undefined} onChange={e => setPassword(e.target.value)} />
         </label>
         <button type="reset" onClick={handleEdit}>
           Update

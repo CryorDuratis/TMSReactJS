@@ -20,12 +20,13 @@ function UserList() {
   const [updateFlag, setUpdateFlag] = useState(false)
   const [editing, setEditing] = useState(0)
   const [group, setGroup] = useState("")
+  const [grouplist, setgrouplist] = useState([])
   const [error, setError] = useState("")
 
   // updates list when new user is created
   const updateUserList = () => {
     console.log("update user list called")
-    setUpdateFlag((prev) => !prev)
+    setUpdateFlag(prev => !prev)
   }
 
   // display user information on load, and on update
@@ -41,7 +42,7 @@ function UserList() {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out",
+              message: "Logged out"
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -67,7 +68,7 @@ function UserList() {
   }, [updateFlag])
 
   // create group form submitted
-  const createGroup = async (e) => {
+  const createGroup = async e => {
     e.preventDefault()
     try {
       // send request -- create group
@@ -79,7 +80,7 @@ function UserList() {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
         } else if (response.data.unauth === "role") {
@@ -99,23 +100,67 @@ function UserList() {
         setError("conflict")
         appDispatch({
           type: "btoast",
-          message: "Group name already exists",
+          message: "Group name already exists"
         })
         return
       }
+      setgrouplist(prev => [...prev, group])
+      setGroup("")
+      appDispatch({
+        type: "gtoast",
+        message: "Group successfully created"
+      })
     } catch (error) {
       console.log("error is ", error)
     }
   }
 
+  // get list of groups
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        // Make fetch request to the server
+        const token = Cookies.get("token")
+        const response = await Axios.post("/group/getall", { groupname: "admin", token })
+        // console.log("response ", response.data)
+
+        // if not logged in
+        if (response.data.unauth) {
+          if (response.data.unauth === "login") {
+            appDispatch({
+              type: "logout",
+              message: "Logged out"
+            })
+            navigate("/login")
+          } else if (response.data.unauth === "role") {
+            appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
+            navigate("/")
+          }
+          return
+        }
+
+        // Set the grouplist based on the server response
+        setgrouplist(response.data.groupsData.map(obj => obj.groupname))
+
+        // console.log("groups obtained ", grouplist)
+      } catch (error) {
+        console.error("Error fetching data:", error)
+        // Handle errors as needed
+      }
+    }
+
+    // Call the fetch function when the component mounts
+    fetchGroups()
+  }, [])
+
   return (
     <Container class="bgclr-light1 content-container">
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>User List</h2>
-        <form className="flex-row" onSubmit={(e) => createGroup(e)}>
+        <form className="flex-row" onSubmit={e => createGroup(e)}>
           <label htmlFor="group">Create User Group: </label>
-          <input className={error === "conflict" ? "error-outline" : undefined} type="text" name="group" onChange={(e) => setGroup(e.target.value)} />
-          <button type="button" onClick={(e) => createGroup(e)} className="gobutton">
+          <input className={error === "conflict" ? "error-outline" : undefined} type="text" name="group" value={group} onChange={e => setGroup(e.target.value)} />
+          <button type="button" onClick={e => createGroup(e)} className="gobutton">
             Create Group
           </button>
         </form>
@@ -128,9 +173,9 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" />
+        <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} class="edit-form-container" grouplist={grouplist} setgrouplist={setgrouplist} />
       </Container>
-      <Container class="content-wrapper">{isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} />)}</Container>
+      <Container class="content-wrapper">{isLoading ? "loading" : userList.map((user, index) => <UserCard user={user} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} grouplist={grouplist} setgrouplist={setgrouplist} />)}</Container>
     </Container>
   )
 }
