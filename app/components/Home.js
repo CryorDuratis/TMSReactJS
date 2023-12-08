@@ -1,24 +1,21 @@
 // import node modules
-import React, { useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 
 // import components
-
 import Sidebar from "../components/Sidebar"
 import Page from "../templates/Page"
-
-const generateuniqueKey = () => {
-  return new Date().getTime().toString()
-}
+import StateContext from "../StateContext"
+import DispatchContext from "../DispatchContext"
 
 function Home(props) {
-  var uniqueKey = ""
+  // check authentication and authorization on remount
   useEffect(() => {
-    uniqueKey = generateuniqueKey()
+    props.onLoad()
   }, [])
 
   return (
     <Page>
-      <Sidebar key={uniqueKey} />
+      <Sidebar />
       {/* AppList */}
     </Page>
   )

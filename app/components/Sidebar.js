@@ -11,17 +11,15 @@ import Cookies from "js-cookie"
 
 function Sidebar() {
   const appState = useContext(StateContext)
-  const appDispatch = useContext(DispatchContext)
+  // const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
-
-  const [UMButton, setUMButton] = useState(false)
 
   return (
     <Container class="sidebar bgclr-light2">
       <div className="sidebar-container">
         <nav>
           <h2>Dashboard</h2>
-          {UMButton && <span onClick={() => navigate("/usermgmt")}>Users Management</span>}
+          {appState.admin && <span onClick={() => navigate("/usermgmt")}>Users Management</span>}
         </nav>
       </div>
     </Container>

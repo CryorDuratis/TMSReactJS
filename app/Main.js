@@ -78,46 +78,47 @@ function reducer(draft, action) {
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
+  console.log("main state ", state)
+
   // check authentication and authorization on remount
-  useEffect(() => {
-    const fetchAuth = async () => {
-      try {
-        // check permissions: in this case only admin
-        // Make authorization request to the server
-        const token = Cookies.get("token")
-        const response = await Axios.post("/checkgroup", { groupname: "admin", token })
 
-        // if not logged in
-        if (response.data.unauth) {
-          if (response.data.unauth === "login") {
-            appDispatch({
-              type: "logout",
-              message: "Logged out"
-            })
-          }
-          if (response.data.unauth === "role" && state.admin) {
-            dispatch({
-              type: "admin",
-              admin: false
-            })
-          }
+  const fetchAuth = async () => {
+    try {
+      // check permissions: in this case only admin
+      // Make authorization request to the server
+      const token = Cookies.get("token")
+      const response = await Axios.post("/checkgroup", { groupname: "admin", token })
+
+      // if not logged in
+      if (response.data.unauth) {
+        if (response.data.unauth === "login") {
+          dispatch({
+            type: "logout",
+            message: "Logged out"
+          })
         }
-        dispatch({
-          type: "update",
-          user: response.data.user
-        })
-        if (!state.admin) dispatch({ type: "admin", admin: true })
-      } catch (error) {
-        console.error("Error fetching data:", error)
-        // Handle errors as needed
+        if (response.data.unauth === "role" && state.admin) {
+          dispatch({
+            type: "admin",
+            admin: false
+          })
+        }
       }
+      dispatch({
+        type: "update",
+        user: response.data.user
+      })
+      if (!state.admin) dispatch({ type: "admin", admin: true })
+    } catch (error) {
+      console.error("Error fetching data:", error)
+      // Handle errors as needed
     }
+  }
 
+  useEffect(() => {
     // Call the fetch function when the component mounts
     fetchAuth()
   }, [])
-
-  console.log("main state ", state)
 
   const handleClosePopup = () => {
     dispatch({ type: "closeprofile" })
@@ -133,8 +134,8 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={state.user ? <Home /> : <Login />} />
-            <Route path="/usermgmt" element={state.user ? <UserMgmt /> : <Login />} />
+            <Route path="/" element={state.user ? <Home onLoad={fetchAuth} /> : <Login />} />
+            <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
             <Route element={<ErrorPage />} />
           </Routes>

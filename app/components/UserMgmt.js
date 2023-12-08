@@ -7,19 +7,15 @@ import Sidebar from "../components/Sidebar"
 import UserList from "../components/UserList"
 import Page from "../templates/Page"
 
-const generateuniqueKey = () => {
-  return new Date().getTime().toString()
-}
-
 function UserMgmt(props) {
-  var uniqueKey = ""
+  // check authentication and authorization on remount
   useEffect(() => {
-    uniqueKey = generateuniqueKey()
+    props.onLoad()
   }, [])
 
   return (
     <Page>
-      <Sidebar key={uniqueKey} />
+      <Sidebar />
       <UserList />
     </Page>
   )
