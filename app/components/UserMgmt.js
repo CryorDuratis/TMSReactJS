@@ -2,7 +2,6 @@
 import React, { useEffect } from "react"
 
 // import components
-
 import Sidebar from "../components/Sidebar"
 import UserList from "../components/UserList"
 import Page from "../templates/Page"

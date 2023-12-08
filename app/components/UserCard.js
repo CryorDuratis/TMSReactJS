@@ -247,7 +247,7 @@ function UserCard(props) {
     // close popup
     setIsPopupOpen(false)
   }
-  console.log("selectedroles ", selectedRoles)
+
   return (
     <form className="user-form">
       <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} className={error ? "form-username error-outline" : "form-username"} />

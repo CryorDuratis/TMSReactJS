@@ -130,7 +130,7 @@ function Profile() {
       <form onSubmit={handleEdit} style={{ display: "flex", flexDirection: "column" }}>
         <label>
           Username: <br />
-          <input type="text" value={appState.user} style={{ border: "none" }} />
+          <input type="text" value={appState.user} style={{ border: "none" }} readOnly />
         </label>
         <label htmlFor="email">
           Update Email:
