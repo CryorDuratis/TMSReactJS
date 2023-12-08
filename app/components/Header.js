@@ -12,7 +12,7 @@ function Header(props) {
     <Container class={"header-bar bgclr-accent colr-dark"}>
       <div className="header-container">
         <span onClick={() => navigate("/")} className="logo">
-          KANBAN
+          TMS
         </span>
         {appState.user && <HeaderLoggedIn />}
       </div>

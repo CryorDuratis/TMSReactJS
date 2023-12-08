@@ -15,12 +15,12 @@ import StateContext from "./StateContext"
 // import components
 import Header from "./components/Header"
 import Login from "./components/Login"
-import Dashboard from "./templates/Dashboard"
-import UserList from "./components/UserList"
 import ErrorPage from "./components/ErrorPage"
 import Footer from "./components/Footer"
 import Toast from "./components/Toast"
 import Profile from "./components/Profile"
+import Home from "./components/Home"
+import UserMgmt from "./components/UserMgmt"
 
 // immerReducer enables state to be accessed throughout app
 // initial state is empty
@@ -30,7 +30,7 @@ const initialState = {
   usergroup: "",
   overlay: false,
   toasts: [],
-  toasttype: false,
+  toasttype: false
 }
 
 function reducer(draft, action) {
@@ -82,19 +82,8 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={state.user ? <Dashboard /> : <Login />} />
-            <Route
-              path="/usermgmt"
-              element={
-                state.user ? (
-                  <Dashboard>
-                    <UserList />
-                  </Dashboard>
-                ) : (
-                  <Login />
-                )
-              }
-            />
+            <Route path="/" element={state.user ? <Home /> : <Login />} />
+            <Route path="/usermgmt" element={state.user ? <UserMgmt /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
             <Route element={<ErrorPage />} />
           </Routes>

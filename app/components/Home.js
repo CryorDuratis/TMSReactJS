@@ -2,14 +2,15 @@
 import React, { useEffect } from "react"
 
 // import components
-import Page from "./Page"
+
 import Sidebar from "../components/Sidebar"
+import Page from "../templates/Page"
 
 const generateuniqueKey = () => {
   return new Date().getTime().toString()
 }
 
-function Dashboard(props) {
+function Home(props) {
   var uniqueKey = ""
   useEffect(() => {
     uniqueKey = generateuniqueKey()
@@ -18,9 +19,9 @@ function Dashboard(props) {
   return (
     <Page>
       <Sidebar key={uniqueKey} />
-      {props.children}
+      {/* AppList */}
     </Page>
   )
 }
 
-export default Dashboard
+export default Home
