@@ -15,13 +15,16 @@ function UserList() {
   const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
 
-  const [userList, setUserList] = useState([])
+  // managing rendering
   const [isLoading, setIsLoading] = useState(true)
   const [updateFlag, setUpdateFlag] = useState(false)
   const [editing, setEditing] = useState(0)
-  const [group, setGroup] = useState("")
-  const [grouplist, setgrouplist] = useState([])
   const [error, setError] = useState("")
+  // initial data
+  const [userList, setUserList] = useState([])
+  const [grouplist, setgrouplist] = useState([])
+  // formdata states
+  const [group, setGroup] = useState("")
 
   // updates list when new user is created
   const updateUserList = () => {

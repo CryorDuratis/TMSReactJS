@@ -21,13 +21,18 @@ function UserCard(props) {
     defaultuser = props.userlist[props.listkey]
   } else defaultuser = props.user
 
+  // formdata handles optional fields that are retrieved from db
   const [formData, setFormData] = useState(defaultuser)
+  // password is optional field but not retrieved from data
   const [password, setPassword] = useState("")
+  // role is optional field, with default field if empty
   const [selectedRoles, setSelectedRoles] = useState(defaultuser.role !== "" ? defaultuser.role : "user")
+
+  // managing rendering
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [error, setError] = useState("")
-  const editkey = props.listkey + 1
   const buttonRef = useRef(null)
+  const editkey = props.listkey + 1 // so that 0 can be set as nothing is editing
 
   // set default formdata and close popup if not editing current user
   useEffect(() => {
