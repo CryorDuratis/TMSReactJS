@@ -20,18 +20,17 @@ function HeaderLoggedIn(props) {
       if (response.data.error) {
         appDispatch({
           type: "btoast",
-          message: "An error was encountered",
+          message: "An error was encountered"
         })
         return
       }
       // else on success
       Cookies.remove("token")
-      Cookies.remove("kanbanuser")
       console.log("logout is called")
 
       appDispatch({
         type: "logout",
-        message: "Logged out",
+        message: "Logged out"
       })
       navigate("/login")
     } catch (e) {
@@ -41,7 +40,7 @@ function HeaderLoggedIn(props) {
 
   const toggleProfile = () => {
     appDispatch({
-      type: "profile",
+      type: "profile"
     })
   }
 

@@ -23,7 +23,7 @@ function UserCard(props) {
 
   const [formData, setFormData] = useState(defaultuser)
   const [password, setPassword] = useState("")
-  const [selectedRoles, setSelectedRoles] = useState(formData.role)
+  const [selectedRoles, setSelectedRoles] = useState(defaultuser.role !== "" ? defaultuser.role : "user")
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [error, setError] = useState("")
   const editkey = props.listkey + 1
@@ -37,7 +37,7 @@ function UserCard(props) {
         setIsPopupOpen(false)
         setFormData(defaultuser)
         setPassword("")
-        setSelectedRoles(defaultuser.role)
+        setSelectedRoles(defaultuser.role !== "" ? defaultuser.role : "user")
       }
       // close popup
     }
@@ -60,7 +60,7 @@ function UserCard(props) {
       console.log("edit form was submitted")
       try {
         const { username, email, isactive } = formData
-        const role = selectedRoles ? selectedRoles : ""
+        const role = selectedRoles
 
         const token = Cookies.get("token")
 
@@ -131,7 +131,7 @@ function UserCard(props) {
       console.log("create form was submitted")
       try {
         const { username, email } = formData
-        const role = selectedRoles ? selectedRoles : ""
+        const role = selectedRoles
 
         const token = Cookies.get("token")
         // if required fields blank
@@ -210,7 +210,7 @@ function UserCard(props) {
   const handleCancel = e => {
     setFormData(defaultuser)
     setPassword("")
-    setSelectedRoles(defaultuser.role)
+    setSelectedRoles(defaultuser.role !== "" ? defaultuser.role : "user")
     if (!props.create) {
       props.setEditing(0)
     }
@@ -224,6 +224,20 @@ function UserCard(props) {
       [name]: value
     }))
   }
+  // update selected list array (form value for roles)
+  const handleCheckboxChange = event => {
+    const value = event.target.value
+
+    var checkedRoles = selectedRoles.split(",").filter(selected => selected !== "user") // converted to array, removed user element
+    if (checkedRoles.includes(value)) {
+      checkedRoles = checkedRoles.filter(selected => selected !== value)
+    } else {
+      checkedRoles.push(value)
+    }
+    // set selectroles string back based on checked values
+    if (checkedRoles.length > 0) setSelectedRoles(checkedRoles.join(","))
+    else setSelectedRoles("user")
+  }
 
   // pass to each user form to handle roles in a multiselect dropdown
   const togglePopup = () => {
@@ -233,7 +247,7 @@ function UserCard(props) {
     // close popup
     setIsPopupOpen(false)
   }
-
+  console.log("selectedroles ", selectedRoles)
   return (
     <form className="user-form">
       <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} className={error ? "form-username error-outline" : "form-username"} />
@@ -243,10 +257,18 @@ function UserCard(props) {
       <input type="text" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-email" />
 
       <div className="form-role">
-        <button type="button" name="role" value={selectedRoles ? selectedRoles : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>
-          <span>{selectedRoles ? selectedRoles : "user"}</span> {props.editing === editkey || props.create ? <>&#9660;</> : ""}
+        <button type="button" name="role" value={selectedRoles !== "" ? selectedRoles : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>
+          <span>{selectedRoles !== "" ? selectedRoles : "user"}</span> {props.editing === editkey || props.create ? <>&#9660;</> : ""}
         </button>
-        <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef} roles={selectedRoles} setRoles={setSelectedRoles} grouplist={props.grouplist} setgrouplist={props.setgrouplist} />
+        <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef}>
+          Select Roles:
+          <br />
+          {props.grouplist.map((groupname, index) => (
+            <label key={index} style={{ display: "flex", flexDirection: "row" }}>
+              <input type="checkbox" name="roles" value={groupname} checked={new RegExp(`\\b${groupname}\\b`).test(selectedRoles)} onChange={handleCheckboxChange} /> {groupname}
+            </label>
+          ))}
+        </Popup>
       </div>
 
       <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={e => handleInputChange(e)}>

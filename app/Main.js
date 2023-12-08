@@ -26,15 +26,21 @@ import UserMgmt from "./components/UserMgmt"
 // initial state is empty
 
 const initialState = {
+  // for general use
   user: "",
-  usergroup: "",
   overlay: false,
   toasts: [],
-  toasttype: false
+  toasttype: false,
+  // for nested use
+  admin: false
 }
 
 function reducer(draft, action) {
   switch (action.type) {
+    // user session -----------------------------
+    case "update":
+      draft.user = action.user
+      return
     case "login":
       draft.user = action.user
       draft.toasts.push(action.message)
@@ -46,6 +52,7 @@ function reducer(draft, action) {
       draft.toasts.push(action.message)
       draft.toasttype = true
       return
+    // toasts --------------------------------
     case "gtoast":
       draft.toasts.push(action.message)
       draft.toasttype = true
@@ -54,17 +61,61 @@ function reducer(draft, action) {
       draft.toasts.push(action.message)
       draft.toasttype = false
       return
+    // profile popup -------------------------
     case "profile":
       draft.overlay = !draft.overlay
       return
     case "closeprofile":
       draft.overlay = false
       return
+    // SIDEBAR admin check
+    case "admin":
+      draft.admin = action.admin
+      return
   }
 }
 
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
+
+  // check authentication and authorization on remount
+  useEffect(() => {
+    const fetchAuth = async () => {
+      try {
+        // check permissions: in this case only admin
+        // Make authorization request to the server
+        const token = Cookies.get("token")
+        const response = await Axios.post("/checkgroup", { groupname: "admin", token })
+
+        // if not logged in
+        if (response.data.unauth) {
+          if (response.data.unauth === "login") {
+            appDispatch({
+              type: "logout",
+              message: "Logged out"
+            })
+          }
+          if (response.data.unauth === "role" && state.admin) {
+            dispatch({
+              type: "admin",
+              admin: false
+            })
+          }
+        }
+        dispatch({
+          type: "update",
+          user: response.data.user
+        })
+        if (!state.admin) dispatch({ type: "admin", admin: true })
+      } catch (error) {
+        console.error("Error fetching data:", error)
+        // Handle errors as needed
+      }
+    }
+
+    // Call the fetch function when the component mounts
+    fetchAuth()
+  }, [])
 
   console.log("main state ", state)
 

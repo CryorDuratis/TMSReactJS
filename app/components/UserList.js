@@ -175,7 +175,7 @@ function UserList() {
           <strong>Status</strong>
         </div>
         <div className="edit-form-container">
-          <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} userlist={userList} grouplist={grouplist} setgrouplist={setgrouplist} />
+          <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} userlist={userList} grouplist={grouplist} />
         </div>
       </Container>
       <Container class="content-wrapper">
@@ -183,7 +183,7 @@ function UserList() {
           ? "loading"
           : userList.map((user, index) => (
               <div key={index} className="edit-form-container">
-                <UserCard user={user} userlist={userList} listkey={index} update={updateUserList} class="edit-form-container" editing={editing} setEditing={setEditing} grouplist={grouplist} setgrouplist={setgrouplist} />
+                <UserCard user={user} userlist={userList} listkey={index} update={updateUserList} editing={editing} setEditing={setEditing} grouplist={grouplist} />
               </div>
             ))}
       </Container>
