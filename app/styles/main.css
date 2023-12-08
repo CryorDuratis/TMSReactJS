@@ -245,3 +245,25 @@ body {
   bottom: 0;
   height: 50px;
 }
+
+/* testing */
+
+.kanban-board {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 0 10px;
+}
+
+.task {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}

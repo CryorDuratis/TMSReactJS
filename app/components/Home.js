@@ -4,6 +4,7 @@ import React, { useEffect } from "react"
 // import components
 import Sidebar from "../components/Sidebar"
 import Page from "../templates/Page"
+import AppList from "./AppList"
 
 function AppMgmt(props) {
   // check authentication and authorization on remount
@@ -14,7 +15,7 @@ function AppMgmt(props) {
   return (
     <Page>
       <Sidebar />
-      {/* AppList */}
+      <AppList />
     </Page>
   )
 }
