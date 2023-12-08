@@ -27,6 +27,7 @@ import UserMgmt from "./components/UserMgmt"
 
 const initialState = {
   // for general use
+  loading: true,
   user: "",
   overlay: false,
   toasts: [],
@@ -40,6 +41,7 @@ function reducer(draft, action) {
     // user session -----------------------------
     case "update":
       draft.user = action.user
+      draft.loading = false
       return
     case "login":
       draft.user = action.user
@@ -90,25 +92,24 @@ function MainComponent() {
       const response = await Axios.post("/checkgroup", { groupname: "admin", token })
 
       // if not logged in
-      if (response.data.unauth) {
-        if (response.data.unauth === "login") {
-          dispatch({
-            type: "logout",
-            message: "Logged out"
-          })
-        }
-        if (response.data.unauth === "role" && state.admin) {
-          dispatch({
-            type: "admin",
-            admin: false
-          })
-        }
-      }
-      dispatch({
-        type: "update",
-        user: response.data.user
-      })
-      if (!state.admin) dispatch({ type: "admin", admin: true })
+
+      if (response.data.unauth === "login") {
+        dispatch({
+          type: "logout",
+          message: "Logged out"
+        })
+      } else
+        dispatch({
+          type: "update",
+          user: response.data.user
+        })
+
+      if (response.data.unauth === "role" && state.admin) {
+        dispatch({
+          type: "admin",
+          admin: false
+        })
+      } else dispatch({ type: "admin", admin: true })
     } catch (error) {
       console.error("Error fetching data:", error)
       // Handle errors as needed
@@ -134,9 +135,10 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={state.user ? <Home onLoad={fetchAuth} /> : <Login />} />
-            <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : <Login />} />
+            <Route path="/" element={state.user ? <Home onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
+            <Route path="/error" element={<ErrorPage />} />
             <Route element={<ErrorPage />} />
           </Routes>
           <Footer />

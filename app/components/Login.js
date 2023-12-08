@@ -21,7 +21,7 @@ function Login() {
   const [error, setError] = useState("") // for login page error rendering
 
   // const ourRequest = Axios.CancelToken.source()
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault()
     setError(false)
     try {
@@ -43,12 +43,11 @@ function Login() {
       setError(false)
       // set cookie
       Cookies.set("token", response.data.token, { expires: 7, path: "/" })
-      Cookies.set("kanbanuser", response.data.username, { expires: 7, path: "/" })
 
       appDispatch({
         type: "login",
         user: response.data.username,
-        message: "Logged in",
+        message: "Logged in"
       })
       navigate("/")
     } catch (e) {
@@ -63,9 +62,9 @@ function Login() {
           <h1>Log In</h1>
           <div className="form-group">
             <label htmlFor="username">Username: </label>
-            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>
-            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
           </div>
           <div className={error ? "login-error error-box" : "login-error"}>Invalid login details.</div>
           <button className="login-btn">Log in</button>
