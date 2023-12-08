@@ -126,7 +126,6 @@ function Profile() {
   return (
     <div className="profile" ref={popupRef}>
       <h2 style={{ width: "max-content" }}>Update Personal Details</h2>
-      {error === "invalid" && <div className="login-error">Invalid login details.</div>}
       <form onSubmit={handleEdit} style={{ display: "flex", flexDirection: "column" }}>
         <label>
           Username: <br />
