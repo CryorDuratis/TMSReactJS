@@ -137,7 +137,6 @@ body {
   min-width: min-content;
   display: flex;
   flex-direction: column;
-  margin-top: 80px;
   margin-bottom: 80px;
 }
 .grid-header {
@@ -152,13 +151,6 @@ body {
   padding: 10px;
   margin-bottom: 10px;
   display: flex;
-}
-.create-form-container {
-  position: absolute;
-  background-color: white;
-  box-shadow: 0px -10px 10px 5px white;
-  width: calc(100% - 40px);
-  min-width: min-content;
 }
 .user-form {
   display: grid;

@@ -1,47 +1,35 @@
-import React, { useState } from "react"
+import React from "react"
+import Container from "../templates/Container"
 
-const AppList = () => {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Task 1", state: "open" },
-    { id: 2, title: "Task 2", state: "to do" },
-    { id: 3, title: "Task 3", state: "doing" },
-    { id: 4, title: "Task 4", state: "done" },
-    { id: 5, title: "Task 5", state: "closed" }
-  ])
-
-  const renderTasks = state => {
-    return tasks
-      .filter(task => task.state === state)
-      .map(task => (
-        <div key={task.id} className="task">
-          {task.title}
-        </div>
-      ))
-  }
-
+function AppList() {
   return (
-    <div className="kanban-board">
-      <div className="column">
-        <h2>Open</h2>
-        {renderTasks("open")}
+    <Container class="bgclr-light1 content-container">
+      <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
+        <h2>App List</h2>
+
+        <button type="button" onClick={(e) => createGroup(e)} className="gobutton">
+          Create App
+        </button>
       </div>
-      <div className="column">
-        <h2>To Do</h2>
-        {renderTasks("to do")}
-      </div>
-      <div className="column">
-        <h2>Doing</h2>
-        {renderTasks("doing")}
-      </div>
-      <div className="column">
-        <h2>Done</h2>
-        {renderTasks("done")}
-      </div>
-      <div className="column">
-        <h2>Closed</h2>
-        {renderTasks("closed")}
-      </div>
-    </div>
+
+      <Container class="content-wrapper">
+        <div className="grid-header">
+          <strong>App Acronym</strong>
+          <strong>App Running Number</strong>
+          <strong>App Description</strong>
+          <strong>App Start Date</strong>
+          <strong>App End Date</strong>
+          <strong>Create</strong>
+          <strong>Open</strong>
+          <strong>To Do List</strong>
+          <strong>Doing</strong>
+          <strong>Done</strong>
+        </div>
+        <div className="edit-form-container">
+          <p>hi</p>
+        </div>
+      </Container>
+    </Container>
   )
 }
 
