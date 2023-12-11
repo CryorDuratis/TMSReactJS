@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useRef, useEffect } from "react"
 
 function Popup(props) {
   const popupRef = useRef(null)
 
   // closes popup if clicked outside, sends selected roles array as string to parent
   useEffect(() => {
-    const handleOutsideClick = event => {
+    const handleOutsideClick = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         props.onClose()
       }

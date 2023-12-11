@@ -32,8 +32,9 @@ const initialState = {
   overlay: false,
   toasts: [],
   toasttype: false,
+  error: "",
   // for nested use
-  admin: false
+  admin: false,
 }
 
 function reducer(draft, action) {
@@ -74,6 +75,10 @@ function reducer(draft, action) {
     case "admin":
       draft.admin = action.admin
       return
+    // Server error
+    case "error":
+      draft.error = action.error
+      return
   }
 }
 
@@ -96,23 +101,33 @@ function MainComponent() {
       if (response.data.unauth === "login") {
         dispatch({
           type: "logout",
-          message: "Logged out"
+          message: "Logged out",
         })
       } else
         dispatch({
           type: "update",
-          user: response.data.user
+          user: response.data.user,
         })
 
       if (response.data.unauth === "role" && state.admin) {
         dispatch({
           type: "admin",
-          admin: false
+          admin: false,
         })
       } else dispatch({ type: "admin", admin: true })
+      if (response.data.error) {
+        dispatch({
+          type: "error",
+          error: response.data.error,
+        })
+      }
     } catch (error) {
       console.error("Error fetching data:", error)
       // Handle errors as needed
+      dispatch({
+        type: "error",
+        error: "server",
+      })
     }
   }
 
@@ -139,7 +154,7 @@ function MainComponent() {
             <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
             <Route path="/error" element={<ErrorPage />} />
-            <Route element={<ErrorPage />} />
+            <Route path="*" element={<Navigate replace to="/error" />} />
           </Routes>
           <Footer />
         </BrowserRouter>

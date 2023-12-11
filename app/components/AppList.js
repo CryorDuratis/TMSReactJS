@@ -34,7 +34,7 @@ function AppList() {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -52,7 +52,7 @@ function AppList() {
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>App List</h2>
 
-        <button type="button" onClick={e => createGroup(e)} className="gobutton">
+        <button type="button" onClick={(e) => createGroup(e)} className="gobutton">
           Create App
         </button>
       </div>
