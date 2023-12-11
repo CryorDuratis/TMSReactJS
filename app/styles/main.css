@@ -52,16 +52,31 @@ body {
   outline: 1px solid #17252a;
 }
 
-/* body content container*/
-.body-content {
-  padding-top: 60px;
-  box-sizing: border-box;
-  height: calc(100vh - 50px);
-  min-height: min-content;
-  overflow-y: auto;
-}
-
 /* login page */
+.login-card {
+  padding: 50px;
+  min-height: max-content;
+  min-width: min-content;
+  width: 20vw;
+  border-radius: 10px;
+  text-align: center;
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+.login-form-group {
+  display: grid;
+  grid-template-rows: repeat(2, auto auto);
+  margin-bottom: 10px;
+  text-align: start;
+}
+.login-form-group input {
+  font-size: 20px;
+  padding: 10px 5px;
+  margin-bottom: 4px;
+}
 .login-btn {
   outline: 1px solid #3aafa9;
   background-color: transparent;
@@ -90,7 +105,7 @@ body {
   bottom: 0;
   box-sizing: border-box;
   width: 140px;
-  padding: 10px 20px 80px;
+  padding: 10px 0px 80px;
 }
 .sidebar-container {
   display: flex;
@@ -98,9 +113,6 @@ body {
   justify-content: space-between;
   font-size: 12px;
   text-align: center;
-}
-.protected-links {
-  font-weight: bold;
 }
 
 /* overlay - right container */
@@ -139,27 +151,13 @@ body {
   z-index: 1;
 }
 
-/* app list */
-
 /* user management */
-.content-wrapper {
-  min-width: min-content;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 80px;
-}
 .user-grid-header {
   display: grid;
   grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px minmax(20px, 2fr) 150px;
   gap: 10px 10px;
   align-items: center;
   padding: 0 10px;
-}
-.edit-form-container {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  display: flex;
 }
 .user-form {
   display: grid;
@@ -168,66 +166,6 @@ body {
   gap: 10px 10px;
   width: 100%;
   margin: 0;
-}
-.form-password {
-  grid-area: password;
-}
-.form-email {
-  grid-area: email;
-}
-.form-status {
-  grid-area: status;
-  width: min-content;
-}
-.form-cancel {
-  grid-area: cancel;
-}
-.form-edit {
-  grid-area: edit;
-}
-.form-cancel button,
-.form-edit button {
-  width: 70px;
-  display: flex;
-  justify-content: center;
-}
-.form-username {
-  grid-area: username;
-}
-.form-role {
-  grid-area: role;
-  position: relative;
-}
-.form-role button {
-  font-size: 14px;
-  background-color: transparent;
-  border: 1px solid grey;
-  border-radius: 2px;
-  width: 100%;
-  justify-content: space-between;
-  text-align: start;
-}
-.form-role span {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.popup {
-  position: absolute;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  display: none;
-  z-index: 1000;
-  white-space: nowrap;
-}
-.popup.open {
-  display: flex;
-  flex-direction: column;
-}
-
-.hidden {
-  visibility: hidden;
 }
 .user-form input:disabled,
 .user-form button:disabled,
@@ -240,31 +178,32 @@ body {
   cursor: default;
 }
 
-/* footer bar */
-.footer {
-  position: sticky;
-  bottom: 0;
-  height: 50px;
-}
+/* app list */
 
-/* testing */
+/* plan list */
 
+/* task list */
 .kanban-board {
   display: flex;
   justify-content: space-around;
   padding: 20px;
 }
-
 .column {
   flex: 1;
   border: 1px solid #ddd;
   padding: 10px;
   margin: 0 10px;
 }
-
 .task {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+/* footer bar */
+.footer {
+  position: sticky;
+  bottom: 0;
+  height: 50px;
 }

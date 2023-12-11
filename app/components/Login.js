@@ -57,10 +57,10 @@ function Login() {
 
   return (
     <Page class="center-children">
-      <Container class="card bgclr-light2">
-        <form onSubmit={handleLogin} className="form-container">
+      <Container class="login-card bgclr-light2">
+        <form onSubmit={handleLogin} className="login-container">
           <h1>Log In</h1>
-          <div className="form-group">
+          <div className="login-form-group">
             <label htmlFor="username">Username: </label>
             <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>

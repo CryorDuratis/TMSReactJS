@@ -1,10 +1,23 @@
-/* remove default link styles */
-a,
-a:visited,
-a:hover,
-a:active {
-  text-decoration: none;
-  color: inherit;
+/* page style */
+.body-content {
+  padding-top: 60px;
+  box-sizing: border-box;
+  height: calc(100vh - 50px);
+  min-height: min-content;
+  overflow-y: auto;
+}
+
+/* generic simple positioning */
+.center-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
 }
 
 /* nav style and positioning*/
@@ -16,11 +29,131 @@ nav span {
   display: block;
   box-sizing: border-box;
   width: 100%;
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
 }
 .selected-nav {
   background-color: darkslategrey;
+  color: white;
+}
+
+/* list container card styles */
+.list-container {
+  min-width: min-content;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 80px;
+}
+.list-card-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  min-width: fit-content;
+}
+
+/* form grid assignments */
+.form-password {
+  grid-area: password;
+}
+.form-email {
+  grid-area: email;
+}
+.form-status {
+  grid-area: status;
+  width: min-content;
+}
+.form-cancel {
+  grid-area: cancel;
+}
+.form-edit {
+  grid-area: edit;
+}
+.form-cancel button,
+.form-edit button {
+  width: 70px;
+  display: flex;
+  justify-content: center;
+}
+.form-username {
+  grid-area: username;
+}
+.form-role {
+  grid-area: role;
+  position: relative;
+}
+.form-role button {
+  font-size: 14px;
+  background-color: transparent;
+  border: 1px solid grey;
+  border-radius: 2px;
+  width: 100%;
+  justify-content: space-between;
+  text-align: start;
+}
+.form-role span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+/* button styles */
+button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+}
+button:hover {
+  cursor: pointer;
+}
+.gobutton:hover {
+  background-color: greenyellow;
+}
+.backbutton:hover {
+  background-color: salmon;
+}
+
+/* error display */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25%,
+  75% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+.error-box {
+  visibility: visible;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+  animation: shake 0.5s ease-in-out;
+}
+.error-outline {
+  border-color: 1px solid red;
+}
+
+/* dropdown popup styles */
+.popup {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
+  z-index: 1000;
+  white-space: nowrap;
+  left: 0;
+}
+.popup.open {
+  display: flex;
+  flex-direction: column;
 }
 
 /* image styles */
@@ -50,98 +183,6 @@ img {
 .icon {
   height: 1rem;
   margin-right: 5px;
-}
-
-/* body content - board */
-
-/* body content - bar */
-
-/* body content - card */
-.card {
-  padding: 50px;
-  min-height: max-content;
-  min-width: min-content;
-  width: 20vw;
-  border-radius: 10px;
-  text-align: center;
-}
-.form-container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 40px;
-}
-.form-group {
-  display: grid;
-  grid-template-rows: repeat(2, auto auto);
-  margin-bottom: 10px;
-  text-align: start;
-}
-.form-group input {
-  font-size: 20px;
-  padding: 10px 5px;
-  margin-bottom: 4px;
-}
-.error-outline {
-  border-color: 1px solid red;
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25%,
-  75% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-}
-.error-box {
-  visibility: visible;
-  transform: translateX(0);
-  transition: transform 0.3s ease-in-out;
-  animation: shake 0.5s ease-in-out;
-}
-
-.center-children {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 10px;
-}
-
-/* body content - form input */
-.form-group input,
-.form-group textarea {
-  position: relative;
-  z-index: 2;
-}
-
-/* button styles */
-button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: max-content;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: none;
-}
-button:hover {
-  cursor: pointer;
-}
-.gobutton:hover {
-  background-color: greenyellow;
-}
-.backbutton:hover {
-  background-color: salmon;
 }
 
 /* background colour */

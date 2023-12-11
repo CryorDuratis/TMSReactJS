@@ -17,7 +17,7 @@ function Popup(props) {
   }, [props.onClose])
 
   return (
-    <div className={`popup ${props.isOpen ? "open" : ""}`} style={{ left: 0 }} ref={popupRef}>
+    <div className={`popup ${props.isOpen ? "open" : ""}`} ref={popupRef}>
       {props.children}
     </div>
   )

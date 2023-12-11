@@ -177,15 +177,15 @@ function UserList() {
           <strong>User Groups</strong>
           <strong>Status</strong>
         </div>
-        <div className="edit-form-container">
+        <div className="list-card-container">
           <UserCard user={{ username: "", email: "", role: "", isactive: 1 }} create={true} update={updateUserList} userlist={userList} grouplist={grouplist} />
         </div>
       </Container>
-      <Container class="content-wrapper">
+      <Container class="list-container">
         {isLoading
           ? "loading"
           : userList.map((user, index) => (
-              <div key={index} className="edit-form-container">
+              <div key={index} className="list-card-container">
                 <UserCard user={user} userlist={userList} listkey={index} update={updateUserList} editing={editing} setEditing={setEditing} grouplist={grouplist} />
               </div>
             ))}
