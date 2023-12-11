@@ -179,6 +179,13 @@ body {
 }
 
 /* app list */
+.app-grid-header {
+  display: grid;
+  grid-template-columns: 100px 100px 150px minmax(20px, 2fr) 150px;
+  gap: 10px 10px;
+  align-items: center;
+  padding: 0 10px;
+}
 
 /* plan list */
 
