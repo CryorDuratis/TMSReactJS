@@ -72,6 +72,15 @@ body {
 .login-btn:hover {
   background-color: #3aafa9;
 }
+.login-error {
+  border: 1px solid rgb(255, 70, 70);
+  background-color: rgba(255, 216, 216, 0.596);
+  color: rgb(255, 70, 70);
+  padding: 4px;
+  margin-bottom: 20px;
+  text-wrap: wrap;
+  visibility: hidden;
+}
 
 /* body content - left nav */
 .sidebar {
@@ -139,7 +148,7 @@ body {
   flex-direction: column;
   margin-bottom: 80px;
 }
-.grid-header {
+.user-grid-header {
   display: grid;
   grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px minmax(20px, 2fr) 150px;
   gap: 10px 10px;

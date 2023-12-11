@@ -7,7 +7,7 @@ a:active {
   color: inherit;
 }
 
-/* nav style */
+/* nav style and positioning*/
 nav {
   text-align: center;
   font-weight: bold;
@@ -18,6 +18,9 @@ nav span {
   width: 100%;
   padding: 5px;
   cursor: pointer;
+}
+.selected-nav {
+  background-color: darkslategrey;
 }
 
 /* image styles */
@@ -81,15 +84,7 @@ img {
 .error-outline {
   border-color: 1px solid red;
 }
-.login-error {
-  border: 1px solid rgb(255, 70, 70);
-  background-color: rgba(255, 216, 216, 0.596);
-  color: rgb(255, 70, 70);
-  padding: 4px;
-  margin-bottom: 20px;
-  text-wrap: wrap;
-  visibility: hidden;
-}
+
 @keyframes shake {
   0%,
   100% {

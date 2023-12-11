@@ -255,7 +255,7 @@ function UserCard(props) {
 
   return (
     <form className="user-form">
-      <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} className={error ? "form-username error-outline" : "form-username"} />
+      <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.username} className={error ? "form-username error-outline" : "form-username"} />
 
       <input type="password" name="password" value={password} placeholder="********" disabled={props.editing !== editkey && !props.create} onChange={e => setPassword(e.target.value)} className={error ? "form-password error-outline" : "form-password"} />
 
