@@ -35,7 +35,7 @@ const initialState = {
   toasttype: false,
   error: "",
   // for nested use
-  admin: false
+  admin: false,
 }
 
 function reducer(draft, action) {
@@ -49,12 +49,14 @@ function reducer(draft, action) {
       draft.user = action.user
       draft.toasts.push(action.message)
       draft.toasttype = true
+      draft.loading = false
       return
     case "logout":
       draft.user = ""
       draft.overlay = false
       draft.toasts.push(action.message)
       draft.toasttype = true
+      draft.loading = false
       return
     // toasts --------------------------------
     case "gtoast":
@@ -100,24 +102,24 @@ function MainComponent() {
       if (response.data.unauth === "login") {
         dispatch({
           type: "logout",
-          message: "Logged out"
+          message: "Logged out",
         })
       } else
         dispatch({
           type: "update",
-          user: response.data.user
+          user: response.data.user,
         })
 
       if (response.data.unauth === "role" && state.admin) {
         dispatch({
           type: "admin",
-          admin: false
+          admin: false,
         })
       } else dispatch({ type: "admin", admin: true })
       if (response.data.error) {
         dispatch({
           type: "error",
-          error: response.data.error
+          error: response.data.error,
         })
       }
     } catch (error) {
@@ -125,7 +127,7 @@ function MainComponent() {
       // Handle errors as needed
       dispatch({
         type: "error",
-        error: "server"
+        error: "server",
       })
     }
   }

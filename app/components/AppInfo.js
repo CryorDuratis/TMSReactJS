@@ -28,7 +28,7 @@ function AppInfo(props) {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out"
+            message: "Logged out",
           })
           navigate("/login")
           return
@@ -46,7 +46,7 @@ function AppInfo(props) {
   }, [])
 
   // handle submit edit form
-  const handleEdit = async e => {
+  const handleEdit = async (e) => {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
@@ -58,7 +58,7 @@ function AppInfo(props) {
         setError("invalid")
         appDispatch({
           type: "btoast",
-          message: "Password must have letters, numbers and special characters, and 8-10 characters long"
+          message: "Password must have letters, numbers and special characters, and 8-10 characters long",
         })
         return
       }
@@ -76,7 +76,7 @@ function AppInfo(props) {
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out"
+          message: "Logged out",
         })
         navigate("/login")
         return
@@ -92,7 +92,7 @@ function AppInfo(props) {
         setError("invalid")
         appDispatch({
           type: "btoast",
-          message: "Password must have letters, numbers and special characters, and 8-10 characters long"
+          message: "Password must have letters, numbers and special characters, and 8-10 characters long",
         })
         return
       }
@@ -100,7 +100,7 @@ function AppInfo(props) {
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "Personal details updated"
+        message: "Personal details updated",
       })
     } catch (error) {
       console.log("error is ", error)
@@ -108,7 +108,7 @@ function AppInfo(props) {
   }
 
   return (
-    <div class="appinfo-container">
+    <div className="appinfo-container">
       <h2 style={{ width: "max-content" }}>Create App - Configurations</h2>
       <form onSubmit={handleEdit} className="appinfo-form">
         <label style={{ gridArea: "acronym-title" }}>App Acronym</label>

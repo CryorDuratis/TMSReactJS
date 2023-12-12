@@ -201,11 +201,12 @@ body {
   box-shadow: none;
 }
 .appinfo-container {
-  position: fixed;
+  position: absolute;
   top: 150px;
   right: 30px;
   bottom: 70px;
-  left: 170px;
+  left: 30px;
+  min-width: max-content;
   z-index: 1;
   display: flex;
   flex-direction: column;
