@@ -108,26 +108,58 @@ function AppInfo(props) {
   }
 
   return (
-    <Popup class="appinfo" onClose={props.onClose} condition={props.onClose}>
-      <h2 style={{ width: "max-content" }}>Update Personal Details</h2>
-      <form onSubmit={handleEdit} style={{ display: "flex", flexDirection: "column" }}>
-        <label>
-          Username: <br />
-          <input type="text" value={appState.user} style={{ border: "none" }} readOnly />
-        </label>
-        <label htmlFor="email">
-          Update Email:
-          <input type="text" name="email" value={email} placeholder="email" onChange={e => setEmail(e.target.value)} />
-        </label>
-        <label htmlFor="password">
-          Change Password:
-          <input type="password" name="password" placeholder="password" className={error ? "error-outline" : undefined} onChange={e => setPassword(e.target.value)} />
-        </label>
-        <button type="reset" onClick={handleEdit}>
-          Update
-        </button>
+    <div class="appinfo-container">
+      <h2 style={{ width: "max-content" }}>Create App - Configurations</h2>
+      <form onSubmit={handleEdit} className="appinfo-form">
+        <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
+        <input style={{ gridArea: "acronym" }} type="text" value={"test"} />
+        <label style={{ gridArea: "rnumber-title" }}>App rnumber</label>
+        <input style={{ gridArea: "rnumber" }} type="text" value={"test"} />
+        <label style={{ gridArea: "startdate-title" }}>From</label>
+        <input style={{ gridArea: "startdate" }} type="text" value={"test"} />
+        <label style={{ gridArea: "enddate-title" }}>To</label>
+        <input style={{ gridArea: "enddate" }} type="text" value={"test"} />
+        <label style={{ gridArea: "desc-title" }}>App Description</label>
+        <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="description"></textarea>
+
+        <label style={{ gridArea: "create-title" }}>Create Tasks</label>
+        <select style={{ gridArea: "create" }} name="create">
+          <option value="test">test</option>
+          <option value="test2">test2</option>
+          <option value="test3">test3</option>
+        </select>
+        <label style={{ gridArea: "open-title" }}>Open State</label>
+        <select style={{ gridArea: "open" }} name="open">
+          <option value="test">test</option>
+          <option value="test2">test2</option>
+          <option value="test3">test3</option>
+        </select>
+        <label style={{ gridArea: "todolist-title" }}>To Do List State</label>
+        <select style={{ gridArea: "todolist" }} name="todolist">
+          <option value="test">test</option>
+          <option value="test2">test2</option>
+          <option value="test3">test3</option>
+        </select>
+        <label style={{ gridArea: "doing-title" }}>Doing State</label>
+        <select style={{ gridArea: "doing" }} name="doing">
+          <option value="test">test</option>
+          <option value="test2">test2</option>
+          <option value="test3">test3</option>
+        </select>
+        <label style={{ gridArea: "done-title" }}>Done State</label>
+        <select style={{ gridArea: "done" }} name="done">
+          <option value="test">test</option>
+          <option value="test2">test2</option>
+          <option value="test3">test3</option>
+        </select>
+        <div className="flex-row" style={{ gridArea: "button" }}>
+          <button type="button" onClick={props.onClose}>
+            Close
+          </button>
+          <button type="button">Create</button>
+        </div>
       </form>
-    </Popup>
+    </div>
   )
 }
 

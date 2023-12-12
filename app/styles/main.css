@@ -121,7 +121,7 @@ body {
   top: 60px;
   right: 0px;
   bottom: 50px;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   min-height: 230px;
@@ -160,7 +160,7 @@ body {
 }
 .user-form {
   display: grid;
-  grid-template-areas: "username password email role status gap cancel edit";
+  grid-template-areas: "username password email role status . cancel edit";
   grid-template-columns: 100px 100px 150px minmax(100px, 1fr) 50px minmax(20px, 2fr) 70px 70px;
   gap: 10px 10px;
   width: 100%;
@@ -187,7 +187,7 @@ body {
 }
 .app-card {
   display: grid;
-  grid-template-areas: "acronym startdate enddate gap";
+  grid-template-areas: "acronym startdate enddate .";
   grid-template-columns: 150px 150px 150px minmax(20px, 2fr);
   gap: 10px 10px;
   width: 100%;
@@ -200,21 +200,32 @@ body {
 .list-card-container:has(.app-card button:hover):hover {
   box-shadow: none;
 }
-.appinfo {
+.appinfo-container {
   position: fixed;
-  top: 60px;
-  right: 0px;
-  bottom: 50px;
+  top: 150px;
+  right: 30px;
+  bottom: 70px;
+  left: 170px;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  height: -webkit-fill-available;
-  min-height: 230px;
-  width: min-content;
-  padding: 50px;
+  padding: 10px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
+  overflow: auto;
+}
+.appinfo-form {
+  display: grid;
+  grid-template-areas: "acronym-title acronym acronym acronym . create-title create" "rnumber-title rnumber rnumber rnumber . open-title open" "startdate-title startdate enddate-title enddate . todolist-title todolist" "desc-title desc desc desc desc doing-title doing" "desc-title desc desc desc desc done-title done" "desc-title desc desc desc desc . ." "desc-title desc desc desc desc . ." "desc-title desc desc desc desc . button";
+  grid-template-columns: max-content 150px 20px 150px 1fr max-content 150px;
+  grid-template-rows: repeat(5, 20px) 1fr 20px 20px;
+  gap: 10px;
+  text-align: end;
+  padding: 0 30px 30px;
+  height: -webkit-fill-available;
+  min-width: 80%;
+  align-self: center;
 }
 
 /* plan list */

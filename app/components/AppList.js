@@ -17,6 +17,7 @@ function AppList() {
 
   // managing rendering
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [popupMode, setPopupMode] = useState("")
   const [error, setError] = useState("")
   const [CAButton, setCAButton] = useState(false)
   // initial data
@@ -60,8 +61,8 @@ function AppList() {
   }, [updateFlag])
 
   // control create app and edit app popup modal
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen)
+  const openPopup = () => {
+    setIsPopupOpen(true)
   }
   const handleClosePopup = () => {
     // close popup
@@ -83,11 +84,11 @@ function AppList() {
 
   return (
     <Container class="bgclr-light1 content-container">
-      {isPopupOpen && <AppInfo onClose={handleClosePopup} />}
+      {isPopupOpen && (popupMode === "create" ? <AppInfo onClose={handleClosePopup} /> : <AppInfo onClose={handleClosePopup} />)}
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>App List</h2>
         {CAButton && (
-          <button type="button" className="gobutton" onClick={togglePopup}>
+          <button type="button" className="gobutton" onClick={openPopup}>
             Create App
           </button>
         )}

@@ -19,6 +19,10 @@
   align-items: center;
   column-gap: 10px;
 }
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
 
 /* nav style and positioning*/
 nav {
