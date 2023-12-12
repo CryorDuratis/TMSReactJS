@@ -8,6 +8,7 @@ import Container from "../templates/Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
+import AppInfo from "./AppInfo"
 
 function AppList() {
   const appState = useContext(StateContext)
@@ -15,6 +16,7 @@ function AppList() {
   const navigate = useNavigate()
 
   // managing rendering
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [error, setError] = useState("")
   const [CAButton, setCAButton] = useState(false)
   // initial data
@@ -57,6 +59,15 @@ function AppList() {
     fetchApps()
   }, [updateFlag])
 
+  // control create app and edit app popup modal
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen)
+  }
+  const handleClosePopup = () => {
+    // close popup
+    setIsPopupOpen(false)
+  }
+
   // app card component for easy rendering
   const AppCard = props => {
     const { appacro, startdate, enddate } = props.app
@@ -72,10 +83,11 @@ function AppList() {
 
   return (
     <Container class="bgclr-light1 content-container">
+      {isPopupOpen && <AppInfo onClose={handleClosePopup} />}
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>App List</h2>
         {CAButton && (
-          <button type="button" className="gobutton">
+          <button type="button" className="gobutton" onClick={togglePopup}>
             Create App
           </button>
         )}

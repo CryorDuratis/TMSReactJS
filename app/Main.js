@@ -135,17 +135,13 @@ function MainComponent() {
     fetchAuth()
   }, [])
 
-  const handleClosePopup = () => {
-    dispatch({ type: "closeprofile" })
-  }
-
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
           <Toast messages={state.toasts} />
           <Header />
-          {state.overlay && <Profile isOpen={state.overlay} onClose={handleClosePopup} />}
+          {state.overlay && <Profile />}
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />

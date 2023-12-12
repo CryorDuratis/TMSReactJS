@@ -6,7 +6,7 @@ import Axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Popup from "./Popup"
 
-function Profile() {
+function AppInfo(props) {
   const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
@@ -107,13 +107,8 @@ function Profile() {
     }
   }
 
-  const handleClosePopup = () => {
-    // close popup
-    appDispatch({ type: "closeprofile" })
-  }
-
   return (
-    <Popup class="profile" onClose={handleClosePopup} condition={appState.overlay}>
+    <Popup class="appinfo" onClose={props.onClose} condition={props.onClose}>
       <h2 style={{ width: "max-content" }}>Update Personal Details</h2>
       <form onSubmit={handleEdit} style={{ display: "flex", flexDirection: "column" }}>
         <label>
@@ -136,4 +131,4 @@ function Profile() {
   )
 }
 
-export default Profile
+export default AppInfo

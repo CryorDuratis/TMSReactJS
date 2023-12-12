@@ -3,9 +3,9 @@ import React, { useRef, useEffect } from "react"
 function Popup(props) {
   const popupRef = useRef(null)
 
-  // closes popup if clicked outside, sends selected roles array as string to parent
+  // closes popup if clicked outside
   useEffect(() => {
-    const handleOutsideClick = (event) => {
+    const handleOutsideClick = event => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         props.onClose()
       }
@@ -14,10 +14,10 @@ function Popup(props) {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick)
     }
-  }, [props.onClose])
+  }, [props.condition])
 
   return (
-    <div className={`popup ${props.isOpen ? "open" : ""}`} ref={popupRef}>
+    <div className={props.class} ref={popupRef}>
       {props.children}
     </div>
   )

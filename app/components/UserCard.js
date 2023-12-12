@@ -265,15 +265,17 @@ function UserCard(props) {
         <button type="button" name="role" value={selectedRoles !== "" ? selectedRoles : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>
           <span>{selectedRoles !== "" ? selectedRoles : "user"}</span> {props.editing === editkey || props.create ? <>&#9660;</> : ""}
         </button>
-        <Popup isOpen={isPopupOpen} onClose={handleClosePopup} buttonRef={buttonRef}>
-          Select Roles:
-          <br />
-          {props.grouplist.map((groupname, index) => (
-            <label key={index} style={{ display: "flex", flexDirection: "row" }}>
-              <input type="checkbox" name="roles" value={groupname} checked={new RegExp(`\\b${groupname}\\b`).test(selectedRoles)} onChange={handleCheckboxChange} /> {groupname}
-            </label>
-          ))}
-        </Popup>
+        {isPopupOpen && (
+          <Popup class="popup" onClose={handleClosePopup} condition={handleClosePopup}>
+            Select Roles:
+            <br />
+            {props.grouplist.map((groupname, index) => (
+              <label key={index} style={{ display: "flex", flexDirection: "row" }}>
+                <input type="checkbox" name="roles" value={groupname} checked={new RegExp(`\\b${groupname}\\b`).test(selectedRoles)} onChange={handleCheckboxChange} /> {groupname}
+              </label>
+            ))}
+          </Popup>
+        )}
       </div>
 
       <select className="form-status" name="isactive" value={formData.isactive.toString() === "1" ? "1" : "0"} disabled={props.editing !== editkey} onChange={e => handleInputChange(e)}>

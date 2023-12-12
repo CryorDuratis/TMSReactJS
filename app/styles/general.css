@@ -165,12 +165,9 @@ button:hover {
   background-color: #fff;
   border: 1px solid #ccc;
   padding: 10px;
-  display: none;
   z-index: 1000;
   white-space: nowrap;
   left: 0;
-}
-.popup.open {
   display: flex;
   flex-direction: column;
 }
