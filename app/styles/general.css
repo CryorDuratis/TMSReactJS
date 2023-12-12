@@ -50,6 +50,7 @@ nav span {
   margin-bottom: 10px;
   display: flex;
   min-width: fit-content;
+  position: relative;
 }
 
 /* form grid assignments */
@@ -69,7 +70,7 @@ nav span {
 .form-edit {
   grid-area: edit;
 }
-.form-details button,
+
 .form-cancel button,
 .form-edit button {
   width: 70px;
@@ -107,7 +108,12 @@ nav span {
   grid-area: enddate;
 }
 .form-details {
-  grid-area: details;
+  width: max-content;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0 20px;
 }
 /* button styles */
 button {

@@ -68,12 +68,7 @@ function AppList() {
             <span className="form-acronym">hi</span>
             <span className="form-startdate">hi</span>
             <span className="form-enddate">hi</span>
-            <div className="form-details">
-              <button>Details</button>
-            </div>
-            <div className="form-edit">
-              <button>Edit</button>
-            </div>
+            <button className="form-details gobutton">View Details</button>
           </div>
         </div>
       </Container>
