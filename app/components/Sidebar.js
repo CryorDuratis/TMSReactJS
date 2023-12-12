@@ -17,11 +17,11 @@ function Sidebar() {
       <div className="sidebar-container">
         <nav>
           <h2>Dashboard</h2>
-          <span onClick={() => navigate("/")} className={pathname === "/" && "selected-nav"}>
+          <span onClick={() => navigate("/")} className={pathname === "/" ? "selected-nav" : undefined}>
             Apps
           </span>
           {appState.admin && (
-            <span onClick={() => navigate("/usermgmt")} className={pathname === "/usermgmt" && "selected-nav"}>
+            <span onClick={() => navigate("/usermgmt")} className={pathname === "/usermgmt" ? "selected-nav" : undefined}>
               Users Management
             </span>
           )}

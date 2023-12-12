@@ -22,30 +22,30 @@ function AppList() {
   // managing creating
 
   // display app information on first load, and on exit create.edit view
-  // useEffect(() => {
-  //   const fetchApps = async () => {
-  //     try {
-  //       // Make authorization request to the server
-  //       const token = Cookies.get("token")
-  //       var response = await Axios.post("/apps/getall", { groupname: "admin", token })
+  useEffect(() => {
+    const fetchApps = async () => {
+      try {
+        // Make authorization request to the server
+        const token = Cookies.get("token")
+        var response = await Axios.post("/apps/getall", { groupname: "admin", token })
 
-  //       // if not logged in
-  //       if (response.data.unauth) {
-  //         if (response.data.unauth === "login") {
-  //           appDispatch({
-  //             type: "logout",
-  //             message: "Logged out",
-  //           })
-  //           navigate("/login")
-  //         } else if (response.data.unauth === "role") {
-  //           appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
-  //           navigate("/")
-  //         }
-  //         return
-  //       }
-  //     } catch (error) {}
-  //   }
-  // }, [updateFlag])
+        // if not logged in
+        if (response.data.unauth) {
+          if (response.data.unauth === "login") {
+            appDispatch({
+              type: "logout",
+              message: "Logged out"
+            })
+            navigate("/login")
+          } else if (response.data.unauth === "role") {
+            appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
+            navigate("/")
+          }
+          return
+        }
+      } catch (error) {}
+    }
+  }, [updateFlag])
 
   return (
     <Container class="bgclr-light1 content-container">
