@@ -21,6 +21,7 @@ import Toast from "./components/Toast"
 import Profile from "./components/Profile"
 import Home from "./components/Home"
 import UserMgmt from "./components/UserMgmt"
+import TaskList from "./components/TaskList"
 
 // immerReducer enables state to be accessed throughout app
 // initial state is empty
@@ -34,7 +35,7 @@ const initialState = {
   toasttype: false,
   error: "",
   // for nested use
-  admin: false,
+  admin: false
 }
 
 function reducer(draft, action) {
@@ -87,8 +88,7 @@ function MainComponent() {
 
   console.log("main state ", state)
 
-  // check authentication and authorization on remount
-
+  // check authentication and authorization on page load for display of buttons
   const fetchAuth = async () => {
     try {
       // check permissions: in this case only admin
@@ -97,28 +97,27 @@ function MainComponent() {
       const response = await Axios.post("/checkgroup", { groupname: "admin", token })
 
       // if not logged in
-
       if (response.data.unauth === "login") {
         dispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
       } else
         dispatch({
           type: "update",
-          user: response.data.user,
+          user: response.data.user
         })
 
       if (response.data.unauth === "role" && state.admin) {
         dispatch({
           type: "admin",
-          admin: false,
+          admin: false
         })
       } else dispatch({ type: "admin", admin: true })
       if (response.data.error) {
         dispatch({
           type: "error",
-          error: response.data.error,
+          error: response.data.error
         })
       }
     } catch (error) {
@@ -126,13 +125,13 @@ function MainComponent() {
       // Handle errors as needed
       dispatch({
         type: "error",
-        error: "server",
+        error: "server"
       })
     }
   }
 
   useEffect(() => {
-    // Call the fetch function when the component mounts
+    // Call the fetch function when the app first mounts
     fetchAuth()
   }, [])
 
@@ -152,6 +151,8 @@ function MainComponent() {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={state.user ? <Home onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/app/:appid" element={state.user ? <TaskList onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/app/:appid/task/:taskid" element={state.user ? <TaskList onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<Navigate replace to="/error" />} />

@@ -181,10 +181,18 @@ body {
 /* app list */
 .app-grid-header {
   display: grid;
-  grid-template-columns: 100px 100px 150px minmax(20px, 2fr) 150px;
+  grid-template-columns: 150px 150px 150px minmax(20px, 2fr) 150px;
   gap: 10px 10px;
   align-items: center;
   padding: 0 10px;
+}
+.app-card {
+  display: grid;
+  grid-template-areas: "acronym startdate enddate gap details edit";
+  grid-template-columns: 150px 150px 150px minmax(20px, 2fr) 70px 70px;
+  gap: 10px 10px;
+  width: 100%;
+  margin: 0;
 }
 
 /* plan list */
