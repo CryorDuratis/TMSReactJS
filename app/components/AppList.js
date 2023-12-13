@@ -69,6 +69,10 @@ function AppList() {
     setModalMode("create")
     setIsModalOpen(true)
   }
+  const editModal = (App_Acronym) => {
+    setModalMode(App_Acronym)
+    setIsModalOpen(true)
+  }
   const handleCloseModal = () => {
     // close Modal
     setIsModalOpen(false)
@@ -82,7 +86,9 @@ function AppList() {
         <span className="form-acronym">{App_Acronym}</span>
         {App_startDate ? <input type="date" className="form-startdate" value={App_startDate} disabled /> : <span className="form-startdate">No date set</span>}
         {App_endDate ? <input type="date" className="form-enddate" value={App_endDate} disabled /> : <span className="form-enddate">No date set</span>}
-        <button className="form-details gobutton">View Details</button>
+        <button className="form-details gobutton" onClick={(e) => editModal(App_Acronym)}>
+          View Details
+        </button>
       </div>
     )
   }
@@ -95,7 +101,7 @@ function AppList() {
 
   return (
     <Container class="bgclr-light1 content-container">
-      {isModalOpen && (ModalMode === "create" ? <CreateApp onClose={handleCloseModal} update={updateAppList} /> : <EditApp onClose={handleCloseModal} update={updateAppList} />)}
+      {isModalOpen && (ModalMode === "create" ? <CreateApp onClose={handleCloseModal} update={updateAppList} /> : <EditApp onClose={handleCloseModal} update={updateAppList} appacro={ModalMode} />)}
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>App List</h2>
         {CAButton && (

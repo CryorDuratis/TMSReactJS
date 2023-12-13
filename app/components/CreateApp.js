@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
@@ -21,7 +21,7 @@ function CreateApp(props) {
   const [grouplist, setgrouplist] = useState([])
   const [error, setError] = useState("")
 
-  // set default formdata on load
+  // get grouplist on load
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -77,7 +77,6 @@ function CreateApp(props) {
     setOpenPermit(e.target.value)
   }
   const handleTodolistPermit = (e) => {
-    console.log("todo permit changed to ", e.target.value)
     setTodolistPermit(e.target.value)
   }
   const handleDoingPermit = (e) => {
@@ -92,18 +91,6 @@ function CreateApp(props) {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
-
-      // validate date input
-      // const validstartDate = /^(\d{2})-(\d{2})-(\d{4})$/.test(App_startDate);
-      // const validendDate = /^(\d{2})-(\d{2})-(\d{4})$/.test(App_endDate);
-
-      // if (!validendDate || !validstartDate) {
-      //   setError("date")
-      //   appDispatch({
-      //     type: "btoast",
-      //     message: "Invalid Date format, please enter DD-MM-YYYY",
-      //   })
-      // }
 
       // send request
       const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, token })
