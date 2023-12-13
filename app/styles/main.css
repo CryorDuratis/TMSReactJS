@@ -144,6 +144,7 @@ body {
   padding: 20px;
   min-height: calc(100% - 20px);
   overflow-x: auto;
+  overflow-y: hidden;
 }
 .content-container::before {
   box-shadow: inset -5px 0px 10px 10px black;
@@ -216,8 +217,8 @@ body {
 }
 .appinfo-form {
   display: grid;
-  grid-template-areas: "acronym-title acronym acronym acronym . create-title create" "rnumber-title rnumber rnumber rnumber . open-title open" "startdate-title startdate enddate-title enddate . todolist-title todolist" "desc-title desc desc desc desc doing-title doing" "desc-title desc desc desc desc done-title done" "desc-title desc desc desc desc . ." "desc-title desc desc desc desc . ." "desc-title desc desc desc desc . button";
-  grid-template-columns: max-content 150px 20px 150px 1fr max-content 150px;
+  grid-template-areas: "acronym-title acronym . open-title open" "rnumber-title rnumber . todolist-title todolist" "startdate-title startdate . doing-title doing" "enddate-title enddate . done-title done" "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . button";
+  grid-template-columns: max-content 150px 1fr max-content 150px;
   grid-template-rows: repeat(5, 20px) 1fr 20px 20px;
   gap: 10px;
   text-align: end;

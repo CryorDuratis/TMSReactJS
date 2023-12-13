@@ -8,7 +8,8 @@ import Container from "../templates/Container"
 import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
-import AppInfo from "./AppInfo"
+import CreateApp from "./CreateApp"
+import EditApp from "./EditApp"
 
 function AppList() {
   const appState = useContext(StateContext)
@@ -16,8 +17,8 @@ function AppList() {
   const navigate = useNavigate()
 
   // managing rendering
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const [popupMode, setPopupMode] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [ModalMode, setModalMode] = useState("")
   const [error, setError] = useState("")
   const [CAButton, setCAButton] = useState(false)
   // initial data
@@ -34,7 +35,6 @@ function AppList() {
         // Make authorization request to the server
         const token = Cookies.get("token")
         var response = await Axios.post("/app/getall", { groupname: "Project Lead", token })
-        console.log("response: ", response)
 
         // if not logged in
         if (response.data.unauth) {
@@ -53,6 +53,10 @@ function AppList() {
           console.log("cabutton set to true")
           setCAButton(true)
         }
+
+        // set apps
+        setAppList(response.data.appsData)
+        console.log("apps obtained: ", response.data.appsData)
       } catch (error) {
         console.log("error: ", error)
       }
@@ -61,12 +65,13 @@ function AppList() {
   }, [updateFlag])
 
   // control create app and edit app popup modal
-  const openPopup = () => {
-    setIsPopupOpen(true)
+  const createModal = () => {
+    setModalMode("create")
+    setIsModalOpen(true)
   }
-  const handleClosePopup = () => {
-    // close popup
-    setIsPopupOpen(false)
+  const handleCloseModal = () => {
+    // close Modal
+    setIsModalOpen(false)
   }
 
   // app card component for easy rendering
@@ -82,13 +87,19 @@ function AppList() {
     )
   }
 
+  // updates applist when new app is made or edited
+  const updateAppList = () => {
+    console.log("update app list called")
+    setUpdateFlag(prev => !prev)
+  }
+
   return (
     <Container class="bgclr-light1 content-container">
-      {isPopupOpen && (popupMode === "create" ? <AppInfo onClose={handleClosePopup} /> : <AppInfo onClose={handleClosePopup} />)}
+      {isModalOpen && (ModalMode === "create" ? <CreateApp onClose={handleCloseModal} update={updateAppList} /> : <EditApp onClose={handleCloseModal} update={updateAppList} />)}
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>App List</h2>
         {CAButton && (
-          <button type="button" className="gobutton" onClick={openPopup}>
+          <button type="button" className="gobutton" onClick={createModal}>
             Create App
           </button>
         )}
