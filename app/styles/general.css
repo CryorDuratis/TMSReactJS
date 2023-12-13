@@ -111,6 +111,12 @@ nav span {
 .form-enddate {
   grid-area: enddate;
 }
+.form-startdate:disabled,
+.form-enddate:disabled {
+  color: black;
+  background-color: transparent;
+  border: none;
+}
 .form-details {
   width: max-content;
   height: 100%;

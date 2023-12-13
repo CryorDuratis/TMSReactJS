@@ -40,7 +40,10 @@ function CreateApp(props) {
         }
 
         // Set the grouplist based on the server response
-        setgrouplist(response.data.groupsData.map((obj) => obj.groupname))
+        const groups = response.data.groupsData.map((obj) => obj.groupname)
+        const filteredGroups = groups.filter((groupName) => groupName !== "admin")
+
+        setgrouplist(filteredGroups)
 
         // console.log("groups obtained ", grouplist)
       } catch (error) {
@@ -89,6 +92,18 @@ function CreateApp(props) {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
+
+      // validate date input
+      // const validstartDate = /^(\d{2})-(\d{2})-(\d{4})$/.test(App_startDate);
+      // const validendDate = /^(\d{2})-(\d{2})-(\d{4})$/.test(App_endDate);
+
+      // if (!validendDate || !validstartDate) {
+      //   setError("date")
+      //   appDispatch({
+      //     type: "btoast",
+      //     message: "Invalid Date format, please enter DD-MM-YYYY",
+      //   })
+      // }
 
       // send request
       const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, token })
@@ -161,10 +176,10 @@ function CreateApp(props) {
         />
 
         <label style={{ gridArea: "startdate-title" }}>From</label>
-        <input style={{ gridArea: "startdate" }} type="text" name="App_startDate" onChange={(e) => handleInputChange(e)} />
+        <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" onChange={(e) => handleInputChange(e)} />
 
         <label style={{ gridArea: "enddate-title" }}>To</label>
-        <input style={{ gridArea: "enddate" }} type="text" name="App_endDate" onChange={(e) => handleInputChange(e)} />
+        <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" onChange={(e) => handleInputChange(e)} />
 
         <label style={{ gridArea: "desc-title" }}>App Description</label>
         <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" onChange={(e) => handleInputChange(e)}></textarea>
