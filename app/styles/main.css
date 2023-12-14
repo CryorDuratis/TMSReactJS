@@ -193,6 +193,10 @@ body {
   gap: 10px 10px;
   width: 100%;
   margin: 0;
+  padding: 10px;
+}
+.list-card-container:has(.app-card) {
+  padding: 0;
 }
 .list-card-container:has(.app-card):hover {
   cursor: pointer;

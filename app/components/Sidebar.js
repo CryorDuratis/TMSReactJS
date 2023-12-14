@@ -17,7 +17,7 @@ function Sidebar() {
       <div className="sidebar-container">
         <nav>
           <h2>Dashboard</h2>
-          <span onClick={() => navigate("/")} className={pathname === "/" ? "selected-nav" : undefined}>
+          <span onClick={() => navigate("/apps")} className={pathname.startsWith("/apps") ? "selected-nav" : undefined}>
             Apps
           </span>
           {appState.admin && (

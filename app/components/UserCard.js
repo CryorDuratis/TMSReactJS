@@ -99,7 +99,7 @@ function UserCard(props) {
             navigate("/login")
           } else if (response.data.unauth === "role") {
             appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
-            navigate("/")
+            navigate("/apps")
           }
           props.update()
           return
@@ -175,7 +175,7 @@ function UserCard(props) {
             navigate("/login")
           } else if (response.data.unauth === "role") {
             appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
-            navigate("/")
+            navigate("/apps")
           }
           props.update()
           return

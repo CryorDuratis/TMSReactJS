@@ -51,7 +51,7 @@ function UserList() {
             navigate("/login")
           } else if (response.data.unauth === "role") {
             appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
-            navigate("/")
+            navigate("/apps")
           }
           return
         }
@@ -89,7 +89,7 @@ function UserList() {
           navigate("/login")
         } else if (response.data.unauth === "role") {
           appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
-          navigate("/")
+          navigate("/apps")
         }
         return
       }
@@ -138,7 +138,7 @@ function UserList() {
             navigate("/login")
           } else if (response.data.unauth === "role") {
             appDispatch({ type: "btoast", message: "Unauthorized page, redirecting to home" })
-            navigate("/")
+            navigate("/apps")
           }
           return
         }

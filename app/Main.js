@@ -147,7 +147,8 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={state.user ? <Home onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/apps" element={state.user ? <Home onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/" element={<Navigate to="/apps" replace />} />
             <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/apps/:appid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/apps/:appid/task/:taskid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />

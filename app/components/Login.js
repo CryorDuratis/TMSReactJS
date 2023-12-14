@@ -49,7 +49,7 @@ function Login() {
         user: response.data.username,
         message: "Logged in"
       })
-      navigate("/")
+      navigate("/apps")
     } catch (e) {
       console.log(e)
     }
