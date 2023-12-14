@@ -18,6 +18,7 @@ function EditApp(props) {
   const [donePermit, setDonePermit] = useState()
 
   // manage rendering
+  const [isLoading, setIsLoading] = useState(true)
   const [grouplist, setgrouplist] = useState([])
   const [isAuth, setIsAuth] = useState(false)
   const [error, setError] = useState("")
@@ -25,7 +26,7 @@ function EditApp(props) {
   // set default formdata on load, and check if user is permitted
   useEffect(() => {
     const fetchApp = async () => {
-      console.log("fetchapps is loaded")
+      console.log("fetch single app is loaded")
       try {
         // Make authorization request to the server
         const token = Cookies.get("token")
@@ -37,7 +38,7 @@ function EditApp(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out",
+              message: "Logged out"
             })
             navigate("/login")
           }
@@ -51,7 +52,12 @@ function EditApp(props) {
 
         // set apps
         setFormData(response.data.appData)
+        setOpenPermit(response.data.appData.App_permit_Open ? response.data.appData.App_permit_Open : grouplist[0])
+        setTodolistPermit(response.data.appData.App_permit_toDoList ? response.data.appData.App_permit_toDoList : grouplist[0])
+        setDoingPermit(response.data.appData.App_permit_Doing ? response.data.appData.App_permit_Doing : grouplist[0])
+        setDonePermit(response.data.appData.App_permit_Done ? response.data.appData.App_permit_Done : grouplist[0])
         console.log("app obtained: ", response.data.appData)
+        setIsLoading(false)
       } catch (error) {
         console.log("error: ", error)
       }
@@ -72,14 +78,14 @@ function EditApp(props) {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
         }
 
         // Set the grouplist based on the server response
-        const groups = response.data.groupsData.map((obj) => obj.groupname)
-        const filteredGroups = groups.filter((groupName) => groupName !== "admin")
+        const groups = response.data.groupsData.map(obj => obj.groupname)
+        const filteredGroups = groups.filter(groupName => groupName !== "admin")
 
         setgrouplist(filteredGroups)
 
@@ -104,40 +110,40 @@ function EditApp(props) {
   }
 
   // change formdata on input change
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }))
   }
-  const handleOpenPermit = (e) => {
+  const handleOpenPermit = e => {
     setOpenPermit(e.target.value)
   }
-  const handleTodolistPermit = (e) => {
+  const handleTodolistPermit = e => {
     setTodolistPermit(e.target.value)
   }
-  const handleDoingPermit = (e) => {
+  const handleDoingPermit = e => {
     setDoingPermit(e.target.value)
   }
-  const handleDonePermit = (e) => {
+  const handleDonePermit = e => {
     setDonePermit(e.target.value)
   }
 
   // handle submit form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
 
       // send request
-      const response = await Axios.post("/app/edit", { groupname: "Project Lead", App_Acronym: formData.App_Acronym, token })
+      const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, openPermit, todolistPermit, doingPermit, donePermit, token })
 
       // if not logged in
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
         navigate("/login")
         return
@@ -149,30 +155,12 @@ function EditApp(props) {
         props.update()
         return
       }
-      // if create fails
-      if (!response.data.success && response.data.message === "required") {
-        setError("required")
-        appDispatch({
-          type: "btoast",
-          message: "App creation failed, please enter the App Acronym and App Rnumber",
-        })
-        props.update()
-        return
-      }
-      if (!response.data.success && response.data.message === "conflict") {
-        setError("conflict")
-        appDispatch({
-          type: "btoast",
-          message: "App Acronym is already in use, please try again",
-        })
-        props.update()
-        return
-      }
+
       // else on success
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "App successfully created",
+        message: "App successfully edited"
       })
       props.update()
     } catch (error) {
@@ -183,61 +171,55 @@ function EditApp(props) {
   return (
     <div className="appinfo-container">
       <h2 style={{ width: "max-content" }}>Edit App - Configurations</h2>
-      <form onSubmit={handleSubmit} className="appinfo-form">
-        <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
-        <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={(e) => handleInputChange(e)} />
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <form onSubmit={handleSubmit} className="appinfo-form">
+          <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
+          <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" disabled value={formData.App_Acronym} />
 
-        <label style={{ gridArea: "rnumber-title" }}>App rnumber</label>
-        <input
-          style={{ gridArea: "rnumber" }}
-          type="number"
-          name="App_Rnumber"
-          min="0"
-          step="1"
-          onInput={(e) => {
-            if (!/^[0-9]+$/.test(e.target.value)) e.target.value = formData.App_Rnumber
-          }}
-          onChange={(e) => handleInputChange(e)}
-        />
+          <label style={{ gridArea: "rnumber-title" }}>App rnumber</label>
+          <input style={{ gridArea: "rnumber" }} type="number" name="App_Rnumber" disabled value={formData.App_Rnumber} />
 
-        <label style={{ gridArea: "startdate-title" }}>From</label>
-        <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" onChange={(e) => handleInputChange(e)} />
+          <label style={{ gridArea: "startdate-title" }}>From</label>
+          <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" value={formData.App_startDate} onChange={e => handleInputChange(e)} />
 
-        <label style={{ gridArea: "enddate-title" }}>To</label>
-        <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" onChange={(e) => handleInputChange(e)} />
+          <label style={{ gridArea: "enddate-title" }}>To</label>
+          <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" value={formData.App_endDate} onChange={e => handleInputChange(e)} />
 
-        <label style={{ gridArea: "desc-title" }}>App Description</label>
-        <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" onChange={(e) => handleInputChange(e)}></textarea>
+          <label style={{ gridArea: "desc-title" }}>App Description</label>
+          <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" value={formData.App_Description ? formData.App_Description : ""} onChange={e => handleInputChange(e)}></textarea>
 
-        <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
-        <select value={openPermit} onChange={(e) => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
-          {rendergrouplist()}
-        </select>
+          <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
+          <select value={openPermit} onChange={e => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
+            {rendergrouplist()}
+          </select>
 
-        <label style={{ gridArea: "todolist-title" }}>To Do List State Permissions</label>
-        <select value={todolistPermit} onChange={(e) => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
-          {rendergrouplist()}
-        </select>
+          <label style={{ gridArea: "todolist-title" }}>To Do List State Permissions</label>
+          <select value={todolistPermit} onChange={e => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
+            {rendergrouplist()}
+          </select>
 
-        <label style={{ gridArea: "doing-title" }}>Doing State Permissions</label>
-        <select value={doingPermit} onChange={(e) => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
-          {rendergrouplist()}
-        </select>
+          <label style={{ gridArea: "doing-title" }}>Doing State Permissions</label>
+          <select value={doingPermit} onChange={e => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
+            {rendergrouplist()}
+          </select>
 
-        <label style={{ gridArea: "done-title" }}>Done State Permissions</label>
-        <select value={donePermit} onChange={(e) => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
-          {rendergrouplist()}
-        </select>
+          <label style={{ gridArea: "done-title" }}>Done State Permissions</label>
+          <select value={donePermit} onChange={e => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
+            {rendergrouplist()}
+          </select>
 
-        <div className="flex-row" style={{ gridArea: "button" }}>
-          <button type="button" onClick={props.onClose}>
-            Close
-          </button>
-          <button type="button" onClick={handleSubmit}>
-            Save Changes
-          </button>
-        </div>
-      </form>
+          <div className="flex-row" style={{ gridArea: "button" }}>
+            <button type="button" onClick={props.onClose}>
+              Close
+            </button>
+            <button type="button" onClick={handleSubmit}>
+              Save Changes
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   )
 }

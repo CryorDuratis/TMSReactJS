@@ -227,6 +227,11 @@ body {
   min-width: 80%;
   align-self: center;
 }
+.appinfo-form input:disabled {
+  color: black;
+  background-color: transparent;
+  border: none;
+}
 
 /* plan list */
 
