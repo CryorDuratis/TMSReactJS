@@ -1,9 +1,11 @@
 // import node modules
 import React, { useState } from "react"
+import { useParams } from "react-router-dom"
 
 // import components
 
-const TaskList = () => {
+const TaskList = props => {
+  const { appid } = useParams()
   const [tasks, setTasks] = useState([
     { id: 1, title: "Task 1", state: "open" },
     { id: 2, title: "Task 2", state: "to do" },
@@ -24,8 +26,9 @@ const TaskList = () => {
 
   return (
     <div className="content-container bgclr-light1">
-      <div className="flex-row" style={{ justifyContent: "end" }}>
-        <button>Create Task</button>
+      <div className="flex-row" style={{ justifyContent: "space-between" }}>
+        <h2>{appid}</h2>
+        <button className="gobutton">Create Task</button>
       </div>
       <div className="kanban-board">
         <div className="column">

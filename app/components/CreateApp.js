@@ -193,10 +193,10 @@ function CreateApp(props) {
         </select>
 
         <div className="flex-row" style={{ gridArea: "button" }}>
-          <button type="button" onClick={props.onClose}>
+          <button type="button" className="backbutton" onClick={props.onClose}>
             Close
           </button>
-          <button type="button" onClick={handleSubmit}>
+          <button type="button" className="gobutton" onClick={handleSubmit}>
             Create
           </button>
         </div>

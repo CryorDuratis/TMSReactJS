@@ -34,29 +34,33 @@ function AppList() {
       try {
         // Make authorization request to the server
         const token = Cookies.get("token")
-        var response = await Axios.post("/app/getall", { groupname: "Project Lead", token })
+        var response = await Axios.post("/app/getall", { token })
 
         // if not logged in
         if (response.data.unauth) {
           console.log("user is unauth")
-          if (response.data.unauth === "login") {
-            appDispatch({
-              type: "logout",
-              message: "Logged out"
-            })
-            navigate("/login")
-          }
-          console.log("cabutton set to false")
-          setCAButton(false)
+          appDispatch({
+            type: "logout",
+            message: "Logged out"
+          })
+          navigate("/login")
           return
-        } else {
-          console.log("cabutton set to true")
-          setCAButton(true)
         }
-
         // set apps
         setAppList(response.data.appsData)
         console.log("apps obtained: ", response.data.appsData)
+
+        // check button authorization
+        response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
+        console.log("checkgroup", response)
+
+        if (response.data.unauth) {
+          console.log("cabutton set to false")
+          setCAButton(false)
+        } else {
+          setCAButton(true)
+          console.log("cabutton set to true")
+        }
       } catch (error) {
         console.log("error: ", error)
       }
