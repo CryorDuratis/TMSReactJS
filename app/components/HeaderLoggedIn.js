@@ -47,11 +47,11 @@ function HeaderLoggedIn(props) {
   return (
     <Container class={"header-grp"}>
       <button className="header-btn" onClick={toggleProfile}>
-        <img src="profile.png" className="avatar" />
+        <img src="http://localhost:3000/public/profile.png" className="avatar" />
         {appState.user} &#9660;
       </button>
       <button className="header-btn" onClick={logout}>
-        <img src="logout.png" className="icon" />
+        <img src="http://localhost:3000/public/logout.png" className="icon" />
         Log out
       </button>
     </Container>

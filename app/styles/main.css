@@ -189,7 +189,7 @@ body {
 .app-card {
   display: grid;
   grid-template-areas: "acronym startdate enddate .";
-  grid-template-columns: 150px 150px 150px minmax(20px, 2fr);
+  grid-template-columns: 150px 150px 150px minmax(100px, 2fr);
   gap: 10px 10px;
   width: 100%;
   margin: 0;
@@ -239,13 +239,19 @@ body {
 .kanban-board {
   display: flex;
   justify-content: space-around;
-  padding: 20px;
+  padding: 20px 0;
+  min-height: calc(100vh - 230px);
+  height: max-content;
+}
+.kanban-board h2 {
+  text-wrap: nowrap;
+  margin-top: 0;
 }
 .column {
   flex: 1;
-  border: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   padding: 10px;
-  margin: 0 10px;
 }
 .task {
   background-color: #f9f9f9;

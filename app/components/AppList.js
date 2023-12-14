@@ -81,7 +81,7 @@ function AppList() {
 
   // handle navigate
   const handleNavigate = appacro => {
-    navigate(`/app/${appacro}`)
+    navigate(`/apps/${appacro}`)
   }
 
   // app card component for easy rendering

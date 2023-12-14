@@ -11,7 +11,7 @@ function CreateApp(props) {
   const navigate = useNavigate()
 
   // state of fields
-  const [formData, setFormData] = useState()
+  const [formData, setFormData] = useState({})
   const [openPermit, setOpenPermit] = useState()
   const [todolistPermit, setTodolistPermit] = useState()
   const [doingPermit, setDoingPermit] = useState()
@@ -137,6 +137,7 @@ function CreateApp(props) {
         message: "App successfully created"
       })
       props.update()
+      props.onClose()
     } catch (error) {
       console.log("error is ", error)
     }
