@@ -116,6 +116,7 @@ nav span {
   color: black;
   background-color: transparent;
   border: none;
+  pointer-events: none;
 }
 .form-details {
   width: max-content;

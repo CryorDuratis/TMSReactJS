@@ -69,7 +69,8 @@ function AppList() {
     setModalMode("create")
     setIsModalOpen(true)
   }
-  const editModal = App_Acronym => {
+  const editModal = (e, App_Acronym) => {
+    e.stopPropagation()
     setModalMode(App_Acronym)
     setIsModalOpen(true)
   }
@@ -78,15 +79,20 @@ function AppList() {
     setIsModalOpen(false)
   }
 
+  // handle navigate
+  const handleNavigate = appacro => {
+    navigate(`/app/${appacro}`)
+  }
+
   // app card component for easy rendering
   const AppCard = props => {
     const { App_Acronym, App_startDate, App_endDate } = props.app
     return (
-      <div className="app-card">
+      <div className="app-card" onClick={e => handleNavigate(App_Acronym)}>
         <span className="form-acronym">{App_Acronym}</span>
         {App_startDate ? <input type="date" className="form-startdate" value={App_startDate} disabled /> : <span className="form-startdate">No date set</span>}
         {App_endDate ? <input type="date" className="form-enddate" value={App_endDate} disabled /> : <span className="form-enddate">No date set</span>}
-        <button className="form-details gobutton" onClick={e => editModal(App_Acronym)}>
+        <button className="form-details gobutton" onClick={e => editModal(e, App_Acronym)}>
           View Details
         </button>
       </div>
