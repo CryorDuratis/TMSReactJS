@@ -4,6 +4,7 @@ import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
 import Axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Popup from "./Popup"
 
 function CreateTask(props) {
   const appState = useContext(StateContext)
@@ -11,188 +12,137 @@ function CreateTask(props) {
   const navigate = useNavigate()
 
   // state of fields
-  const [formData, setFormData] = useState({})
-  const [openPermit, setOpenPermit] = useState()
-  const [todolistPermit, setTodolistPermit] = useState()
-  const [doingPermit, setDoingPermit] = useState()
-  const [donePermit, setDonePermit] = useState()
+  const [formData, setFormData] = useState({
+    Task_name: "",
+    Task_id: "",
+    Task_App_Acronym: props.appid,
+    Task_Description: ""
+  })
 
   // manage rendering
-  const [grouplist, setgrouplist] = useState([])
   const [error, setError] = useState("")
 
-  // get grouplist on load
+  // change formdata on input change
+  const handleInputChange = e => {
+    const { name, value } = e.target
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }))
+  }
+
+  // get taskid
   useEffect(() => {
-    const fetchGroups = async () => {
+    const fetchapp = async () => {
       try {
         // Make fetch request to the server
         const token = Cookies.get("token")
-        const response = await Axios.post("/group/getall", { token })
+        const response = await Axios.post("/app", { App_Acronym: props.appid, token })
         // console.log("response ", response.data)
 
         // if not logged in
-        if (response.data.unauth === "login") {
+        if (response.data.unauth) {
+          console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
+          return
         }
 
-        // Set the grouplist based on the server response
-        const groups = response.data.groupsData.map((obj) => obj.groupname)
-        const filteredGroups = groups.filter((groupName) => groupName !== "admin")
-
-        setgrouplist(filteredGroups)
-
-        // console.log("groups obtained ", grouplist)
+        // get app rnum
+        const rnum = response.data.appData.App_Rnumber
+        // set default taskid
+        const taskid = props.appid + "_" + rnum
       } catch (error) {
         console.error("Error fetching data:", error)
         // Handle errors as needed
       }
     }
 
-    // Call the fetch function when the component mounts
-    fetchGroups()
+    setFormData(prevData => ({
+      ...prevData,
+      ["Task_id"]: taskid
+    }))
   }, [])
 
-  // render grouplist dropdown
-  const rendergrouplist = () => {
-    return grouplist.map((group, index) => (
-      <option key={index} value={group}>
-        {group}
-      </option>
-    ))
-  }
-
-  // change formdata on input change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }))
-  }
-  const handleOpenPermit = (e) => {
-    setOpenPermit(e.target.value)
-  }
-  const handleTodolistPermit = (e) => {
-    setTodolistPermit(e.target.value)
-  }
-  const handleDoingPermit = (e) => {
-    setDoingPermit(e.target.value)
-  }
-  const handleDonePermit = (e) => {
-    setDonePermit(e.target.value)
-  }
-
   // handle submit form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    try {
-      const token = Cookies.get("token")
 
-      // send request
-      const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, openPermit, todolistPermit, doingPermit, donePermit, token })
+    console.log("values sent in: ", formData)
+    // try {
+    //   const token = Cookies.get("token")
 
-      // if not logged in
-      if (response.data.unauth === "login") {
-        appDispatch({
-          type: "logout",
-          message: "Logged out",
-        })
-        navigate("/login")
-        return
-      }
+    //   // send request
+    //   const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, token })
 
-      // if request fails
-      if (response.data.error) {
-        appDispatch({ type: "logerror", error: response.data.error })
-        props.update()
-        return
-      }
-      // if create fails
-      if (!response.data.success && response.data.message === "required") {
-        setError("required")
-        appDispatch({
-          type: "btoast",
-          message: "App creation failed, please enter the App Acronym and App Rnumber",
-        })
-        props.update()
-        return
-      }
-      if (!response.data.success && response.data.message === "conflict") {
-        setError("conflict")
-        appDispatch({
-          type: "btoast",
-          message: "App Acronym is already in use, please try again",
-        })
-        props.update()
-        return
-      }
-      // else on success
-      setError(false)
-      appDispatch({
-        type: "gtoast",
-        message: "App successfully created",
-      })
-      props.update()
-      props.onClose()
-    } catch (error) {
-      console.log("error is ", error)
-    }
+    //   // if not logged in
+    //   if (response.data.unauth === "login") {
+    //     appDispatch({
+    //       type: "logout",
+    //       message: "Logged out",
+    //     })
+    //     navigate("/login")
+    //     return
+    //   }
+
+    //   // if request fails
+    //   if (response.data.error) {
+    //     appDispatch({ type: "logerror", error: response.data.error })
+    //     props.update()
+    //     return
+    //   }
+    //   // if create fails
+    //   if (!response.data.success && response.data.message === "required") {
+    //     setError("required")
+    //     appDispatch({
+    //       type: "btoast",
+    //       message: "App creation failed, please enter the App Acronym and App Rnumber",
+    //     })
+    //     props.update()
+    //     return
+    //   }
+    //   if (!response.data.success && response.data.message === "conflict") {
+    //     setError("conflict")
+    //     appDispatch({
+    //       type: "btoast",
+    //       message: "App Acronym is already in use, please try again",
+    //     })
+    //     props.update()
+    //     return
+    //   }
+    //   // else on success
+    //   setError(false)
+    //   appDispatch({
+    //     type: "gtoast",
+    //     message: "App successfully created",
+    //   })
+    //   props.update()
+    //   props.onClose()
+    // } catch (error) {
+    //   console.log("error is ", error)
+    // }
   }
 
   return (
-    <div className="appinfo-container">
-      <h2 style={{ width: "max-content" }}>Create App - Configurations</h2>
-      <form onSubmit={handleSubmit} className="appinfo-form">
-        <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
-        <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={(e) => handleInputChange(e)} />
+    <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
+      <h2 style={{ width: "max-content" }}>Create Task</h2>
+      <form onSubmit={handleSubmit} className="create-task-form">
+        <label htmlFor="Task_name">Task Name</label>
+        <input type="text" name="Task_name" onChange={e => handleInputChange(e)} />
 
-        <label style={{ gridArea: "rnumber-title" }}>App rnumber</label>
-        <input
-          style={{ gridArea: "rnumber" }}
-          type="number"
-          name="App_Rnumber"
-          min="0"
-          step="1"
-          onInput={(e) => {
-            if (!/^[0-9]+$/.test(e.target.value)) e.target.value = formData.App_Rnumber
-          }}
-          onChange={(e) => handleInputChange(e)}
-        />
+        <label htmlFor="Task_id">Task ID</label>
+        <input type="text" name="Task_id" value={formData.Task_id} disabled />
 
-        <label style={{ gridArea: "startdate-title" }}>From</label>
-        <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" onChange={(e) => handleInputChange(e)} />
+        <label htmlFor="Task_App_Acronym">App Acronym</label>
+        <input type="text" name="Task_App_Acronym" value={props.appid} disabled />
 
-        <label style={{ gridArea: "enddate-title" }}>To</label>
-        <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" onChange={(e) => handleInputChange(e)} />
+        <label>App Description</label>
+        <textarea style={{ resize: "none", width: "100%", height: "150px" }} name="App_Description" onChange={e => handleInputChange(e)}></textarea>
 
-        <label style={{ gridArea: "desc-title" }}>App Description</label>
-        <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" onChange={(e) => handleInputChange(e)}></textarea>
-
-        <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
-        <select value={openPermit} onChange={(e) => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
-          {rendergrouplist()}
-        </select>
-
-        <label style={{ gridArea: "todolist-title" }}>To Do List State Permissions</label>
-        <select value={todolistPermit} onChange={(e) => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
-          {rendergrouplist()}
-        </select>
-
-        <label style={{ gridArea: "doing-title" }}>Doing State Permissions</label>
-        <select value={doingPermit} onChange={(e) => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
-          {rendergrouplist()}
-        </select>
-
-        <label style={{ gridArea: "done-title" }}>Done State Permissions</label>
-        <select value={donePermit} onChange={(e) => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
-          {rendergrouplist()}
-        </select>
-
-        <div className="flex-row" style={{ gridArea: "button" }}>
+        <div className="flex-row" style={{ gridArea: "button", marginTop: "20px" }}>
           <button type="button" className="backbutton" onClick={props.onClose}>
             Close
           </button>
@@ -201,7 +151,7 @@ function CreateTask(props) {
           </button>
         </div>
       </form>
-    </div>
+    </Popup>
   )
 }
 

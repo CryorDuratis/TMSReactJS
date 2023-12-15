@@ -4,6 +4,7 @@ import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
 import Axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Popup from "./Popup"
 
 function EditApp(props) {
   const appState = useContext(StateContext)
@@ -30,7 +31,7 @@ function EditApp(props) {
       try {
         // Make authorization request to the server
         const token = Cookies.get("token")
-        var response = await Axios.post("/app", { groupname: "Project Lead", App_Acronym: props.appacro, token })
+        var response = await Axios.post("/app", { App_Acronym: props.appacro, token })
 
         // if not logged in
         if (response.data.unauth) {
@@ -172,8 +173,8 @@ function EditApp(props) {
   }
 
   return (
-    <div className="appinfo-container">
-      <h2 style={{ width: "max-content" }}>Edit App - Configurations</h2>
+    <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
+      <h2 style={{ width: "max-content" }}>{isAuth ? "Edit App Details" : "View App Details"}</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
@@ -225,7 +226,7 @@ function EditApp(props) {
           </div>
         </form>
       )}
-    </div>
+    </Popup>
   )
 }
 

@@ -4,6 +4,7 @@ import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
 import Axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Popup from "./Popup"
 
 function CreateApp(props) {
   const appState = useContext(StateContext)
@@ -144,8 +145,8 @@ function CreateApp(props) {
   }
 
   return (
-    <div className="appinfo-container">
-      <h2 style={{ width: "max-content" }}>Create App - Configurations</h2>
+    <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
+      <h2 style={{ width: "max-content" }}>Create App Details</h2>
       <form onSubmit={handleSubmit} className="appinfo-form">
         <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
         <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={e => handleInputChange(e)} />
@@ -201,7 +202,7 @@ function CreateApp(props) {
           </button>
         </div>
       </form>
-    </div>
+    </Popup>
   )
 }
 

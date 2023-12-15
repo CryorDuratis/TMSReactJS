@@ -205,20 +205,6 @@ body {
 .list-card-container:has(.app-card button:hover):hover {
   box-shadow: none;
 }
-.appinfo-container {
-  position: absolute;
-  top: 70px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: min-content;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-}
 .appinfo-form {
   display: grid;
   grid-template-areas: "acronym-title acronym . open-title open" "rnumber-title rnumber . todolist-title todolist" "startdate-title startdate . doing-title doing" "enddate-title enddate . done-title done" "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . button";
@@ -265,6 +251,21 @@ body {
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
+}
+.create-task-form {
+  display: grid;
+  grid-template-areas: ". ." ". ." ". ." ". ." ". button";
+  justify-items: end;
+  gap: 10px;
+  text-wrap: nowrap;
+  padding: 0 20px;
+}
+.create-task-form input:disabled,
+.create-task-form textarea:disabled {
+  color: black;
+  background-color: transparent;
+  border: none;
+  appearance: none;
 }
 
 /* footer bar */
