@@ -22,6 +22,7 @@ import Profile from "./components/Profile"
 import Home from "./components/Home"
 import UserMgmt from "./components/UserMgmt"
 import TaskDashboard from "./components/TaskDashboard"
+import PlanMgmt from "./components/PlanMgmt"
 
 // immerReducer enables state to be accessed throughout app
 // initial state is empty
@@ -151,6 +152,7 @@ function MainComponent() {
             <Route path="/" element={<Navigate to="/apps" replace />} />
             <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/apps/:appid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/apps/:appid/plans" element={state.user ? <PlanMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/apps/:appid/task/:taskid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
             <Route path="/error" element={<ErrorPage />} />

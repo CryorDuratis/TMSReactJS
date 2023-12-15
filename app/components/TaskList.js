@@ -1,6 +1,6 @@
 // import node modules
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import CreateTask from "./CreateTask"
 import Cookies from "js-cookie"
 import Axios from "axios"
@@ -8,6 +8,9 @@ import Axios from "axios"
 // import components
 
 const TaskList = props => {
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+
   // field values
   const { appid } = useParams()
   const [tasks, setTasks] = useState([
@@ -66,7 +69,7 @@ const TaskList = props => {
 
         if (!response.data.unauth) {
           setIsAuth(prev => ({ ...prev, PM: true }))
-          console.log("create task set to true")
+          console.log("edit plan set to true")
         } else if (isAuth.PM) {
           setIsAuth(prev => ({ ...prev, PM: false }))
         }
@@ -116,7 +119,7 @@ const TaskList = props => {
         <h2>{appid}</h2>
         <div className="flex-row">
           {isAuth.PM && (
-            <button className="gobutton" onClick={createModal}>
+            <button className="gobutton" onClick={e => navigate(pathname + "/plans")}>
               Edit Plans
             </button>
           )}
