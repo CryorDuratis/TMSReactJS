@@ -227,6 +227,26 @@ body {
 }
 
 /* plan list */
+.plan-grid-header {
+  display: grid;
+  grid-template-columns: 150px 150px 150px minmax(20px, 1fr) 150px;
+  gap: 10px 10px;
+  align-items: center;
+  padding: 0 10px;
+}
+.plan-form {
+  display: grid;
+  grid-template-areas: ". . . . cancel edit";
+  grid-template-columns: 150px 150px 150px minmax(20px, 1fr) 70px 70px;
+  gap: 10px 10px;
+  width: 100%;
+  margin: 0;
+}
+.plan-form input:disabled {
+  color: black;
+  background-color: transparent;
+  border: none;
+}
 
 /* task list */
 .kanban-board {
