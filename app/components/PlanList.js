@@ -78,7 +78,9 @@ function PlanList() {
   return (
     <Container class="bgclr-light1 content-container">
       <div className="flex-row" style={{ whiteSpace: "nowrap" }}>
-        <button>Return to Task Dashboard</button>
+        <button className="gobutton" onClick={e => navigate(pathname.split("/plans")[0])}>
+          Return to Task Dashboard
+        </button>
         <h2>Plan List</h2>
       </div>
       <Container class="create-form-container">

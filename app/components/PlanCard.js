@@ -27,7 +27,6 @@ function PlanCard(props) {
   // role is optional field, with default field if empty
 
   // managing rendering
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [error, setError] = useState("")
   const editkey = props.listkey + 1 // so that 0 can be set as nothing is editing
 
@@ -36,7 +35,6 @@ function PlanCard(props) {
     console.log("editing changed ", props.editing)
     if (!props.create) {
       if (props.editing !== editkey) {
-        setIsPopupOpen(false)
         setFormData(defaultplan)
       }
       // close popup
@@ -94,6 +92,13 @@ function PlanCard(props) {
           type: "gtoast",
           message: "Plan edited successfully"
         })
+
+        // update formdata
+        setFormData(prev => ({
+          ...prev,
+          ["Plan_startDate"]: Plan_startDate,
+          ["Plan_endDate"]: Plan_endDate
+        }))
       } catch (e) {
         console.log(e)
       }
@@ -181,22 +186,13 @@ function PlanCard(props) {
     }))
   }
 
-  // pass to each user form to handle roles in a multiselect dropdown
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen)
-  }
-  const handleClosePopup = () => {
-    // close popup
-    setIsPopupOpen(false)
-  }
-
   return (
     <form className="plan-form">
       <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} />
 
-      {formData.Plan_startDate || props.editing || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 
-      {formData.Plan_endDate || props.editing || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 
       <div className="form-cancel">
         {props.editing === editkey ? (
