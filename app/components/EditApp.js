@@ -220,7 +220,7 @@ function EditApp(props) {
             </button>
             {isAuth && (
               <button type="button" className="gobutton" onClick={handleSubmit}>
-                Save Changes
+                Save
               </button>
             )}
           </div>

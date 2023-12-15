@@ -37,7 +37,7 @@ function CreateTask(props) {
       try {
         // Make fetch request to the server
         const token = Cookies.get("token")
-        const response = await Axios.post("/app", { App_Acronym: props.appid, token })
+        var response = await Axios.post("/app", { App_Acronym: props.appid, token })
         // console.log("response ", response.data)
 
         // if not logged in
@@ -55,16 +55,27 @@ function CreateTask(props) {
         const rnum = response.data.appData.App_Rnumber
         // set default taskid
         const taskid = props.appid + "_" + rnum
+        setFormData(prevData => ({
+          ...prevData,
+          ["Task_id"]: taskid
+        }))
+
+        // check auth
+        response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
+        if (response.data.unauth) {
+          props.setIsAuth("")
+          appDispatch({
+            type: "btoast",
+            message: "Unauthorised action"
+          })
+          props.onClose()
+        }
       } catch (error) {
         console.error("Error fetching data:", error)
         // Handle errors as needed
       }
     }
-
-    setFormData(prevData => ({
-      ...prevData,
-      ["Task_id"]: taskid
-    }))
+    fetchapp()
   }, [])
 
   // handle submit form
