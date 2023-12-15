@@ -111,6 +111,7 @@ function AppList() {
 
   return (
     <Container class="bgclr-light1 content-container">
+      <div className="breadcrumb">Apps</div>
       {isModalOpen && (ModalMode === "create" ? <CreateApp onClose={handleCloseModal} update={updateAppList} /> : <EditApp onClose={handleCloseModal} update={updateAppList} appacro={ModalMode} />)}
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>App List</h2>

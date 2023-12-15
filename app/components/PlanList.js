@@ -77,10 +77,10 @@ function PlanList() {
 
   return (
     <Container class="bgclr-light1 content-container">
+      <div className="breadcrumb">
+        <span onClick={e => navigate("/apps")}>Apps</span> / <span onClick={e => navigate(pathname.split("/plans")[0])}>App Dashboard</span> / Plans
+      </div>
       <div className="flex-row" style={{ whiteSpace: "nowrap" }}>
-        <button className="gobutton" onClick={e => navigate(pathname.split("/plans")[0])}>
-          Return to Task Dashboard
-        </button>
         <h2>Plan List</h2>
       </div>
       <Container class="create-form-container">

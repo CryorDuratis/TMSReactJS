@@ -114,6 +114,9 @@ const TaskList = props => {
 
   return (
     <div className="content-container bgclr-light1">
+      <div className="breadcrumb">
+        <span onClick={e => navigate("/apps")}>Apps</span> / App Dashboard
+      </div>
       {isModalOpen && (ModalMode === "create" ? <CreateTask onClose={handleCloseModal} update={updateTaskList} appid={appid} setIsAuth={setIsAuth} /> : <EditTask onClose={handleCloseModal} update={updateTaskList} appacro={ModalMode} setIsAuth={setIsAuth} />)}
       <div className="flex-row" style={{ justifyContent: "space-between" }}>
         <h2>{appid}</h2>

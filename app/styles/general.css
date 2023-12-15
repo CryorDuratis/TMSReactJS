@@ -41,6 +41,18 @@ nav span {
   background-color: darkslategrey;
   color: white;
 }
+.breadcrumb {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+.breadcrumb span {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.breadcrumb span:hover {
+  font-weight: bold;
+}
 
 /* popup modal style */
 .info-container {
