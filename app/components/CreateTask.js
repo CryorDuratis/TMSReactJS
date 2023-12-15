@@ -60,8 +60,12 @@ function CreateTask(props) {
           ["Task_id"]: taskid
         }))
 
+        // fetch app permissions
+        response = await Axios.post("/app", { App_Acronym: appid, token })
+        const createpermit = response.data.appData.App_permit_Create
+
         // check auth
-        response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
+        response = await Axios.post("/checkgroup", { groupname: createpermit, token })
         if (response.data.unauth) {
           props.setIsAuth("")
           appDispatch({

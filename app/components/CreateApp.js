@@ -13,6 +13,7 @@ function CreateApp(props) {
 
   // state of fields
   const [formData, setFormData] = useState({})
+  const [createPermit, setCreatePermit] = useState()
   const [openPermit, setOpenPermit] = useState()
   const [todolistPermit, setTodolistPermit] = useState()
   const [doingPermit, setDoingPermit] = useState()
@@ -74,6 +75,9 @@ function CreateApp(props) {
       [name]: value
     }))
   }
+  const handleCreatePermit = e => {
+    setCreatePermit(e.target.value)
+  }
   const handleOpenPermit = e => {
     setOpenPermit(e.target.value)
   }
@@ -94,7 +98,7 @@ function CreateApp(props) {
       const token = Cookies.get("token")
 
       // send request
-      const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, openPermit, todolistPermit, doingPermit, donePermit, token })
+      const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, createPermit, openPermit, todolistPermit, doingPermit, donePermit, token })
 
       // if not logged in
       if (response.data.unauth === "login") {
@@ -151,7 +155,7 @@ function CreateApp(props) {
         <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
         <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={e => handleInputChange(e)} />
 
-        <label style={{ gridArea: "rnumber-title" }}>App rnumber</label>
+        <label style={{ gridArea: "rnumber-title" }}>App Rnumber</label>
         <input
           style={{ gridArea: "rnumber" }}
           type="number"
@@ -173,6 +177,10 @@ function CreateApp(props) {
         <label style={{ gridArea: "desc-title" }}>App Description</label>
         <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" onChange={e => handleInputChange(e)}></textarea>
 
+        <label style={{ gridArea: "create-title" }}>Create Task Permissions</label>
+        <select value={createPermit} onChange={e => handleCreatePermit(e)} style={{ gridArea: "create" }} name="App_permit_Create">
+          {rendergrouplist()}
+        </select>
         <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
         <select value={openPermit} onChange={e => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
           {rendergrouplist()}

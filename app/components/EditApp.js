@@ -13,6 +13,7 @@ function EditApp(props) {
 
   // state of fields
   const [formData, setFormData] = useState()
+  const [createPermit, setCreatePermit] = useState()
   const [openPermit, setOpenPermit] = useState()
   const [todolistPermit, setTodolistPermit] = useState()
   const [doingPermit, setDoingPermit] = useState()
@@ -46,6 +47,7 @@ function EditApp(props) {
 
         // set apps
         setFormData(response.data.appData)
+        setCreatePermit(response.data.appData.App_permit_Create ? response.data.appData.App_permit_Create : grouplist[0])
         setOpenPermit(response.data.appData.App_permit_Open ? response.data.appData.App_permit_Open : grouplist[0])
         setTodolistPermit(response.data.appData.App_permit_toDoList ? response.data.appData.App_permit_toDoList : grouplist[0])
         setDoingPermit(response.data.appData.App_permit_Doing ? response.data.appData.App_permit_Doing : grouplist[0])
@@ -121,6 +123,9 @@ function EditApp(props) {
       [name]: value
     }))
   }
+  const handleCreatePermit = e => {
+    setCreatePermit(e.target.value)
+  }
   const handleOpenPermit = e => {
     setOpenPermit(e.target.value)
   }
@@ -141,7 +146,7 @@ function EditApp(props) {
       const token = Cookies.get("token")
 
       // send request
-      const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, openPermit, todolistPermit, doingPermit, donePermit, token })
+      const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, createPermit, openPermit, todolistPermit, doingPermit, donePermit, token })
 
       // if not logged in
       if (response.data.unauth === "login") {
@@ -193,6 +198,11 @@ function EditApp(props) {
 
           <label style={{ gridArea: "desc-title" }}>App Description</label>
           <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" disabled={!isAuth} value={formData.App_Description ? formData.App_Description : ""} onChange={e => handleInputChange(e)}></textarea>
+
+          <label style={{ gridArea: "create-title" }}>Create Task Permissions</label>
+          <select disabled={!isAuth} value={createPermit} onChange={e => handleCreatePermit(e)} style={{ gridArea: "create" }} name="App_permit_Create">
+            {rendergrouplist()}
+          </select>
 
           <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
           <select disabled={!isAuth} value={openPermit} onChange={e => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">

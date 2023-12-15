@@ -26,8 +26,8 @@ const TaskList = props => {
   const [ModalMode, setModalMode] = useState("")
   const [updateFlag, setUpdateFlag] = useState(false)
   const [isAuth, setIsAuth] = useState({
-    PL: false,
-    PM: false
+    Task: false,
+    Plan: false
   })
 
   // get all tasks
@@ -52,26 +52,30 @@ const TaskList = props => {
         // setTasks(response.data.tasksData)
         // console.log("tasks obtained: ", response.data.tasksData)
 
-        // check button authorization
-        var response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
+        // fetch app permissions
+        var response = await Axios.post("/app", { App_Acronym: appid, token })
+        const createpermit = response.data.appData.App_permit_Create
+
+        // check create task button authorization
+        response = await Axios.post("/checkgroup", { groupname: createpermit, token })
         console.log("checkgroup", response)
 
         if (!response.data.unauth) {
-          setIsAuth(prev => ({ ...prev, PL: true }))
+          setIsAuth(prev => ({ ...prev, Task: true }))
           console.log("create task set to true")
-        } else if (isAuth.PL) {
-          setIsAuth(prev => ({ ...prev, PL: false }))
+        } else if (isAuth.Task) {
+          setIsAuth(prev => ({ ...prev, Task: false }))
         }
 
-        // check button authorization
+        // check edit plan button authorization
         response = await Axios.post("/checkgroup", { groupname: "Project Manager", token })
         console.log("checkgroup", response)
 
         if (!response.data.unauth) {
-          setIsAuth(prev => ({ ...prev, PM: true }))
+          setIsAuth(prev => ({ ...prev, Plan: true }))
           console.log("edit plan set to true")
-        } else if (isAuth.PM) {
-          setIsAuth(prev => ({ ...prev, PM: false }))
+        } else if (isAuth.Plan) {
+          setIsAuth(prev => ({ ...prev, Plan: false }))
         }
       } catch (error) {
         console.log("error: ", error)
@@ -121,12 +125,12 @@ const TaskList = props => {
       <div className="flex-row" style={{ justifyContent: "space-between" }}>
         <h2>{appid}</h2>
         <div className="flex-row">
-          {isAuth.PM && (
+          {isAuth.Plan && (
             <button className="gobutton" onClick={e => navigate(pathname + "/plans")}>
               Edit Plans
             </button>
           )}
-          {isAuth.PL && (
+          {isAuth.Task && (
             <button className="gobutton" onClick={createModal}>
               Create Task
             </button>

@@ -207,7 +207,7 @@ body {
 }
 .appinfo-form {
   display: grid;
-  grid-template-areas: "acronym-title acronym . open-title open" "rnumber-title rnumber . todolist-title todolist" "startdate-title startdate . doing-title doing" "enddate-title enddate . done-title done" "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . button";
+  grid-template-areas: "acronym-title acronym . create-title create" "rnumber-title rnumber . open-title open" "startdate-title startdate . todolist-title todolist" "enddate-title enddate . doing-title doing" "desc-title desc desc done-title done" "desc-title desc desc . ." "desc-title desc desc . ." "desc-title desc desc . button";
   grid-template-columns: max-content 150px 1fr max-content 150px;
   grid-template-rows: repeat(5, 20px) 1fr 20px 20px;
   gap: 10px;
