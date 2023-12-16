@@ -19,12 +19,12 @@ function PlanCard(props) {
   // state of fields
   var defaultplan = {}
   if (props.listkey) {
+    // edit card
     defaultplan = props.planlist[props.listkey]
-  } else defaultplan = props.plan
+  } else defaultplan = props.plan // create card
 
   // formdata handles optional fields that are retrieved from db
   const [formData, setFormData] = useState(defaultplan)
-  // role is optional field, with default field if empty
 
   // managing rendering
   const [error, setError] = useState("")
@@ -35,20 +35,21 @@ function PlanCard(props) {
     console.log("editing changed ", props.editing)
     if (!props.create) {
       if (props.editing !== editkey) {
+        defaultplan = props.planlist[props.listkey]
         setFormData(defaultplan)
       }
       // close popup
     }
-  }, [props.editing, props.userlist])
+  }, [props.editing, props.planlist])
 
   // set editing to this item
-  const handleClick = async e => {
+  const handleClick = async (e) => {
     e.preventDefault()
     props.setEditing(editkey)
   }
 
   // submit to backend and update user list state
-  const handleUpdate = async e => {
+  const handleUpdate = async (e) => {
     e.preventDefault()
 
     // submit edit
@@ -69,7 +70,7 @@ function PlanCard(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -90,14 +91,14 @@ function PlanCard(props) {
         setError(false)
         appDispatch({
           type: "gtoast",
-          message: "Plan edited successfully"
+          message: "Plan edited successfully",
         })
 
         // update formdata
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           ["Plan_startDate"]: Plan_startDate,
-          ["Plan_endDate"]: Plan_endDate
+          ["Plan_endDate"]: Plan_endDate,
         }))
       } catch (e) {
         console.log(e)
@@ -115,7 +116,7 @@ function PlanCard(props) {
           setError("required")
           appDispatch({
             type: "btoast",
-            message: "Plan name is required"
+            message: "Plan name is required",
           })
           props.update()
           return
@@ -129,7 +130,7 @@ function PlanCard(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -151,7 +152,7 @@ function PlanCard(props) {
           setError("conflict")
           appDispatch({
             type: "btoast",
-            message: "Plan name already used in this app"
+            message: "Plan name already used in this app",
           })
           props.update()
           return
@@ -160,7 +161,7 @@ function PlanCard(props) {
         setError(false)
         appDispatch({
           type: "gtoast",
-          message: "New plan created successfully"
+          message: "New plan created successfully",
         })
       } catch (e) {
         console.log(e)
@@ -170,7 +171,7 @@ function PlanCard(props) {
   }
 
   // set default form data if canceled or cleared
-  const handleCancel = e => {
+  const handleCancel = (e) => {
     setFormData(defaultplan)
     if (!props.create) {
       props.setEditing(0)
@@ -178,30 +179,30 @@ function PlanCard(props) {
   }
 
   // updates form values for axios submission since single page react cant use default form actions
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }))
   }
 
   return (
     <form className="plan-form">
-      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} />
+      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={(e) => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} />
 
-      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} /> : <span>No Date Set</span>}
 
-      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} /> : <span>No Date Set</span>}
 
       <div className="form-cancel">
         {props.editing === editkey ? (
-          <button type="reset" onClick={e => handleCancel(e)} className="backbutton">
+          <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
             Cancel
           </button>
         ) : (
           props.create && (
-            <button type="reset" onClick={e => handleCancel(e)} className="backbutton">
+            <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
               Clear
             </button>
           )
@@ -210,11 +211,11 @@ function PlanCard(props) {
 
       <div className="form-edit">
         {props.editing === editkey ? (
-          <button type="submit" onClick={e => handleUpdate(e)} className="gobutton">
+          <button type="submit" onClick={(e) => handleUpdate(e)} className="gobutton">
             Update
           </button>
         ) : (
-          <button type="button" onClick={props.create ? e => handleUpdate(e) : e => handleClick(e)} className="gobutton">
+          <button type="button" onClick={props.create ? (e) => handleUpdate(e) : (e) => handleClick(e)} className="gobutton">
             {props.create ? "Create" : "Edit"}
           </button>
         )}

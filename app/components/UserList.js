@@ -29,8 +29,7 @@ function UserList() {
   // updates list when new user is created
   const updateUserList = () => {
     console.log("update user list called")
-    setUpdateFlag(prev => !prev)
-    navigate("/usermgmt")
+    setUpdateFlag((prev) => !prev)
   }
 
   // display user information on load, and on update
@@ -46,7 +45,7 @@ function UserList() {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -72,7 +71,7 @@ function UserList() {
   }, [updateFlag])
 
   // create group form submitted
-  const createGroup = async e => {
+  const createGroup = async (e) => {
     e.preventDefault()
     try {
       // send request -- create group
@@ -84,7 +83,7 @@ function UserList() {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out"
+            message: "Logged out",
           })
           navigate("/login")
         } else if (response.data.unauth === "role") {
@@ -104,15 +103,15 @@ function UserList() {
         setError("conflict")
         appDispatch({
           type: "btoast",
-          message: "Group name already exists"
+          message: "Group name already exists",
         })
         return
       }
-      setgrouplist(prev => [...prev, group])
+      setgrouplist((prev) => [...prev, group])
       setGroup("")
       appDispatch({
         type: "gtoast",
-        message: "Group successfully created"
+        message: "Group successfully created",
       })
     } catch (error) {
       console.log("error is ", error)
@@ -133,7 +132,7 @@ function UserList() {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out"
+              message: "Logged out",
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -144,7 +143,7 @@ function UserList() {
         }
 
         // Set the grouplist based on the server response
-        setgrouplist(response.data.groupsData.map(obj => obj.groupname))
+        setgrouplist(response.data.groupsData.map((obj) => obj.groupname))
 
         // console.log("groups obtained ", grouplist)
       } catch (error) {
@@ -161,10 +160,10 @@ function UserList() {
     <Container class="bgclr-light1 content-container">
       <div className="flex-row" style={{ justifyContent: "space-between", whiteSpace: "nowrap" }}>
         <h2>User List</h2>
-        <form className="flex-row" onSubmit={e => createGroup(e)}>
+        <form className="flex-row" onSubmit={(e) => createGroup(e)}>
           <label htmlFor="group">Create User Group: </label>
-          <input className={error === "conflict" ? "error-outline" : undefined} type="text" name="group" value={group} onChange={e => setGroup(e.target.value)} />
-          <button type="button" onClick={e => createGroup(e)} className="gobutton">
+          <input className={error === "conflict" ? "error-outline" : undefined} type="text" name="group" value={group} onChange={(e) => setGroup(e.target.value)} />
+          <button type="button" onClick={(e) => createGroup(e)} className="gobutton">
             Create Group
           </button>
         </form>
