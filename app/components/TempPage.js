@@ -3,9 +3,9 @@ import Container from "../templates/Container"
 import StateContext from "../StateContext"
 import Page from "../templates/Page"
 
-function ErrorPage() {
+function TempPage() {
   useEffect(() => {
-    console.log("errorpage was loaded")
+    console.log("temp page was loaded")
   }, [])
 
   const appState = useContext(StateContext)
@@ -45,4 +45,4 @@ function ErrorPage() {
   }
 }
 
-export default ErrorPage
+export default TempPage

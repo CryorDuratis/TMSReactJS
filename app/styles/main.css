@@ -262,9 +262,11 @@ body {
 }
 .column {
   flex: 1;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  /* border-left: 1px solid #ddd; */
   padding: 10px;
+}
+.column:not(:last-child) {
+  border-right: 1px solid #ddd;
 }
 .task {
   background-color: #f9f9f9;

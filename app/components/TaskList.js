@@ -7,7 +7,7 @@ import Axios from "axios"
 
 // import components
 
-const TaskList = props => {
+const TaskList = (props) => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
@@ -18,7 +18,7 @@ const TaskList = props => {
     { id: 2, title: "Task 2", state: "to do" },
     { id: 3, title: "Task 3", state: "doing" },
     { id: 4, title: "Task 4", state: "done" },
-    { id: 5, title: "Task 5", state: "closed" }
+    { id: 5, title: "Task 5", state: "closed" },
   ])
 
   // rendering
@@ -27,7 +27,7 @@ const TaskList = props => {
   const [updateFlag, setUpdateFlag] = useState(false)
   const [isAuth, setIsAuth] = useState({
     Task: false,
-    Plan: false
+    Plan: false,
   })
 
   // get all tasks
@@ -58,24 +58,22 @@ const TaskList = props => {
 
         // check create task button authorization
         response = await Axios.post("/checkgroup", { groupname: createpermit, token })
-        console.log("checkgroup", response)
+        console.log("create task permit: ", !response.data.unauth)
 
         if (!response.data.unauth) {
-          setIsAuth(prev => ({ ...prev, Task: true }))
-          console.log("create task set to true")
+          setIsAuth((prev) => ({ ...prev, Task: true }))
         } else if (isAuth.Task) {
-          setIsAuth(prev => ({ ...prev, Task: false }))
+          setIsAuth((prev) => ({ ...prev, Task: false }))
         }
 
         // check edit plan button authorization
         response = await Axios.post("/checkgroup", { groupname: "Project Manager", token })
-        console.log("checkgroup", response)
+        console.log("edit plan permit: ", !response.data.unauth)
 
         if (!response.data.unauth) {
-          setIsAuth(prev => ({ ...prev, Plan: true }))
-          console.log("edit plan set to true")
+          setIsAuth((prev) => ({ ...prev, Plan: true }))
         } else if (isAuth.Plan) {
-          setIsAuth(prev => ({ ...prev, Plan: false }))
+          setIsAuth((prev) => ({ ...prev, Plan: false }))
         }
       } catch (error) {
         console.log("error: ", error)
@@ -84,10 +82,10 @@ const TaskList = props => {
     fetchTasks()
   }, [updateFlag])
 
-  const renderTasks = state => {
+  const renderTasks = (state) => {
     return tasks
-      .filter(task => task.state === state)
-      .map(task => (
+      .filter((task) => task.state === state)
+      .map((task) => (
         <div key={task.id} className="task">
           {task.title}
           {task.title}
@@ -99,7 +97,7 @@ const TaskList = props => {
   // updates kanban board when new task is made or edited
   const updateTaskList = () => {
     console.log("update app list called")
-    setUpdateFlag(prev => !prev)
+    setUpdateFlag((prev) => !prev)
   }
   // control create task and edit task popup modal
   const createModal = () => {
@@ -119,14 +117,14 @@ const TaskList = props => {
   return (
     <div className="content-container bgclr-light1">
       <div className="breadcrumb">
-        <span onClick={e => navigate("/apps")}>Apps</span> / App Dashboard
+        <span onClick={(e) => navigate("/apps")}>Apps</span> / App Dashboard
       </div>
       {isModalOpen && (ModalMode === "create" ? <CreateTask onClose={handleCloseModal} update={updateTaskList} appid={appid} setIsAuth={setIsAuth} /> : <EditTask onClose={handleCloseModal} update={updateTaskList} appacro={ModalMode} setIsAuth={setIsAuth} />)}
       <div className="flex-row" style={{ justifyContent: "space-between" }}>
         <h2>{appid}</h2>
         <div className="flex-row">
           {isAuth.Plan && (
-            <button className="gobutton" onClick={e => navigate(pathname + "/plans")}>
+            <button className="gobutton" onClick={(e) => navigate(pathname + "/plans")}>
               Edit Plans
             </button>
           )}

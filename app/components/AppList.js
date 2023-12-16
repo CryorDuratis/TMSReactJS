@@ -41,7 +41,7 @@ function AppList() {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out"
+            message: "Logged out",
           })
           navigate("/login")
           return
@@ -52,14 +52,12 @@ function AppList() {
 
         // check button authorization
         response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
-        console.log("checkgroup", response)
+        console.log("create app permit: ", !response.data.unauth)
 
         if (response.data.unauth) {
-          console.log("cabutton set to false")
           setCAButton(false)
         } else {
           setCAButton(true)
-          console.log("cabutton set to true")
         }
       } catch (error) {
         console.log("error: ", error)
@@ -84,19 +82,19 @@ function AppList() {
   }
 
   // handle navigate
-  const handleNavigate = appacro => {
+  const handleNavigate = (appacro) => {
     navigate(`/apps/${appacro}`)
   }
 
   // app card component for easy rendering
-  const AppCard = props => {
+  const AppCard = (props) => {
     const { App_Acronym, App_startDate, App_endDate } = props.app
     return (
-      <div className="app-card" onClick={e => handleNavigate(App_Acronym)}>
+      <div className="app-card" onClick={(e) => handleNavigate(App_Acronym)}>
         <span className="form-acronym">{App_Acronym}</span>
         {App_startDate ? <input type="date" className="form-startdate" value={App_startDate} disabled /> : <span className="form-startdate">No date set</span>}
         {App_endDate ? <input type="date" className="form-enddate" value={App_endDate} disabled /> : <span className="form-enddate">No date set</span>}
-        <button className="form-details gobutton" onClick={e => editModal(e, App_Acronym)}>
+        <button className="form-details gobutton" onClick={(e) => editModal(e, App_Acronym)}>
           View Details
         </button>
       </div>
@@ -106,7 +104,7 @@ function AppList() {
   // updates applist when new app is made or edited
   const updateAppList = () => {
     console.log("update app list called")
-    setUpdateFlag(prev => !prev)
+    setUpdateFlag((prev) => !prev)
   }
 
   return (

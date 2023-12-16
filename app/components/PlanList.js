@@ -1,6 +1,6 @@
 // import node modules
 import React, { useContext, useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import Axios from "axios"
 
 // import components
@@ -16,6 +16,7 @@ function PlanList() {
   const appDispatch = useContext(DispatchContext)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { appid } = useParams()
 
   // managing rendering
   const [isLoading, setIsLoading] = useState(true)
@@ -57,7 +58,7 @@ function PlanList() {
         }
 
         // get plans
-        response = await Axios.post("/plan/getall", { token })
+        response = await Axios.post("/plan/getall", { appid, token })
 
         // Set the state based on the server response
         setPlanList(response.data.plansData)
@@ -80,7 +81,7 @@ function PlanList() {
         <span onClick={(e) => navigate("/apps")}>Apps</span> / <span onClick={(e) => navigate(pathname.split("/plans")[0])}>App Dashboard</span> / Plans
       </div>
       <div className="flex-row" style={{ whiteSpace: "nowrap" }}>
-        <h2>Plan List</h2>
+        <h2>{appid} - Plan List</h2>
       </div>
       <Container class="create-form-container">
         <div className="plan-grid-header">

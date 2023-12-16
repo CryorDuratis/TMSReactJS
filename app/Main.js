@@ -15,7 +15,7 @@ import StateContext from "./StateContext"
 // import components
 import Header from "./components/Header"
 import Login from "./components/Login"
-import ErrorPage from "./components/ErrorPage"
+import TempPage from "./components/TempPage"
 import Footer from "./components/Footer"
 import Toast from "./components/Toast"
 import Profile from "./components/Profile"
@@ -36,7 +36,7 @@ const initialState = {
   toasttype: false,
   error: "",
   // for nested use
-  admin: false
+  admin: false,
 }
 
 function reducer(draft, action) {
@@ -89,8 +89,6 @@ function reducer(draft, action) {
 function MainComponent() {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
 
-  console.log("main state ", state)
-
   // check authentication and authorization on page load for display of buttons
   const fetchAuth = async () => {
     try {
@@ -103,37 +101,39 @@ function MainComponent() {
       if (response.data.unauth === "login") {
         dispatch({
           type: "logout",
-          message: "Logged out"
+          message: "Logged out",
         })
       } else
         dispatch({
           type: "update",
-          user: response.data.user
+          user: response.data.user,
         })
 
       if (response.data.unauth === "role" && state.admin) {
         dispatch({
           type: "admin",
-          admin: false
+          admin: false,
         })
       } else dispatch({ type: "admin", admin: true })
       if (response.data.error) {
         dispatch({
           type: "error",
-          error: response.data.error
+          error: response.data.error,
         })
       }
+      console.log("main state updated: ", state)
     } catch (error) {
       console.error("Error fetching data:", error)
       // Handle errors as needed
       dispatch({
         type: "error",
-        error: "server"
+        error: "server",
       })
     }
   }
 
   useEffect(() => {
+    console.log("initial state: ", state)
     // Call the fetch function when the app first mounts
     fetchAuth()
   }, [])
@@ -148,14 +148,14 @@ function MainComponent() {
           {/* main body */}
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/apps" element={state.user ? <Home onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/apps" element={state.user ? <Home onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
             <Route path="/" element={<Navigate to="/apps" replace />} />
-            <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
-            <Route path="/apps/:appid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
-            <Route path="/apps/:appid/plans" element={state.user ? <PlanMgmt onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
-            <Route path="/apps/:appid/task/:taskid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <ErrorPage /> : <Login />} />
+            <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
+            <Route path="/apps/:appid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
+            <Route path="/apps/:appid/plans" element={state.user ? <PlanMgmt onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
+            <Route path="/apps/:appid/task/:taskid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
-            <Route path="/error" element={<ErrorPage />} />
+            <Route path="/error" element={<TempPage />} />
             <Route path="*" element={<Navigate replace to="/error" />} />
           </Routes>
           <Footer />
