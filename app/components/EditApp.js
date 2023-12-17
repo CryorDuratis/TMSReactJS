@@ -39,7 +39,7 @@ function EditApp(props) {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out"
+            message: "Logged out",
           })
           navigate("/login")
           return
@@ -84,14 +84,14 @@ function EditApp(props) {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out"
+            message: "Logged out",
           })
           navigate("/login")
         }
 
         // Set the grouplist based on the server response
-        const groups = response.data.groupsData.map(obj => obj.groupname)
-        const filteredGroups = groups.filter(groupName => groupName !== "admin")
+        const groups = response.data.groupsData.map((obj) => obj.groupname)
+        const filteredGroups = groups.filter((groupName) => groupName !== "admin")
 
         setgrouplist(filteredGroups)
 
@@ -116,31 +116,31 @@ function EditApp(props) {
   }
 
   // change formdata on input change
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }))
   }
-  const handleCreatePermit = e => {
+  const handleCreatePermit = (e) => {
     setCreatePermit(e.target.value)
   }
-  const handleOpenPermit = e => {
+  const handleOpenPermit = (e) => {
     setOpenPermit(e.target.value)
   }
-  const handleTodolistPermit = e => {
+  const handleTodolistPermit = (e) => {
     setTodolistPermit(e.target.value)
   }
-  const handleDoingPermit = e => {
+  const handleDoingPermit = (e) => {
     setDoingPermit(e.target.value)
   }
-  const handleDonePermit = e => {
+  const handleDonePermit = (e) => {
     setDonePermit(e.target.value)
   }
 
   // handle submit form
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
@@ -152,7 +152,7 @@ function EditApp(props) {
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out"
+          message: "Logged out",
         })
         navigate("/login")
         return
@@ -169,7 +169,7 @@ function EditApp(props) {
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "App successfully edited"
+        message: "App successfully edited",
       })
       props.update()
     } catch (error) {
@@ -191,36 +191,36 @@ function EditApp(props) {
           <input style={{ gridArea: "rnumber" }} type="number" name="App_Rnumber" disabled value={formData.App_Rnumber} />
 
           <label style={{ gridArea: "startdate-title" }}>From</label>
-          <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" disabled={!isAuth} value={formData.App_startDate} onChange={e => handleInputChange(e)} />
+          <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" disabled={!isAuth} value={formData.App_startDate} onChange={(e) => handleInputChange(e)} />
 
           <label style={{ gridArea: "enddate-title" }}>To</label>
-          <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" disabled={!isAuth} value={formData.App_endDate} onChange={e => handleInputChange(e)} />
+          <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" disabled={!isAuth} value={formData.App_endDate} onChange={(e) => handleInputChange(e)} />
 
           <label style={{ gridArea: "desc-title" }}>App Description</label>
-          <textarea style={{ gridArea: "desc", resize: "none", width: "100%", height: "100%" }} name="App_Description" disabled={!isAuth} value={formData.App_Description ? formData.App_Description : ""} onChange={e => handleInputChange(e)}></textarea>
+          <textarea style={{ gridArea: "desc" }} name="App_Description" disabled={!isAuth} value={formData.App_Description ? formData.App_Description : ""} onChange={(e) => handleInputChange(e)}></textarea>
 
           <label style={{ gridArea: "create-title" }}>Create Task Permissions</label>
-          <select disabled={!isAuth} value={createPermit} onChange={e => handleCreatePermit(e)} style={{ gridArea: "create" }} name="App_permit_Create">
+          <select disabled={!isAuth} value={createPermit} onChange={(e) => handleCreatePermit(e)} style={{ gridArea: "create" }} name="App_permit_Create">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
-          <select disabled={!isAuth} value={openPermit} onChange={e => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
+          <select disabled={!isAuth} value={openPermit} onChange={(e) => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "todolist-title" }}>To Do List State Permissions</label>
-          <select disabled={!isAuth} value={todolistPermit} onChange={e => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
+          <select disabled={!isAuth} value={todolistPermit} onChange={(e) => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "doing-title" }}>Doing State Permissions</label>
-          <select disabled={!isAuth} value={doingPermit} onChange={e => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
+          <select disabled={!isAuth} value={doingPermit} onChange={(e) => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "done-title" }}>Done State Permissions</label>
-          <select disabled={!isAuth} value={donePermit} onChange={e => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
+          <select disabled={!isAuth} value={donePermit} onChange={(e) => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
             {rendergrouplist()}
           </select>
 

@@ -15,19 +15,19 @@ function CreateTask(props) {
   const [formData, setFormData] = useState({
     Task_name: "",
     Task_id: "",
-    Task_App_Acronym: props.appid,
-    Task_Description: ""
+    Task_app_Acronym: props.appid,
+    Task_description: "",
   })
 
   // manage rendering
   const [error, setError] = useState("")
 
   // change formdata on input change
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }))
   }
 
@@ -45,7 +45,7 @@ function CreateTask(props) {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out"
+            message: "Logged out",
           })
           navigate("/login")
           return
@@ -55,13 +55,13 @@ function CreateTask(props) {
         const rnum = response.data.appData.App_Rnumber
         // set default taskid
         const taskid = props.appid + "_" + rnum
-        setFormData(prevData => ({
+        setFormData((prevData) => ({
           ...prevData,
-          ["Task_id"]: taskid
+          ["Task_id"]: taskid,
         }))
 
         // fetch app permissions
-        response = await Axios.post("/app", { App_Acronym: appid, token })
+        response = await Axios.post("/app", { App_Acronym: props.appid, token })
         const createpermit = response.data.appData.App_permit_Create
 
         // check auth
@@ -70,7 +70,7 @@ function CreateTask(props) {
           props.setIsAuth("")
           appDispatch({
             type: "btoast",
-            message: "Unauthorised action"
+            message: "Unauthorised action",
           })
           props.onClose()
         }
@@ -83,62 +83,62 @@ function CreateTask(props) {
   }, [])
 
   // handle submit form
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     console.log("values sent in: ", formData)
-    // try {
-    //   const token = Cookies.get("token")
+    try {
+      const token = Cookies.get("token")
 
-    //   // send request
-    //   const response = await Axios.post("/app/create", { groupname: "Project Lead", formData, token })
+      // send request
+      const response = await Axios.post("/task/create", { formData, token })
 
-    //   // if not logged in
-    //   if (response.data.unauth === "login") {
-    //     appDispatch({
-    //       type: "logout",
-    //       message: "Logged out",
-    //     })
-    //     navigate("/login")
-    //     return
-    //   }
+      // if not logged in
+      if (response.data.unauth === "login") {
+        appDispatch({
+          type: "logout",
+          message: "Logged out",
+        })
+        navigate("/login")
+        return
+      }
 
-    //   // if request fails
-    //   if (response.data.error) {
-    //     appDispatch({ type: "logerror", error: response.data.error })
-    //     props.update()
-    //     return
-    //   }
-    //   // if create fails
-    //   if (!response.data.success && response.data.message === "required") {
-    //     setError("required")
-    //     appDispatch({
-    //       type: "btoast",
-    //       message: "App creation failed, please enter the App Acronym and App Rnumber",
-    //     })
-    //     props.update()
-    //     return
-    //   }
-    //   if (!response.data.success && response.data.message === "conflict") {
-    //     setError("conflict")
-    //     appDispatch({
-    //       type: "btoast",
-    //       message: "App Acronym is already in use, please try again",
-    //     })
-    //     props.update()
-    //     return
-    //   }
-    //   // else on success
-    //   setError(false)
-    //   appDispatch({
-    //     type: "gtoast",
-    //     message: "App successfully created",
-    //   })
-    //   props.update()
-    //   props.onClose()
-    // } catch (error) {
-    //   console.log("error is ", error)
-    // }
+      // if request fails
+      if (response.data.error) {
+        appDispatch({ type: "logerror", error: response.data.error })
+        props.update()
+        return
+      }
+      // if create fails
+      if (!response.data.success && response.data.message === "required") {
+        setError("required")
+        appDispatch({
+          type: "btoast",
+          message: "Task creation failed, please enter the Task name",
+        })
+        props.update()
+        return
+      }
+      if (!response.data.success && response.data.message === "conflict") {
+        setError("conflict")
+        appDispatch({
+          type: "btoast",
+          message: "Task name is already in use, please try again",
+        })
+        props.update()
+        return
+      }
+      // else on success
+      setError(false)
+      appDispatch({
+        type: "gtoast",
+        message: "Task successfully created",
+      })
+      props.update()
+      props.onClose()
+    } catch (error) {
+      console.log("error is ", error)
+    }
   }
 
   return (
@@ -146,18 +146,18 @@ function CreateTask(props) {
       <h2 style={{ width: "max-content" }}>Create Task</h2>
       <form onSubmit={handleSubmit} className="create-task-form">
         <label htmlFor="Task_name">Task Name</label>
-        <input type="text" name="Task_name" onChange={e => handleInputChange(e)} />
+        <input type="text" name="Task_name" onChange={(e) => handleInputChange(e)} className={error ? "error-outline" : undefined} />
 
         <label htmlFor="Task_id">Task ID</label>
         <input type="text" name="Task_id" value={formData.Task_id} disabled />
 
-        <label htmlFor="Task_App_Acronym">App Acronym</label>
-        <input type="text" name="Task_App_Acronym" value={props.appid} disabled />
+        <label htmlFor="Task_app_Acronym">App Acronym</label>
+        <input type="text" name="Task_app_Acronym" value={props.appid} disabled />
 
-        <label>App Description</label>
-        <textarea style={{ resize: "none", width: "100%", height: "150px" }} name="App_Description" onChange={e => handleInputChange(e)}></textarea>
+        <label>Task Description</label>
+        <textarea name="Task_description" onChange={(e) => handleInputChange(e)}></textarea>
 
-        <div className="flex-row" style={{ gridArea: "button", marginTop: "20px" }}>
+        <div className="flex-row" style={{ gridArea: "button", marginTop: "20px", justifySelf: "end" }}>
           <button type="button" className="backbutton" onClick={props.onClose}>
             Close
           </button>

@@ -13,13 +13,7 @@ const TaskList = (props) => {
 
   // field values
   const { appid } = useParams()
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Task 1", state: "open" },
-    { id: 2, title: "Task 2", state: "to do" },
-    { id: 3, title: "Task 3", state: "doing" },
-    { id: 4, title: "Task 4", state: "done" },
-    { id: 5, title: "Task 5", state: "closed" },
-  ])
+  const [tasks, setTasks] = useState([])
 
   // rendering
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -36,21 +30,21 @@ const TaskList = (props) => {
       try {
         // Make authorization request to the server
         const token = Cookies.get("token")
-        // var response = await Axios.post("/task/getall", { token })
+        var response = await Axios.post("/task/getall", { appid, token })
 
-        // // if not logged in
-        // if (response.data.unauth) {
-        //   console.log("user is unauth")
-        //   appDispatch({
-        //     type: "logout",
-        //     message: "Logged out"
-        //   })
-        //   navigate("/login")
-        //   return
-        // }
-        // // set apps
-        // setTasks(response.data.tasksData)
-        // console.log("tasks obtained: ", response.data.tasksData)
+        // if not logged in
+        if (response.data.unauth) {
+          console.log("user is unauth")
+          appDispatch({
+            type: "logout",
+            message: "Logged out",
+          })
+          navigate("/login")
+          return
+        }
+        // set tasks
+        setTasks(response.data.tasksData)
+        console.log("tasks obtained: ", response.data.tasksData)
 
         // fetch app permissions
         var response = await Axios.post("/app", { App_Acronym: appid, token })
@@ -84,12 +78,13 @@ const TaskList = (props) => {
 
   const renderTasks = (state) => {
     return tasks
-      .filter((task) => task.state === state)
+      .filter((task) => task.Task_state === state)
       .map((task) => (
-        <div key={task.id} className="task">
-          {task.title}
-          {task.title}
-          {task.title}
+        <div key={task.Task_id} className="task">
+          <span>
+            {"(" + task.Task_id + ")"} {task.Task_name}
+          </span>
+          {task.Task_owner}
         </div>
       ))
   }
@@ -138,23 +133,23 @@ const TaskList = (props) => {
       <div className="kanban-board">
         <div className="column">
           <h2>Open</h2>
-          {renderTasks("open")}
+          {renderTasks("Open")}
         </div>
         <div className="column">
           <h2>To Do</h2>
-          {renderTasks("to do")}
+          {renderTasks("To do list")}
         </div>
         <div className="column">
           <h2>Doing</h2>
-          {renderTasks("doing")}
+          {renderTasks("Doing")}
         </div>
         <div className="column">
           <h2>Done</h2>
-          {renderTasks("done")}
+          {renderTasks("Done")}
         </div>
         <div className="column">
           <h2>Closed</h2>
-          {renderTasks("closed")}
+          {renderTasks("Closed")}
         </div>
       </div>
     </div>
