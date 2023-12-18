@@ -333,9 +333,9 @@ textarea {
 .taskinfo-details {
   display: grid;
   grid-template-columns: max-content 100px;
-  grid-template-rows: repeat(7, 20px) minmax(80px, 1fr) 30px;
+  grid-template-rows: repeat(7, 20px) minmax(80px, 1fr) 100px;
   row-gap: 10px;
-  grid-template-areas: ". ." ". ." ". ." ". ." ". ." ". ." ". ." ". ." ". button";
+  grid-template-areas: ". ." ". ." ". ." ". ." ". ." ". ." ". ." ". ." "button button";
   background-color: #eee;
   padding: 70px 20px 20px 20px;
   margin: -10px;
@@ -349,11 +349,24 @@ textarea {
   margin-right: 20px;
   padding: 0 20px 20px;
   display: grid;
-  grid-template-rows: auto auto minmax(20vh, 1fr) minmax(80px, max-content);
+  grid-template-rows: auto auto minmax(25vh, 1fr) minmax(80px, max-content);
   row-gap: 10px;
+}
+.taskinfo-content h2 {
+  margin-bottom: 0;
 }
 .taskinfo-log {
   border: 1px solid #ddd;
+}
+.taskinfo-buttons {
+  position: absolute;
+  bottom: 20px;
+}
+.taskinfo-buttons button {
+  border: 1px solid black;
+  width: 40%;
+  padding: 5px;
+  text-wrap: wrap;
 }
 
 /* footer bar */
