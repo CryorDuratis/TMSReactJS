@@ -4,10 +4,11 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 import CreateTask from "./CreateTask"
 import Cookies from "js-cookie"
 import Axios from "axios"
+import EditTask from "./EditTask"
 
 // import components
 
-const TaskList = (props) => {
+const TaskList = props => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
@@ -21,7 +22,7 @@ const TaskList = (props) => {
   const [updateFlag, setUpdateFlag] = useState(false)
   const [isAuth, setIsAuth] = useState({
     Task: false,
-    Plan: false,
+    Plan: false
   })
 
   // get all tasks
@@ -37,7 +38,7 @@ const TaskList = (props) => {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
           return
@@ -55,9 +56,9 @@ const TaskList = (props) => {
         console.log("create task permit: ", !response.data.unauth)
 
         if (!response.data.unauth) {
-          setIsAuth((prev) => ({ ...prev, Task: true }))
+          setIsAuth(prev => ({ ...prev, Task: true }))
         } else if (isAuth.Task) {
-          setIsAuth((prev) => ({ ...prev, Task: false }))
+          setIsAuth(prev => ({ ...prev, Task: false }))
         }
 
         // check edit plan button authorization
@@ -65,9 +66,9 @@ const TaskList = (props) => {
         console.log("edit plan permit: ", !response.data.unauth)
 
         if (!response.data.unauth) {
-          setIsAuth((prev) => ({ ...prev, Plan: true }))
+          setIsAuth(prev => ({ ...prev, Plan: true }))
         } else if (isAuth.Plan) {
-          setIsAuth((prev) => ({ ...prev, Plan: false }))
+          setIsAuth(prev => ({ ...prev, Plan: false }))
         }
       } catch (error) {
         console.log("error: ", error)
@@ -76,23 +77,10 @@ const TaskList = (props) => {
     fetchTasks()
   }, [updateFlag])
 
-  const renderTasks = (state) => {
-    return tasks
-      .filter((task) => task.Task_state === state)
-      .map((task) => (
-        <div key={task.Task_id} className="task">
-          <span>
-            {"(" + task.Task_id + ")"} {task.Task_name}
-          </span>
-          {task.Task_owner}
-        </div>
-      ))
-  }
-
   // updates kanban board when new task is made or edited
   const updateTaskList = () => {
     console.log("update app list called")
-    setUpdateFlag((prev) => !prev)
+    setUpdateFlag(prev => !prev)
   }
   // control create task and edit task popup modal
   const createModal = () => {
@@ -109,17 +97,30 @@ const TaskList = (props) => {
     setIsModalOpen(false)
   }
 
+  const renderTasks = state => {
+    return tasks
+      .filter(task => task.Task_state === state)
+      .map(task => (
+        <div key={task.Task_id} className="task" onClick={e => editModal(e, task.Task_app_Acronym)}>
+          {task.Task_name}
+          <span>
+            <b>{task.Task_id}</b> {task.Task_owner}
+          </span>
+        </div>
+      ))
+  }
+
   return (
     <div className="content-container bgclr-light1">
       <div className="breadcrumb">
-        <span onClick={(e) => navigate("/apps")}>Apps</span> / App Dashboard
+        <span onClick={e => navigate("/apps")}>Apps</span> / App Dashboard
       </div>
       {isModalOpen && (ModalMode === "create" ? <CreateTask onClose={handleCloseModal} update={updateTaskList} appid={appid} setIsAuth={setIsAuth} /> : <EditTask onClose={handleCloseModal} update={updateTaskList} appacro={ModalMode} setIsAuth={setIsAuth} />)}
       <div className="flex-row" style={{ justifyContent: "space-between" }}>
         <h2>{appid}</h2>
         <div className="flex-row">
           {isAuth.Plan && (
-            <button className="gobutton" onClick={(e) => navigate(pathname + "/plans")}>
+            <button className="gobutton" onClick={e => navigate(pathname + "/plans")}>
               Edit Plans
             </button>
           )}

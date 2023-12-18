@@ -4,6 +4,7 @@ import DispatchContext from "../DispatchContext"
 import Cookies from "js-cookie"
 import Axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Popup from "./Popup"
 
 function EditTask(props) {
   const appState = useContext(StateContext)
@@ -12,44 +13,36 @@ function EditTask(props) {
 
   // state of fields
   const [formData, setFormData] = useState()
-  const [openPermit, setOpenPermit] = useState()
-  const [todolistPermit, setTodolistPermit] = useState()
-  const [doingPermit, setDoingPermit] = useState()
-  const [donePermit, setDonePermit] = useState()
 
   // manage rendering
   const [isLoading, setIsLoading] = useState(true)
-  const [grouplist, setgrouplist] = useState([])
+  const [planlist, setplanlist] = useState([])
   const [isAuth, setIsAuth] = useState(false)
   const [error, setError] = useState("")
 
   // set default formdata on load, and check if user is permitted
   useEffect(() => {
-    const fetchApp = async () => {
-      console.log("fetch single app is loaded")
+    const fetchTask = async () => {
+      console.log("fetch single task is loaded")
       try {
         // Make authorization request to the server
         const token = Cookies.get("token")
-        var response = await Axios.post("/app", { groupname: "Project Lead", App_Acronym: props.appacro, token })
+        var response = await Axios.post("/task", { Task_id: props.taskid, token })
 
         // if not logged in
         if (response.data.unauth) {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
           return
         }
 
         // set apps
-        setFormData(response.data.appData)
-        setOpenPermit(response.data.appData.App_permit_Open ? response.data.appData.App_permit_Open : grouplist[0])
-        setTodolistPermit(response.data.appData.App_permit_toDoList ? response.data.appData.App_permit_toDoList : grouplist[0])
-        setDoingPermit(response.data.appData.App_permit_Doing ? response.data.appData.App_permit_Doing : grouplist[0])
-        setDonePermit(response.data.appData.App_permit_Done ? response.data.appData.App_permit_Done : grouplist[0])
-        console.log("app obtained: ", response.data.appData)
+        setFormData(response.data.taskData)
+        console.log("app obtained: ", response.data.taskData)
 
         // check if authorised to edit
         response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
@@ -81,14 +74,14 @@ function EditTask(props) {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
         }
 
         // Set the grouplist based on the server response
-        const groups = response.data.groupsData.map((obj) => obj.groupname)
-        const filteredGroups = groups.filter((groupName) => groupName !== "admin")
+        const groups = response.data.groupsData.map(obj => obj.groupname)
+        const filteredGroups = groups.filter(groupName => groupName !== "admin")
 
         setgrouplist(filteredGroups)
 
@@ -113,40 +106,43 @@ function EditTask(props) {
   }
 
   // change formdata on input change
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }))
   }
-  const handleOpenPermit = (e) => {
+  const handleCreatePermit = e => {
+    setCreatePermit(e.target.value)
+  }
+  const handleOpenPermit = e => {
     setOpenPermit(e.target.value)
   }
-  const handleTodolistPermit = (e) => {
+  const handleTodolistPermit = e => {
     setTodolistPermit(e.target.value)
   }
-  const handleDoingPermit = (e) => {
+  const handleDoingPermit = e => {
     setDoingPermit(e.target.value)
   }
-  const handleDonePermit = (e) => {
+  const handleDonePermit = e => {
     setDonePermit(e.target.value)
   }
 
   // handle submit form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
 
       // send request
-      const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, openPermit, todolistPermit, doingPermit, donePermit, token })
+      const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, createPermit, openPermit, todolistPermit, doingPermit, donePermit, token })
 
       // if not logged in
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
         navigate("/login")
         return
@@ -163,7 +159,7 @@ function EditTask(props) {
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "App successfully edited",
+        message: "App successfully edited"
       })
       props.update()
     } catch (error) {
@@ -172,8 +168,8 @@ function EditTask(props) {
   }
 
   return (
-    <div className="info-container">
-      <h2 style={{ width: "max-content" }}>Edit App - Configurations</h2>
+    <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
+      <h2 style={{ width: "max-content" }}>{isAuth ? "Edit App Details" : "View App Details"}</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
@@ -185,31 +181,36 @@ function EditTask(props) {
           <input style={{ gridArea: "rnumber" }} type="number" name="App_Rnumber" disabled value={formData.App_Rnumber} />
 
           <label style={{ gridArea: "startdate-title" }}>From</label>
-          <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" disabled={!isAuth} value={formData.App_startDate} onChange={(e) => handleInputChange(e)} />
+          <input style={{ gridArea: "startdate" }} type="date" name="App_startDate" disabled={!isAuth} value={formData.App_startDate} onChange={e => handleInputChange(e)} />
 
           <label style={{ gridArea: "enddate-title" }}>To</label>
-          <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" disabled={!isAuth} value={formData.App_endDate} onChange={(e) => handleInputChange(e)} />
+          <input style={{ gridArea: "enddate" }} type="date" name="App_endDate" disabled={!isAuth} value={formData.App_endDate} onChange={e => handleInputChange(e)} />
 
           <label style={{ gridArea: "desc-title" }}>App Description</label>
-          <textarea style={{ gridArea: "desc" }} name="App_Description" disabled={!isAuth} value={formData.App_Description ? formData.App_Description : ""} onChange={(e) => handleInputChange(e)}></textarea>
+          <textarea style={{ gridArea: "desc" }} name="App_Description" disabled={!isAuth} value={formData.App_Description ? formData.App_Description : ""} onChange={e => handleInputChange(e)}></textarea>
+
+          <label style={{ gridArea: "create-title" }}>Create Task Permissions</label>
+          <select disabled={!isAuth} value={createPermit} onChange={e => handleCreatePermit(e)} style={{ gridArea: "create" }} name="App_permit_Create">
+            {rendergrouplist()}
+          </select>
 
           <label style={{ gridArea: "open-title" }}>Open State Permissions</label>
-          <select disabled={!isAuth} value={openPermit} onChange={(e) => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
+          <select disabled={!isAuth} value={openPermit} onChange={e => handleOpenPermit(e)} style={{ gridArea: "open" }} name="App_permit_Open">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "todolist-title" }}>To Do List State Permissions</label>
-          <select disabled={!isAuth} value={todolistPermit} onChange={(e) => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
+          <select disabled={!isAuth} value={todolistPermit} onChange={e => handleTodolistPermit(e)} style={{ gridArea: "todolist" }} name="App_permit_toDoList">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "doing-title" }}>Doing State Permissions</label>
-          <select disabled={!isAuth} value={doingPermit} onChange={(e) => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
+          <select disabled={!isAuth} value={doingPermit} onChange={e => handleDoingPermit(e)} style={{ gridArea: "doing" }} name="App_permit_Doing">
             {rendergrouplist()}
           </select>
 
           <label style={{ gridArea: "done-title" }}>Done State Permissions</label>
-          <select disabled={!isAuth} value={donePermit} onChange={(e) => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
+          <select disabled={!isAuth} value={donePermit} onChange={e => handleDonePermit(e)} style={{ gridArea: "done" }} name="App_permit_Done">
             {rendergrouplist()}
           </select>
 
@@ -219,13 +220,13 @@ function EditTask(props) {
             </button>
             {isAuth && (
               <button type="button" className="gobutton" onClick={handleSubmit}>
-                Save Changes
+                Save
               </button>
             )}
           </div>
         </form>
       )}
-    </div>
+    </Popup>
   )
 }
 
