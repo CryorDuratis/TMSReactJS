@@ -1,14 +1,18 @@
 // import node modules
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import CreateTask from "./CreateTask"
 import Cookies from "js-cookie"
 import Axios from "axios"
 import EditTask from "./EditTask"
+import StateContext from "../StateContext"
+import DispatchContext from "../DispatchContext"
 
 // import components
 
 const TaskList = props => {
+  const appState = useContext(StateContext)
+  const appDispatch = useContext(DispatchContext)
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
@@ -50,6 +54,16 @@ const TaskList = props => {
 
         // fetch app permissions
         var response = await Axios.post("/app", { App_Acronym: appid, token })
+
+        // check if app exists
+        if (!response.data.appData) {
+          appDispatch({
+            type: "btoast",
+            message: "App does not exist, redirecting back to Apps"
+          })
+          navigate("/apps")
+          return
+        }
         const createpermit = response.data.appData.App_permit_Create
 
         // check create task button authorization

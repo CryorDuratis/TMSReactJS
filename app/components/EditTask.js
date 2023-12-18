@@ -12,15 +12,27 @@ function EditTask(props) {
   const navigate = useNavigate()
 
   // state of fields
-  const [formData, setFormData] = useState()
+  const [taskData, setTaskData] = useState({
+    Task_name: "Loading...",
+    Task_description: "Loading...",
+    Task_id: "Loading...",
+    Task_app_Acronym: "Loading...",
+    Task_state: "Loading...",
+    Task_plan: "Loading...",
+    Task_creator: "Loading...",
+    Task_createDate: "Loading...",
+    Task_owner: "Loading...",
+    Task_notes: "Loading..."
+  })
+  const [notes, setNotes] = useState("")
+  const [selectedplan, setselectedplan] = useState("None")
 
   // manage rendering
-  const [isLoading, setIsLoading] = useState(true)
   const [planlist, setplanlist] = useState([])
   const [isAuth, setIsAuth] = useState(false)
   const [error, setError] = useState("")
 
-  // set default formdata on load, and check if user is permitted
+  // get taskData on load, and check if user is permitted
   useEffect(() => {
     const fetchTask = async () => {
       console.log("fetch single task is loaded")
@@ -41,7 +53,8 @@ function EditTask(props) {
         }
 
         // set task details
-        setFormData(response.data.taskData)
+        setTaskData(response.data.taskData)
+        setselectedplan(response.data.taskData.Task_plan ? response.data.taskData.Task_plan : "None")
         console.log("task obtained: ", response.data.taskData)
         const taskstate = response.data.taskData.Task_state
 
@@ -85,8 +98,6 @@ function EditTask(props) {
           console.log("authorised to edit task in this state")
           setIsAuth(true)
         }
-
-        setIsLoading(false)
       } catch (error) {
         console.log("error: ", error)
       }
@@ -96,6 +107,7 @@ function EditTask(props) {
 
   // get planlist on load
   useEffect(() => {
+    console.log("plans useeffect called")
     const fetchPlans = async () => {
       try {
         // Make fetch request to the server
@@ -114,6 +126,7 @@ function EditTask(props) {
 
         // Set the planlist based on the server response
         setplanlist(response.data.plansData)
+        console.log("plans obtained: ", response.data.plansData)
 
         // console.log("plans obtained ", planlist)
       } catch (error) {
@@ -125,22 +138,41 @@ function EditTask(props) {
     fetchPlans()
   }, [])
 
-  // render grouplist dropdown
+  // render planlist dropdown
   const renderplanlist = () => {
     return planlist.map((plan, index) => (
-      <option key={index} value={plan}>
-        {plan}
+      <option key={index} value={plan.Plan_MVP_name}>
+        {plan.Plan_MVP_name}
       </option>
     ))
   }
 
-  // change formdata on input change
+  // render plan date
+  const renderplanDate = () => {
+    if (selectedplan === "None") {
+      return
+    }
+    const displayplan = planlist.filter(plan => plan.Plan_MVP_name === selectedplan)
+    if (displayplan.length < 1) {
+      return
+    }
+    console.log(displayplan[0])
+    const startdate = displayplan[0].Plan_startDate ? displayplan[0].Plan_startDate : "Not Set"
+    const enddate = displayplan[0].Plan_endDate ? displayplan[0].Plan_endDate : "Not Set"
+    return (
+      <span>
+        {startdate} - {enddate}
+      </span>
+    )
+  }
+
+  // change notes on input change
   const handleInputChange = e => {
-    const { name, value } = e.target
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }))
+    setNotes(e.target.value)
+  }
+  // change plan on input change
+  const handlePlanChange = e => {
+    setselectedplan(e.target.value)
   }
 
   // handle submit form
@@ -183,25 +215,27 @@ function EditTask(props) {
 
   return (
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
-      <h2 style={{ width: "max-content" }}>{isAuth ? "Edit Task" : "View Task Details"}</h2>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <form className="taskinfo-form">
-          <label>App Acronym</label>
-          <input type="text" name="App_Acronym" disabled value={formData.App_Acronym} />
-
-          <label>App rnumber</label>
-          <input type="number" name="App_Rnumber" disabled value={formData.App_Rnumber} />
-
-          <label>From</label>
-          <input type="date" name="App_startDate" disabled={!isAuth} value={formData.App_startDate} onChange={e => handleInputChange(e)} />
-
-          <label>To</label>
-          <input type="date" name="App_endDate" disabled={!isAuth} value={formData.App_endDate} onChange={e => handleInputChange(e)} />
-
-          <label>App Description</label>
-          <textarea name="App_Description" disabled={!isAuth} value={formData.App_Description ? formData.App_Description : ""} onChange={e => handleInputChange(e)}></textarea>
+      <form className="taskinfo-form">
+        <div className="taskinfo-details">
+          <b>ID</b>
+          <span>{taskData.Task_id}</span>
+          <b>App Acronym</b>
+          <span>{taskData.Task_app_Acronym}</span>
+          <b>State</b>
+          <span>{taskData.Task_state}</span>
+          <b>Create Date</b>
+          <span>{taskData.Task_createDate}</span>
+          <b>Creator</b>
+          <span>{taskData.Task_creator}</span>
+          <b>Owner</b>
+          <span>{taskData.Task_owner}</span>
+          <b>Plan</b>
+          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)}>
+            <option value="None">None</option>
+            {renderplanlist()}
+          </select>
+          {selectedplan !== "None" && <b>Plan Schedule</b>}
+          {renderplanDate()}
 
           <div className="flex-row" style={{ gridArea: "button" }}>
             <button type="button" className="backbutton" onClick={props.onClose}>
@@ -213,8 +247,14 @@ function EditTask(props) {
               </button>
             )}
           </div>
-        </form>
-      )}
+        </div>
+        <div>
+          <h2 style={{ width: "max-content" }}>{taskData.Task_name}</h2>
+          <p>{taskData.Task_description}</p>
+          <div>{taskData.Task_notes}</div>
+          <textarea name="Task_notes" placeholder="Add New Note" onChange={e => handleInputChange(e)}></textarea>
+        </div>
+      </form>
     </Popup>
   )
 }

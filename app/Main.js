@@ -36,7 +36,7 @@ const initialState = {
   toasttype: false,
   error: "",
   // for nested use
-  admin: false,
+  admin: false
 }
 
 function reducer(draft, action) {
@@ -101,24 +101,24 @@ function MainComponent() {
       if (response.data.unauth === "login") {
         dispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
       } else
         dispatch({
           type: "update",
-          user: response.data.user,
+          user: response.data.user
         })
 
       if (response.data.unauth === "role" && state.admin) {
         dispatch({
           type: "admin",
-          admin: false,
+          admin: false
         })
       } else dispatch({ type: "admin", admin: true })
       if (response.data.error) {
         dispatch({
           type: "error",
-          error: response.data.error,
+          error: response.data.error
         })
       }
       console.log("main state updated: ", state)
@@ -127,7 +127,7 @@ function MainComponent() {
       // Handle errors as needed
       dispatch({
         type: "error",
-        error: "server",
+        error: "server"
       })
     }
   }
@@ -153,7 +153,6 @@ function MainComponent() {
             <Route path="/usermgmt" element={state.user ? <UserMgmt onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
             <Route path="/apps/:appid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
             <Route path="/apps/:appid/plans" element={state.user ? <PlanMgmt onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
-            <Route path="/apps/:appid/task/:taskid" element={state.user ? <TaskDashboard onLoad={fetchAuth} /> : state.loading ? <TempPage /> : <Login />} />
             <Route path="/logout" element={<Navigate to="/login" replace />} />
             <Route path="/error" element={<TempPage />} />
             <Route path="*" element={<Navigate replace to="/error" />} />
