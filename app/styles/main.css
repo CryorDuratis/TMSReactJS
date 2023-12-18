@@ -260,7 +260,8 @@ textarea {
 
 /* task list */
 .kanban-board {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
   justify-content: space-around;
   padding: 20px 0;
   min-height: calc(100% - 180px);
@@ -295,9 +296,16 @@ textarea {
 }
 .task span {
   display: flex;
-  justify-content: space-between;
   color: #aaa;
   margin-top: 5px;
+}
+.task-owner {
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  width: -webkit-fill-available;
+  text-align: end;
+  margin-left: 10px;
 }
 .create-task-form {
   display: grid;

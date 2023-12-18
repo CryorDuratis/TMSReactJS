@@ -16,18 +16,18 @@ function CreateTask(props) {
     Task_name: "",
     Task_id: "",
     Task_app_Acronym: props.appid,
-    Task_description: "",
+    Task_description: ""
   })
 
   // manage rendering
   const [error, setError] = useState("")
 
   // change formdata on input change
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }))
   }
 
@@ -45,7 +45,7 @@ function CreateTask(props) {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
           return
@@ -55,13 +55,12 @@ function CreateTask(props) {
         const rnum = response.data.appData.App_Rnumber
         // set default taskid
         const taskid = props.appid + "_" + rnum
-        setFormData((prevData) => ({
+        setFormData(prevData => ({
           ...prevData,
-          ["Task_id"]: taskid,
+          ["Task_id"]: taskid
         }))
 
         // fetch app permissions
-        response = await Axios.post("/app", { App_Acronym: props.appid, token })
         const createpermit = response.data.appData.App_permit_Create
 
         // check auth
@@ -70,7 +69,7 @@ function CreateTask(props) {
           props.setIsAuth("")
           appDispatch({
             type: "btoast",
-            message: "Unauthorised action",
+            message: "Unauthorised action"
           })
           props.onClose()
         }
@@ -83,7 +82,7 @@ function CreateTask(props) {
   }, [])
 
   // handle submit form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     console.log("values sent in: ", formData)
@@ -97,7 +96,7 @@ function CreateTask(props) {
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
         navigate("/login")
         return
@@ -114,7 +113,7 @@ function CreateTask(props) {
         setError("required")
         appDispatch({
           type: "btoast",
-          message: "Task creation failed, please enter the Task name",
+          message: "Task creation failed, please enter the Task name"
         })
         props.update()
         return
@@ -123,7 +122,7 @@ function CreateTask(props) {
         setError("conflict")
         appDispatch({
           type: "btoast",
-          message: "Task name is already in use, please try again",
+          message: "Task name is already in use, please try again"
         })
         props.update()
         return
@@ -132,7 +131,7 @@ function CreateTask(props) {
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "Task successfully created",
+        message: "Task successfully created"
       })
       props.update()
       props.onClose()
@@ -146,7 +145,7 @@ function CreateTask(props) {
       <h2 style={{ width: "max-content" }}>Create Task</h2>
       <form onSubmit={handleSubmit} className="create-task-form">
         <label htmlFor="Task_name">Task Name</label>
-        <input type="text" name="Task_name" onChange={(e) => handleInputChange(e)} className={error ? "error-outline" : undefined} />
+        <input type="text" name="Task_name" onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} />
 
         <label htmlFor="Task_id">Task ID</label>
         <input type="text" name="Task_id" value={formData.Task_id} disabled />
@@ -155,7 +154,7 @@ function CreateTask(props) {
         <input type="text" name="Task_app_Acronym" value={props.appid} disabled />
 
         <label>Task Description</label>
-        <textarea name="Task_description" onChange={(e) => handleInputChange(e)}></textarea>
+        <textarea name="Task_description" onChange={e => handleInputChange(e)}></textarea>
 
         <div className="flex-row" style={{ gridArea: "button", marginTop: "20px", justifySelf: "end" }}>
           <button type="button" className="backbutton" onClick={props.onClose}>

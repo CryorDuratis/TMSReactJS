@@ -19,6 +19,7 @@ const TaskList = props => {
   // rendering
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [ModalMode, setModalMode] = useState("")
+  const [taskid, setTaskid] = useState("")
   const [updateFlag, setUpdateFlag] = useState(false)
   const [isAuth, setIsAuth] = useState({
     Task: false,
@@ -87,9 +88,10 @@ const TaskList = props => {
     setModalMode("create")
     setIsModalOpen(true)
   }
-  const editModal = (e, App_Acronym) => {
+  const editModal = (e, taskid) => {
     e.stopPropagation()
-    setModalMode(App_Acronym)
+    setModalMode("edit")
+    setTaskid(taskid)
     setIsModalOpen(true)
   }
   const handleCloseModal = () => {
@@ -101,10 +103,10 @@ const TaskList = props => {
     return tasks
       .filter(task => task.Task_state === state)
       .map(task => (
-        <div key={task.Task_id} className="task" onClick={e => editModal(e, task.Task_app_Acronym)}>
+        <div key={task.Task_id} className="task" onClick={e => editModal(e, task.Task_id)}>
           {task.Task_name}
           <span>
-            <b>{task.Task_id}</b> {task.Task_owner}
+            <b>{task.Task_id} </b> <div className="task-owner">{task.Task_owner}</div>
           </span>
         </div>
       ))
@@ -115,7 +117,7 @@ const TaskList = props => {
       <div className="breadcrumb">
         <span onClick={e => navigate("/apps")}>Apps</span> / App Dashboard
       </div>
-      {isModalOpen && (ModalMode === "create" ? <CreateTask onClose={handleCloseModal} update={updateTaskList} appid={appid} setIsAuth={setIsAuth} /> : <EditTask onClose={handleCloseModal} update={updateTaskList} appacro={ModalMode} setIsAuth={setIsAuth} />)}
+      {isModalOpen && (ModalMode === "create" ? <CreateTask onClose={handleCloseModal} update={updateTaskList} appid={appid} setIsAuth={setIsAuth} /> : <EditTask onClose={handleCloseModal} update={updateTaskList} appid={appid} taskid={taskid} setIsAuth={setIsAuth} />)}
       <div className="flex-row" style={{ justifyContent: "space-between" }}>
         <h2>{appid}</h2>
         <div className="flex-row">
