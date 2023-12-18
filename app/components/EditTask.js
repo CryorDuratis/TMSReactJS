@@ -161,7 +161,7 @@ function EditTask(props) {
     const enddate = displayplan[0].Plan_endDate ? displayplan[0].Plan_endDate : "Not Set"
     return (
       <span>
-        {startdate} - {enddate}
+        {startdate} {enddate}
       </span>
     )
   }
@@ -234,7 +234,11 @@ function EditTask(props) {
             <option value="None">None</option>
             {renderplanlist()}
           </select>
-          {selectedplan !== "None" && <b>Plan Schedule</b>}
+          {selectedplan !== "None" && (
+            <b>
+              Start Date <br /> End Date
+            </b>
+          )}
           {renderplanDate()}
 
           <div className="flex-row" style={{ gridArea: "button" }}>
@@ -248,10 +252,10 @@ function EditTask(props) {
             )}
           </div>
         </div>
-        <div>
+        <div className="taskinfo-content">
           <h2 style={{ width: "max-content" }}>{taskData.Task_name}</h2>
-          <p>{taskData.Task_description}</p>
-          <div>{taskData.Task_notes}</div>
+          <span>{taskData.Task_description}</span>
+          <div className="taskinfo-log">{taskData.Task_notes}</div>
           <textarea name="Task_notes" placeholder="Add New Note" onChange={e => handleInputChange(e)}></textarea>
         </div>
       </form>
