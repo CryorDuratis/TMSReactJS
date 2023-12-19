@@ -233,10 +233,17 @@ function EditTask(props) {
 
       // else on success
       setError(false)
-      appDispatch({
-        type: "gtoast",
-        message: "Task successfully edited"
-      })
+      if (save !== "edit") {
+        appDispatch({
+          type: "gtoast",
+          message: `Task successfully ${save}d`
+        })
+      } else {
+        appDispatch({
+          type: "gtoast",
+          message: "Task successfully edited"
+        })
+      }
       props.update()
       fetchTask()
       setNotes("")
@@ -262,7 +269,7 @@ function EditTask(props) {
           <b>Owner</b>
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
-          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)} disabled={!isAuth}>
+          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)} disabled={!isAuth || (taskData.Task_state !== "Open" && taskData.Task_state !== "Done")}>
             <option value="">{isAuth ? "-Select a Plan-" : "None"}</option>
             {renderplanlist()}
           </select>
