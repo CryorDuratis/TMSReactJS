@@ -134,7 +134,12 @@ function CreateTask(props) {
         message: "Task successfully created"
       })
       props.update()
-      props.onClose()
+      // props.onClose()
+      setFormData(prevData => ({
+        ...prevData,
+        ["Task_name"]: "",
+        ["Task_description"]: ""
+      }))
     } catch (error) {
       console.log("error is ", error)
     }
@@ -145,7 +150,7 @@ function CreateTask(props) {
       <h2 style={{ width: "max-content" }}>Create Task</h2>
       <form onSubmit={handleSubmit} className="create-task-form">
         <label htmlFor="Task_name">Task Name</label>
-        <input type="text" name="Task_name" onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} />
+        <input type="text" name="Task_name" value={formData.Task_name} onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} />
 
         <label htmlFor="Task_id">Task ID</label>
         <input type="text" name="Task_id" value={formData.Task_id} disabled />
@@ -154,7 +159,7 @@ function CreateTask(props) {
         <input type="text" name="Task_app_Acronym" value={props.appid} disabled />
 
         <label>Task Description</label>
-        <textarea name="Task_description" onChange={e => handleInputChange(e)}></textarea>
+        <textarea name="Task_description" value={formData.Task_description} onChange={e => handleInputChange(e)}></textarea>
 
         <div className="flex-row" style={{ gridArea: "button", marginTop: "20px", justifySelf: "end" }}>
           <button type="button" className="backbutton" onClick={props.onClose}>

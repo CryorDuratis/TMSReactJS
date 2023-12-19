@@ -328,6 +328,7 @@ textarea {
   display: flex;
   flex-direction: row-reverse;
   width: 70vw;
+  min-width: min-content;
   margin: 0;
 }
 .taskinfo-details {
@@ -339,6 +340,7 @@ textarea {
   background-color: #eee;
   padding: 70px 20px 20px 20px;
   margin: -10px;
+  position: relative;
 }
 .taskinfo-details b {
   text-align: end;
@@ -346,6 +348,7 @@ textarea {
 }
 .taskinfo-content {
   width: 100%;
+  min-width: 300px;
   margin-right: 20px;
   padding: 0 20px 20px;
   display: grid;
@@ -361,6 +364,8 @@ textarea {
 .taskinfo-buttons {
   position: absolute;
   bottom: 20px;
+  right: -20px;
+  left: 20px;
 }
 .taskinfo-buttons button {
   border: 1px solid black;

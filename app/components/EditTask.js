@@ -22,7 +22,7 @@ function EditTask(props) {
     Task_creator: "Loading...",
     Task_createDate: "Loading...",
     Task_owner: "Loading...",
-    Task_notes: "Loading...",
+    Task_notes: "Loading..."
   })
   const [notes, setNotes] = useState("")
   const [selectedplan, setselectedplan] = useState("None")
@@ -46,7 +46,7 @@ function EditTask(props) {
           console.log("user is unauth")
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
           return
@@ -54,6 +54,10 @@ function EditTask(props) {
 
         // set task details
         setTaskData(response.data.taskData)
+        setTaskData(prev => ({
+          ...prev,
+          ["Task_notes"]: response.data.taskDatanotes
+        }))
         setselectedplan(response.data.taskData.Task_plan ? response.data.taskData.Task_plan : "None")
         console.log("task obtained: ", response.data.taskData)
         const taskstate = response.data.taskData.Task_state
@@ -119,7 +123,7 @@ function EditTask(props) {
         if (response.data.unauth === "login") {
           appDispatch({
             type: "logout",
-            message: "Logged out",
+            message: "Logged out"
           })
           navigate("/login")
         }
@@ -152,7 +156,7 @@ function EditTask(props) {
     if (selectedplan === "None") {
       return
     }
-    const displayplan = planlist.filter((plan) => plan.Plan_MVP_name === selectedplan)
+    const displayplan = planlist.filter(plan => plan.Plan_MVP_name === selectedplan)
     if (displayplan.length < 1) {
       return
     }
@@ -167,11 +171,11 @@ function EditTask(props) {
   }
 
   // change notes on input change
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setNotes(e.target.value)
   }
   // change plan on input change
-  const handlePlanChange = (e) => {
+  const handlePlanChange = e => {
     setselectedplan(e.target.value)
   }
 
@@ -230,7 +234,7 @@ function EditTask(props) {
           <b>Owner</b>
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
-          <select name="Task_plan" value={selectedplan} onChange={(e) => handlePlanChange(e)}>
+          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)}>
             <option value="None">None</option>
             {renderplanlist()}
           </select>
@@ -243,8 +247,12 @@ function EditTask(props) {
 
           <div className="taskinfo-buttons">
             <div className="flex-row" style={{ marginBottom: "10px" }}>
-              <button>Demote and Save</button>
-              <button>Promote and Save</button>
+              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"}>
+                Demote and Save
+              </button>
+              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"}>
+                Promote and Save
+              </button>
             </div>
             <div className="flex-row">
               <button type="button" className="backbutton" onClick={props.onClose}>
@@ -264,7 +272,7 @@ function EditTask(props) {
             <b>Description:</b> {taskData.Task_description}
           </span>
           <div className="taskinfo-log">{taskData.Task_notes}</div>
-          <textarea name="Task_notes" placeholder="Add New Note" onChange={(e) => handleInputChange(e)}></textarea>
+          <textarea name="Task_notes" placeholder="Add New Note" onChange={e => handleInputChange(e)}></textarea>
         </div>
       </form>
     </Popup>
