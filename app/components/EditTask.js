@@ -25,87 +25,88 @@ function EditTask(props) {
     Task_notes: "Loading..."
   })
   const [notes, setNotes] = useState("")
-  const [selectedplan, setselectedplan] = useState("None")
+  const [selectedplan, setselectedplan] = useState("")
 
   // manage rendering
   const [planlist, setplanlist] = useState([])
   const [isAuth, setIsAuth] = useState(false)
   const [error, setError] = useState("")
 
+  const fetchTask = async () => {
+    console.log("fetch single task is loaded")
+    try {
+      // Make authorization request to the server
+      const token = Cookies.get("token")
+      var response = await Axios.post("/task", { Task_id: props.taskid, token })
+
+      // if not logged in
+      if (response.data.unauth) {
+        console.log("user is unauth")
+        appDispatch({
+          type: "logout",
+          message: "Logged out"
+        })
+        navigate("/login")
+        return
+      }
+
+      // set task details
+      setTaskData(response.data.taskData)
+      setTaskData(prev => ({
+        ...prev,
+        ["Task_notes"]: response.data.taskDatanotes
+      }))
+      setselectedplan(response.data.taskData.Task_plan ? response.data.taskData.Task_plan : "")
+      console.log("task obtained: ", response.data.taskData)
+      const taskstate = response.data.taskData.Task_state
+
+      // fetch app permissions
+      var response = await Axios.post("/app", { App_Acronym: props.appid, token })
+      console.log("app obtained: ", response.data.appData)
+      // permission switch case
+      let appPermit
+      switch (taskstate) {
+        case "Open":
+          appPermit = response.data.appData.App_permit_Open
+          break
+        case "Todolist":
+          appPermit = response.data.appData.App_permit_toDoList
+          break
+        case "Doing":
+          appPermit = response.data.appData.App_permit_Doing
+          break
+        case "Done":
+          appPermit = response.data.appData.App_permit_Done
+          break
+        case "Closed":
+          appPermit = null
+          break
+        default:
+          appPermit = null
+          break
+      }
+      if (!appPermit) {
+        setIsAuth(false)
+        return
+      }
+
+      // check if authorised to edit
+      response = await Axios.post("/checkgroup", { groupname: appPermit, token })
+
+      if (response.data.unauth) {
+        console.log("unauthorised to edit task in this state")
+        setIsAuth(false)
+      } else {
+        console.log("authorised to edit task in this state")
+        setIsAuth(true)
+      }
+    } catch (error) {
+      console.log("error: ", error)
+    }
+  }
+
   // get taskData on load, and check if user is permitted
   useEffect(() => {
-    const fetchTask = async () => {
-      console.log("fetch single task is loaded")
-      try {
-        // Make authorization request to the server
-        const token = Cookies.get("token")
-        var response = await Axios.post("/task", { Task_id: props.taskid, token })
-
-        // if not logged in
-        if (response.data.unauth) {
-          console.log("user is unauth")
-          appDispatch({
-            type: "logout",
-            message: "Logged out"
-          })
-          navigate("/login")
-          return
-        }
-
-        // set task details
-        setTaskData(response.data.taskData)
-        setTaskData(prev => ({
-          ...prev,
-          ["Task_notes"]: response.data.taskDatanotes
-        }))
-        setselectedplan(response.data.taskData.Task_plan ? response.data.taskData.Task_plan : "None")
-        console.log("task obtained: ", response.data.taskData)
-        const taskstate = response.data.taskData.Task_state
-
-        // fetch app permissions
-        var response = await Axios.post("/app", { App_Acronym: props.appid, token })
-        console.log("app obtained: ", response.data.appData)
-        // permission switch case
-        let appPermit
-        switch (taskstate) {
-          case "Open":
-            appPermit = response.data.appData.App_permit_Open
-            break
-          case "Todolist":
-            appPermit = response.data.appData.App_permit_toDoList
-            break
-          case "Doing":
-            appPermit = response.data.appData.App_permit_Doing
-            break
-          case "Done":
-            appPermit = response.data.appData.App_permit_Done
-            break
-          case "Closed":
-            appPermit = null
-            break
-          default:
-            appPermit = null
-            break
-        }
-        if (!appPermit) {
-          setIsAuth(false)
-          return
-        }
-
-        // check if authorised to edit
-        response = await Axios.post("/checkgroup", { groupname: appPermit, token })
-
-        if (response.data.unauth) {
-          console.log("unauthorised to edit task in this state")
-          setIsAuth(false)
-        } else {
-          console.log("authorised to edit task in this state")
-          setIsAuth(true)
-        }
-      } catch (error) {
-        console.log("error: ", error)
-      }
-    }
     fetchTask()
   }, [])
 
@@ -153,7 +154,7 @@ function EditTask(props) {
 
   // render plan date
   const renderplanDate = () => {
-    if (selectedplan === "None") {
+    if (!selectedplan) {
       return
     }
     const displayplan = planlist.filter(plan => plan.Plan_MVP_name === selectedplan)
@@ -165,7 +166,8 @@ function EditTask(props) {
     const enddate = displayplan[0].Plan_endDate ? displayplan[0].Plan_endDate : "Not Set"
     return (
       <span>
-        {startdate} {enddate}
+        {startdate} <br />
+        {enddate}
       </span>
     )
   }
@@ -180,42 +182,64 @@ function EditTask(props) {
   }
 
   // handle submit form
-  // const handleSubmit = async e => {
-  //   e.preventDefault()
-  //   try {
-  //     const token = Cookies.get("token")
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const token = Cookies.get("token")
+      const { Task_id, Task_state, Task_app_Acronym } = taskData
+      const Task_note = notes
 
-  //     // send request
-  //     const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, createPermit, openPermit, todolistPermit, doingPermit, donePermit, token })
+      // send request
+      const response = await Axios.post("/task/edit", { token, Task_note, Task_id, Task_state, Task_app_Acronym, selectedplan })
 
-  //     // if not logged in
-  //     if (response.data.unauth === "login") {
-  //       appDispatch({
-  //         type: "logout",
-  //         message: "Logged out"
-  //       })
-  //       navigate("/login")
-  //       return
-  //     }
+      // if not logged in
+      if (response.data.unauth === "login") {
+        appDispatch({
+          type: "logout",
+          message: "Logged out"
+        })
+        navigate("/login")
+        return
+      }
 
-  //     // if request fails
-  //     if (response.data.error) {
-  //       appDispatch({ type: "logerror", error: response.data.error })
-  //       props.update()
-  //       return
-  //     }
+      // if request fails
+      if (response.data.error) {
+        appDispatch({ type: "logerror", error: response.data.error })
+        props.update()
+        return
+      }
 
-  //     // else on success
-  //     setError(false)
-  //     appDispatch({
-  //       type: "gtoast",
-  //       message: "App successfully edited"
-  //     })
-  //     props.update()
-  //   } catch (error) {
-  //     console.log("error is ", error)
-  //   }
-  // }
+      // if edit fails
+      if (!response.data.success) {
+        appDispatch({
+          type: "btoast",
+          message: "Nothing changed"
+        })
+        return
+      }
+
+      // else on success
+      setError(false)
+      appDispatch({
+        type: "gtoast",
+        message: "Task successfully edited"
+      })
+      props.update()
+      fetchTask()
+    } catch (error) {
+      console.log("error is ", error)
+    }
+  }
+  // handle promote form
+  const handlePromote = async e => {
+    e.preventDefault()
+    return
+  }
+  // handle demote form
+  const handleDemote = async e => {
+    e.preventDefault()
+    return
+  }
 
   return (
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
@@ -235,10 +259,10 @@ function EditTask(props) {
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
           <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)}>
-            <option value="None">None</option>
+            <option value="">-Select a Plan-</option>
             {renderplanlist()}
           </select>
-          {selectedplan !== "None" && (
+          {selectedplan && (
             <b>
               Start Date <br /> End Date
             </b>
@@ -247,22 +271,22 @@ function EditTask(props) {
 
           <div className="taskinfo-buttons">
             <div className="flex-row" style={{ marginBottom: "10px" }}>
-              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"}>
+              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={e => handleDemote(e)}>
                 Demote and Save
               </button>
-              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"}>
+              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={e => handlePromote(e)}>
                 Promote and Save
               </button>
             </div>
-            <div className="flex-row">
-              <button type="button" className="backbutton" onClick={props.onClose}>
-                Close
-              </button>
+            <div className="flex-row" style={{ flexDirection: "row-reverse" }}>
               {isAuth && (
-                <button type="button" className="gobutton">
+                <button type="button" className="gobutton" onClick={e => handleSubmit(e)}>
                   Save
                 </button>
               )}
+              <button type="button" className="backbutton" onClick={props.onClose}>
+                Close
+              </button>
             </div>
           </div>
         </div>

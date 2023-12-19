@@ -360,16 +360,18 @@ textarea {
 }
 .taskinfo-log {
   border: 1px solid #ddd;
+  white-space: pre;
+  padding-top: 10px;
 }
 .taskinfo-buttons {
   position: absolute;
   bottom: 20px;
-  right: -20px;
+  right: 20px;
   left: 20px;
 }
 .taskinfo-buttons button {
   border: 1px solid black;
-  width: 40%;
+  width: 100%;
   padding: 5px;
   text-wrap: wrap;
 }
