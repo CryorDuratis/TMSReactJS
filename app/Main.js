@@ -114,7 +114,9 @@ function MainComponent() {
           type: "admin",
           admin: false
         })
-      } else dispatch({ type: "admin", admin: true })
+      } else if (!response.data.unauth) {
+        dispatch({ type: "admin", admin: true })
+      }
       if (response.data.error) {
         dispatch({
           type: "error",
