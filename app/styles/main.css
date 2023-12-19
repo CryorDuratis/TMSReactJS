@@ -329,6 +329,7 @@ textarea {
   flex-direction: row-reverse;
   width: 70vw;
   min-width: min-content;
+  max-height: 80vh;
   margin: 0;
 }
 .taskinfo-details {
@@ -346,6 +347,15 @@ textarea {
   text-align: end;
   margin-right: 10px;
 }
+.taskinfo-details select:disabled {
+  color: black;
+  background-color: transparent;
+  border: none;
+  appearance: none;
+  font-family: "Roboto";
+  opacity: 1;
+  font-size: 16;
+}
 .taskinfo-content {
   width: 100%;
   min-width: 300px;
@@ -360,8 +370,11 @@ textarea {
 }
 .taskinfo-log {
   border: 1px solid #ddd;
-  white-space: pre;
+  white-space: pre-wrap;
   padding-top: 10px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 14px;
 }
 .taskinfo-buttons {
   position: absolute;
@@ -371,7 +384,7 @@ textarea {
 }
 .taskinfo-buttons button {
   border: 1px solid black;
-  width: 100%;
+  width: 50%;
   padding: 5px;
   text-wrap: wrap;
 }

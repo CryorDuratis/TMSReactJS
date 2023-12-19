@@ -226,6 +226,7 @@ function EditTask(props) {
       })
       props.update()
       fetchTask()
+      setNotes("")
     } catch (error) {
       console.log("error is ", error)
     }
@@ -258,7 +259,7 @@ function EditTask(props) {
           <b>Owner</b>
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
-          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)}>
+          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)} disabled={!isAuth}>
             <option value="">-Select a Plan-</option>
             {renderplanlist()}
           </select>
@@ -296,7 +297,7 @@ function EditTask(props) {
             <b>Description:</b> {taskData.Task_description}
           </span>
           <div className="taskinfo-log">{taskData.Task_notes}</div>
-          <textarea name="Task_notes" placeholder="Add New Note" onChange={e => handleInputChange(e)}></textarea>
+          {isAuth && <textarea name="Task_notes" placeholder="Add New Note" value={notes} onChange={e => handleInputChange(e)}></textarea>}
         </div>
       </form>
     </Popup>
