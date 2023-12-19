@@ -161,7 +161,7 @@ function EditTask(props) {
     if (displayplan.length < 1) {
       return
     }
-    console.log(displayplan[0])
+    // console.log(displayplan[0])
     const startdate = displayplan[0].Plan_startDate ? displayplan[0].Plan_startDate : "Not Set"
     const enddate = displayplan[0].Plan_endDate ? displayplan[0].Plan_endDate : "Not Set"
     return (
@@ -182,15 +182,28 @@ function EditTask(props) {
   }
 
   // handle submit form
-  const handleSubmit = async e => {
+  const handleSubmit = async (e, save) => {
     e.preventDefault()
     try {
       const token = Cookies.get("token")
       const { Task_id, Task_state, Task_app_Acronym } = taskData
       const Task_note = notes
 
+      let submittype
+      switch (save) {
+        case "promote":
+          submittype = "/task/promote"
+          break
+        case "demote":
+          submittype = "/task/demote"
+          break
+        default:
+          submittype = "/task/edit"
+          break
+      }
+
       // send request
-      const response = await Axios.post("/task/edit", { token, Task_note, Task_id, Task_state, Task_app_Acronym, selectedplan })
+      const response = await Axios.post(submittype, { token, Task_note, Task_id, Task_state, Task_app_Acronym, selectedplan })
 
       // if not logged in
       if (response.data.unauth === "login") {
@@ -231,16 +244,6 @@ function EditTask(props) {
       console.log("error is ", error)
     }
   }
-  // handle promote form
-  const handlePromote = async e => {
-    e.preventDefault()
-    return
-  }
-  // handle demote form
-  const handleDemote = async e => {
-    e.preventDefault()
-    return
-  }
 
   return (
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
@@ -260,7 +263,7 @@ function EditTask(props) {
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
           <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)} disabled={!isAuth}>
-            <option value="">-Select a Plan-</option>
+            <option value="">{isAuth ? "-Select a Plan-" : "None"}</option>
             {renderplanlist()}
           </select>
           {selectedplan && (
@@ -272,16 +275,16 @@ function EditTask(props) {
 
           <div className="taskinfo-buttons">
             <div className="flex-row" style={{ marginBottom: "10px" }}>
-              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={e => handleDemote(e)}>
+              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={e => handleSubmit(e, "demote")}>
                 Demote and Save
               </button>
-              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={e => handlePromote(e)}>
+              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={e => handleSubmit(e, "promote")}>
                 Promote and Save
               </button>
             </div>
             <div className="flex-row" style={{ flexDirection: "row-reverse" }}>
               {isAuth && (
-                <button type="button" className="gobutton" onClick={e => handleSubmit(e)}>
+                <button type="button" className="gobutton" onClick={e => handleSubmit(e, "edit")}>
                   Save
                 </button>
               )}

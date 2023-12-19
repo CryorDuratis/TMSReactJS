@@ -154,7 +154,7 @@ const TaskList = props => {
         </div>
         <div className="column">
           <h2>To Do</h2>
-          {renderTasks("To do list")}
+          {renderTasks("Todolist")}
         </div>
         <div className="column">
           <h2>Doing</h2>
