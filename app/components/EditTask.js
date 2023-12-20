@@ -22,13 +22,14 @@ function EditTask(props) {
     Task_creator: "Loading...",
     Task_createDate: "Loading...",
     Task_owner: "Loading...",
-    Task_notes: "Loading...",
+    Task_notes: "Loading..."
   })
   const [notes, setNotes] = useState("")
   const [selectedplan, setselectedplan] = useState("")
 
   // manage rendering
   const [planlist, setplanlist] = useState([])
+  const [plancol, setPlancol] = useState("#eee")
   const [isAuth, setIsAuth] = useState(false)
   const [error, setError] = useState("")
 
@@ -44,7 +45,7 @@ function EditTask(props) {
         console.log("user is unauth")
         appDispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
         navigate("/login")
         return
@@ -52,9 +53,9 @@ function EditTask(props) {
 
       // set task details
       setTaskData(response.data.taskData)
-      setTaskData((prev) => ({
+      setTaskData(prev => ({
         ...prev,
-        ["Task_notes"]: response.data.taskDatanotes,
+        ["Task_notes"]: response.data.taskDatanotes
       }))
       setselectedplan(response.data.taskData.Task_plan ? response.data.taskData.Task_plan : "")
       console.log("task obtained: ", response.data.taskData)
@@ -104,42 +105,36 @@ function EditTask(props) {
       console.log("error: ", error)
     }
   }
+  const fetchPlans = async () => {
+    try {
+      // Make fetch request to the server
+      const token = Cookies.get("token")
+      const response = await Axios.post("/plan/getall", { appid: props.appid, token })
+      // console.log("response ", response.data)
 
-  // get taskData on load, and check if user is permitted
+      // if not logged in
+      if (response.data.unauth === "login") {
+        appDispatch({
+          type: "logout",
+          message: "Logged out"
+        })
+        navigate("/login")
+      }
+
+      // Set the planlist based on the server response
+      setplanlist(response.data.plansData)
+      console.log("plans obtained: ", response.data.plansData)
+
+      // console.log("plans obtained ", planlist)
+    } catch (error) {
+      console.error("Error fetching data:", error)
+      // Handle errors as needed
+    }
+  }
+
+  // get taskData and planlist on load, and check if user is permitted
   useEffect(() => {
     fetchTask()
-  }, [])
-
-  // get planlist on load
-  useEffect(() => {
-    console.log("plans useeffect called")
-    const fetchPlans = async () => {
-      try {
-        // Make fetch request to the server
-        const token = Cookies.get("token")
-        const response = await Axios.post("/plan/getall", { appid: props.appid, token })
-        // console.log("response ", response.data)
-
-        // if not logged in
-        if (response.data.unauth === "login") {
-          appDispatch({
-            type: "logout",
-            message: "Logged out",
-          })
-          navigate("/login")
-        }
-
-        // Set the planlist based on the server response
-        setplanlist(response.data.plansData)
-        console.log("plans obtained: ", response.data.plansData)
-
-        // console.log("plans obtained ", planlist)
-      } catch (error) {
-        console.error("Error fetching data:", error)
-        // Handle errors as needed
-      }
-    }
-    // Call the fetch function when the component mounts
     fetchPlans()
   }, [])
 
@@ -157,7 +152,7 @@ function EditTask(props) {
     if (!selectedplan) {
       return
     }
-    const displayplan = planlist.filter((plan) => plan.Plan_MVP_name === selectedplan)
+    const displayplan = planlist.filter(plan => plan.Plan_MVP_name === selectedplan)
     if (displayplan.length < 1) {
       return
     }
@@ -172,12 +167,27 @@ function EditTask(props) {
     )
   }
 
+  // render taskplan colour
+  useEffect(() => {
+    const taskplan = planlist.find(plan => plan.Plan_MVP_name === selectedplan)
+    if (taskplan) {
+      const adjustedcol =
+        taskplan.Plan_colour +
+        Math.round(0.2 * 255)
+          .toString(16)
+          .padStart(2, "0")
+      setPlancol(adjustedcol)
+    } else {
+      setPlancol("#eee")
+    }
+  }, [selectedplan, planlist])
+
   // change notes on input change
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setNotes(e.target.value)
   }
   // change plan on input change
-  const handlePlanChange = (e) => {
+  const handlePlanChange = e => {
     setselectedplan(e.target.value)
   }
 
@@ -209,7 +219,7 @@ function EditTask(props) {
       if (response.data.unauth === "login") {
         appDispatch({
           type: "logout",
-          message: "Logged out",
+          message: "Logged out"
         })
         navigate("/login")
         return
@@ -226,7 +236,7 @@ function EditTask(props) {
       if (!response.data.success) {
         appDispatch({
           type: "btoast",
-          message: "Nothing changed",
+          message: "Nothing changed"
         })
         return
       }
@@ -236,12 +246,12 @@ function EditTask(props) {
       if (save !== "edit") {
         appDispatch({
           type: "gtoast",
-          message: `Task successfully ${save}d`,
+          message: `Task successfully ${save}d`
         })
       } else {
         appDispatch({
           type: "gtoast",
-          message: "Task successfully edited",
+          message: "Task successfully edited"
         })
       }
       props.update()
@@ -255,7 +265,7 @@ function EditTask(props) {
   return (
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
       <form className="taskinfo-form">
-        <div className="taskinfo-details">
+        <div className="taskinfo-details" style={{ backgroundColor: plancol }}>
           <b>ID</b>
           <span>{taskData.Task_id}</span>
           <b>App Acronym</b>
@@ -269,7 +279,7 @@ function EditTask(props) {
           <b>Owner</b>
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
-          <select name="Task_plan" value={selectedplan} onChange={(e) => handlePlanChange(e)} disabled={!isAuth || (taskData.Task_state !== "Open" && taskData.Task_state !== "Done")}>
+          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)} disabled={!isAuth || (taskData.Task_state !== "Open" && taskData.Task_state !== "Done")}>
             <option value="">{isAuth && (taskData.Task_state === "Open" || taskData.Task_state === "Done") ? "-Select a Plan-" : "None"}</option>
             {renderplanlist()}
           </select>
@@ -282,16 +292,16 @@ function EditTask(props) {
 
           <div className="taskinfo-buttons">
             <div className="flex-row" style={{ marginBottom: "10px" }}>
-              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={(e) => handleSubmit(e, "demote")}>
+              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={e => handleSubmit(e, "demote")}>
                 Demote and Save
               </button>
-              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={(e) => handleSubmit(e, "promote")}>
+              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={e => handleSubmit(e, "promote")}>
                 Promote and Save
               </button>
             </div>
             <div className="flex-row" style={{ flexDirection: "row-reverse" }}>
               {isAuth && (
-                <button type="button" className="gobutton" onClick={(e) => handleSubmit(e, "edit")}>
+                <button type="button" className="gobutton" onClick={e => handleSubmit(e, "edit")}>
                   Save
                 </button>
               )}
@@ -307,7 +317,7 @@ function EditTask(props) {
             <b>Description:</b> {taskData.Task_description}
           </span>
           <div className="taskinfo-log">{taskData.Task_notes}</div>
-          {isAuth && <textarea name="Task_notes" placeholder="Add New Note" value={notes} onChange={(e) => handleInputChange(e)}></textarea>}
+          {isAuth && <textarea name="Task_notes" placeholder="Add New Note" value={notes} onChange={e => handleInputChange(e)}></textarea>}
         </div>
       </form>
     </Popup>

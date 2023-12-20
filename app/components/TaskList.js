@@ -152,9 +152,6 @@ const TaskList = props => {
       .filter(task => task.Task_state === state)
       .map(task => {
         const taskPlan = planlist.find(plan => plan.Plan_MVP_name === task.Task_plan)
-        const plancolour = taskPlan ? taskPlan.Plan_colour : "#dddddd"
-
-        console.log("taskplan", taskPlan)
 
         return (
           <div key={task.Task_id} className="task" onClick={e => editModal(e, task.Task_id)} style={taskPlan ? { borderTop: `8px solid ${taskPlan.Plan_colour}` } : undefined}>
@@ -194,7 +191,7 @@ const TaskList = props => {
           {renderTasks("Open")}
         </div>
         <div className="column">
-          <h2>To Do</h2>
+          <h2>To Do List</h2>
           {renderTasks("Todolist")}
         </div>
         <div className="column">
