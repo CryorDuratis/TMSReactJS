@@ -21,6 +21,7 @@ const TaskList = props => {
   const [tasks, setTasks] = useState([])
 
   // rendering
+  const [planlist, setplanlist] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [ModalMode, setModalMode] = useState("")
   const [taskid, setTaskid] = useState("")
@@ -113,17 +114,57 @@ const TaskList = props => {
     setIsModalOpen(false)
   }
 
+  // get planlist on load
+  useEffect(() => {
+    console.log("plans useeffect called")
+    const fetchPlans = async () => {
+      try {
+        // Make fetch request to the server
+        const token = Cookies.get("token")
+        const response = await Axios.post("/plan/getall", { appid, token })
+        // console.log("response ", response.data)
+
+        // if not logged in
+        if (response.data.unauth === "login") {
+          appDispatch({
+            type: "logout",
+            message: "Logged out"
+          })
+          navigate("/login")
+        }
+
+        // Set the planlist based on the server response
+        setplanlist(response.data.plansData)
+        console.log("plans obtained: ", response.data.plansData)
+
+        // console.log("plans obtained ", planlist)
+      } catch (error) {
+        console.error("Error fetching data:", error)
+        // Handle errors as needed
+      }
+    }
+    // Call the fetch function when the component mounts
+    fetchPlans()
+  }, [])
+
   const renderTasks = state => {
     return tasks
       .filter(task => task.Task_state === state)
-      .map(task => (
-        <div key={task.Task_id} className="task" onClick={e => editModal(e, task.Task_id)}>
-          {task.Task_name}
-          <span>
-            <b>{task.Task_id} </b> <div className="task-owner">{task.Task_owner}</div>
-          </span>
-        </div>
-      ))
+      .map(task => {
+        const taskPlan = planlist.find(plan => plan.Plan_MVP_name === task.Task_plan)
+        const plancolour = taskPlan ? taskPlan.Plan_colour : "#dddddd"
+
+        console.log("taskplan", taskPlan)
+
+        return (
+          <div key={task.Task_id} className="task" onClick={e => editModal(e, task.Task_id)} style={taskPlan ? { borderTop: `8px solid ${taskPlan.Plan_colour}` } : undefined}>
+            {task.Task_name}
+            <span>
+              <b>{task.Task_id} </b> <div className="task-owner">{task.Task_owner}</div>
+            </span>
+          </div>
+        )
+      })
   }
 
   return (
