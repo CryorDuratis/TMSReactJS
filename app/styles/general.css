@@ -142,6 +142,9 @@ textarea {
 .form-acronym {
   grid-area: acronym;
 }
+.form-rnumber {
+  grid-area: rnumber;
+}
 .form-startdate {
   grid-area: startdate;
 }
