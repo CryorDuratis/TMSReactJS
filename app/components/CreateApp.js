@@ -157,10 +157,10 @@ function CreateApp(props) {
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
       <h2 style={{ width: "max-content" }}>Create App Details</h2>
       <form onSubmit={handleSubmit} className="appinfo-form">
-        <label style={{ gridArea: "acronym-title" }}>App Acronym</label>
+        <label style={{ gridArea: "acronym-title" }}>App Acronym*</label>
         <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={e => handleInputChange(e)} />
 
-        <label style={{ gridArea: "rnumber-title" }}>App Rnumber</label>
+        <label style={{ gridArea: "rnumber-title" }}>App Rnumber*</label>
         <input
           style={{ gridArea: "rnumber" }}
           type="number"
@@ -168,7 +168,7 @@ function CreateApp(props) {
           min="0"
           step="1"
           onInput={e => {
-            if (!/^[0-9]+$/.test(e.target.value)) e.target.value = formData.App_Rnumber
+            if (!/^[0-9]+$/.test(e.target.value) && e.target.value !== "") e.target.value = formData.App_Rnumber
           }}
           onChange={e => handleInputChange(e)}
         />

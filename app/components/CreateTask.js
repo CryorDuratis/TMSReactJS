@@ -30,54 +30,54 @@ function CreateTask(props) {
       [name]: value
     }))
   }
+  // define fetchapp
+  const fetchapp = async () => {
+    try {
+      // Make fetch request to the server
+      const token = Cookies.get("token")
+      var response = await Axios.post("/app", { App_Acronym: props.appid, token })
+      // console.log("response ", response.data)
 
+      // if not logged in
+      if (response.data.unauth) {
+        console.log("user is unauth")
+        appDispatch({
+          type: "logout",
+          message: "Logged out"
+        })
+        navigate("/login")
+        return
+      }
+
+      // get app rnum
+      const rnum = response.data.appData.App_Rnumber
+      // set default taskid
+      const taskid = props.appid + "_" + rnum
+      setFormData(prevData => ({
+        ...prevData,
+        ["Task_id"]: taskid
+      }))
+
+      // fetch app permissions
+      const createpermit = response.data.appData.App_permit_Create
+
+      // check auth
+      response = await Axios.post("/checkgroup", { groupname: createpermit, token })
+      if (response.data.unauth) {
+        props.setIsAuth("")
+        appDispatch({
+          type: "btoast",
+          message: "Unauthorised action"
+        })
+        props.onClose()
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error)
+      // Handle errors as needed
+    }
+  }
   // get taskid
   useEffect(() => {
-    const fetchapp = async () => {
-      try {
-        // Make fetch request to the server
-        const token = Cookies.get("token")
-        var response = await Axios.post("/app", { App_Acronym: props.appid, token })
-        // console.log("response ", response.data)
-
-        // if not logged in
-        if (response.data.unauth) {
-          console.log("user is unauth")
-          appDispatch({
-            type: "logout",
-            message: "Logged out"
-          })
-          navigate("/login")
-          return
-        }
-
-        // get app rnum
-        const rnum = response.data.appData.App_Rnumber
-        // set default taskid
-        const taskid = props.appid + "_" + rnum
-        setFormData(prevData => ({
-          ...prevData,
-          ["Task_id"]: taskid
-        }))
-
-        // fetch app permissions
-        const createpermit = response.data.appData.App_permit_Create
-
-        // check auth
-        response = await Axios.post("/checkgroup", { groupname: createpermit, token })
-        if (response.data.unauth) {
-          props.setIsAuth("")
-          appDispatch({
-            type: "btoast",
-            message: "Unauthorised action"
-          })
-          props.onClose()
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error)
-        // Handle errors as needed
-      }
-    }
     fetchapp()
   }, [])
 
@@ -135,6 +135,7 @@ function CreateTask(props) {
       })
       props.update()
       // props.onClose()
+      fetchapp()
       setFormData(prevData => ({
         ...prevData,
         ["Task_name"]: "",
@@ -149,7 +150,7 @@ function CreateTask(props) {
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
       <h2 style={{ width: "max-content" }}>Create Task</h2>
       <form onSubmit={handleSubmit} className="create-task-form">
-        <label htmlFor="Task_name">Task Name</label>
+        <label htmlFor="Task_name">Task Name*</label>
         <input type="text" name="Task_name" value={formData.Task_name} onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} />
 
         <label htmlFor="Task_id">Task ID</label>
