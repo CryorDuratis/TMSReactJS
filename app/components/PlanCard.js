@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import Axios from "axios"
+import { ChromePicker } from "react-color"
 
 // import components
 import Container from "../templates/Container"
@@ -30,6 +31,16 @@ function PlanCard(props) {
   const [error, setError] = useState("")
   const editkey = props.listkey + 1 // so that 0 can be set as nothing is editing
 
+  // generate random colour
+  function generateRandomColor() {
+    const letters = "0123456789ABCDEF"
+    let randomColor = "#"
+    for (let i = 0; i < 6; i++) {
+      randomColor += letters[Math.floor(Math.random() * 16)]
+    }
+    return randomColor
+  }
+
   // set default formdata and close popup if not editing current user
   useEffect(() => {
     console.log("editing changed ", props.editing)
@@ -39,17 +50,32 @@ function PlanCard(props) {
         setFormData(defaultplan)
       }
       // close popup
+    } else if (!formData.Plan_colour) {
+      setFormData(prev => ({
+        ...prev,
+        ["Plan_colour"]: generateRandomColor()
+      }))
     }
   }, [props.editing, props.planlist])
 
+  // change text colour to white if the background is dark
+  const isColorDark = hexColor => {
+    const r = parseInt(hexColor.slice(1, 3), 16)
+    const g = parseInt(hexColor.slice(3, 5), 16)
+    const b = parseInt(hexColor.slice(5, 7), 16)
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    return luminance < 0.5 // Adjust the threshold as needed
+  }
+  const textColor = formData.Plan_colour ? (isColorDark(formData.Plan_colour) ? "white" : "black") : "black"
+
   // set editing to this item
-  const handleClick = async (e) => {
+  const handleClick = async e => {
     e.preventDefault()
     props.setEditing(editkey)
   }
 
   // submit to backend and update user list state
-  const handleUpdate = async (e) => {
+  const handleUpdate = async e => {
     e.preventDefault()
 
     // submit edit
@@ -57,12 +83,12 @@ function PlanCard(props) {
       props.setEditing(0)
       console.log("edit form was submitted")
       try {
-        const { Plan_MVP_name, Plan_startDate, Plan_endDate } = formData
+        const { Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_colour } = formData
 
         const token = Cookies.get("token")
 
         // send request -- edit
-        const requestbody = { groupname: "Project Manager", Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym: appid, token }
+        const requestbody = { groupname: "Project Manager", Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_colour, Plan_app_Acronym: appid, token }
         const response = await Axios.post("/plan/edit", requestbody)
 
         // if not logged in
@@ -70,7 +96,7 @@ function PlanCard(props) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out",
+              message: "Logged out"
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -91,14 +117,14 @@ function PlanCard(props) {
         setError(false)
         appDispatch({
           type: "gtoast",
-          message: "Plan edited successfully",
+          message: "Plan edited successfully"
         })
 
         // update formdata
-        setFormData((prev) => ({
+        setFormData(prev => ({
           ...prev,
           ["Plan_startDate"]: Plan_startDate,
-          ["Plan_endDate"]: Plan_endDate,
+          ["Plan_endDate"]: Plan_endDate
         }))
       } catch (e) {
         console.log(e)
@@ -108,7 +134,7 @@ function PlanCard(props) {
     if (props.create) {
       console.log("create form was submitted")
       try {
-        const { Plan_MVP_name, Plan_startDate, Plan_endDate } = formData
+        const { Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_colour } = formData
 
         const token = Cookies.get("token")
         // if required fields blank
@@ -116,21 +142,21 @@ function PlanCard(props) {
           setError("required")
           appDispatch({
             type: "btoast",
-            message: "Plan name is required",
+            message: "Plan name is required"
           })
           props.update()
           return
         }
 
         // send request -- create
-        const response = await Axios.post("/plan/create", { groupname: "Project Manager", Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_app_Acronym: appid, token })
+        const response = await Axios.post("/plan/create", { groupname: "Project Manager", Plan_MVP_name, Plan_startDate, Plan_endDate, Plan_colour, Plan_app_Acronym: appid, token })
 
         // if not logged in
         if (response.data.unauth) {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out",
+              message: "Logged out"
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -152,7 +178,7 @@ function PlanCard(props) {
           setError("conflict")
           appDispatch({
             type: "btoast",
-            message: "Plan name already used in this app",
+            message: "Plan name already used in this app"
           })
           props.update()
           return
@@ -161,7 +187,7 @@ function PlanCard(props) {
         setError(false)
         appDispatch({
           type: "gtoast",
-          message: "New plan created successfully",
+          message: "New plan created successfully"
         })
       } catch (e) {
         console.log(e)
@@ -171,7 +197,7 @@ function PlanCard(props) {
   }
 
   // set default form data if canceled or cleared
-  const handleCancel = (e) => {
+  const handleCancel = e => {
     setFormData(defaultplan)
     if (!props.create) {
       props.setEditing(0)
@@ -179,30 +205,41 @@ function PlanCard(props) {
   }
 
   // updates form values for axios submission since single page react cant use default form actions
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
-      [name]: value,
+      [name]: value
+    }))
+  }
+  const handleColourChange = e => {
+    setFormData(prevData => ({
+      ...prevData,
+      ["Plan_colour"]: e.hex
     }))
   }
 
   return (
     <form className="plan-form">
-      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={(e) => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} />
+      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} />
 
-      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 
-      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
+
+      <div className={props.editing !== editkey && !props.create ? "chromepicker-container" : "chromepicker-container active"}>
+        <div style={{ padding: "5px", backgroundColor: formData.Plan_colour, color: textColor }}>{formData.Plan_colour}</div>
+        <ChromePicker className="chromepicker-popup" color={formData.Plan_colour} disabled={props.editing !== editkey && !props.create} onChange={e => handleColourChange(e)} />
+      </div>
 
       <div className="form-cancel">
         {props.editing === editkey ? (
-          <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
+          <button type="reset" onClick={e => handleCancel(e)} className="backbutton">
             Cancel
           </button>
         ) : (
           props.create && (
-            <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
+            <button type="reset" onClick={e => handleCancel(e)} className="backbutton">
               Clear
             </button>
           )
@@ -211,11 +248,11 @@ function PlanCard(props) {
 
       <div className="form-edit">
         {props.editing === editkey ? (
-          <button type="submit" onClick={(e) => handleUpdate(e)} className="gobutton">
+          <button type="submit" onClick={e => handleUpdate(e)} className="gobutton">
             Update
           </button>
         ) : (
-          <button type="button" onClick={props.create ? (e) => handleUpdate(e) : (e) => handleClick(e)} className="gobutton">
+          <button type="button" onClick={props.create ? e => handleUpdate(e) : e => handleClick(e)} className="gobutton">
             {props.create ? "Create" : "Edit"}
           </button>
         )}

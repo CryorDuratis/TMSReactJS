@@ -241,16 +241,17 @@ textarea {
 /* plan list */
 .plan-grid-header {
   display: grid;
-  grid-template-columns: 150px 150px 150px minmax(20px, 1fr) 150px;
+  grid-template-columns: 150px 150px 150px 150px minmax(20px, 1fr) 150px;
   gap: 10px 10px;
   align-items: center;
   padding: 0 10px;
 }
 .plan-form {
   display: grid;
-  grid-template-areas: ". . . . cancel edit";
-  grid-template-columns: 150px 150px 150px minmax(20px, 1fr) 70px 70px;
+  grid-template-areas: ". . . . . cancel edit";
+  grid-template-columns: 150px 150px 150px 150px minmax(20px, 1fr) 70px 70px;
   gap: 10px 10px;
+  align-items: center;
   width: 100%;
   margin: 0;
 }
@@ -258,6 +259,18 @@ textarea {
   color: black;
   background-color: transparent;
   border: none;
+}
+.chromepicker-container {
+  position: relative;
+  user-select: none;
+}
+.chromepicker-popup {
+  position: absolute;
+  display: none;
+  z-index: 5;
+}
+.chromepicker-container.active:hover .chromepicker-popup {
+  display: block;
 }
 
 /* task list */

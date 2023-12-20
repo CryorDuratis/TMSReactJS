@@ -31,7 +31,7 @@ function PlanList() {
   // updates list when new user is created
   const updatePlanList = () => {
     console.log("update plan list called")
-    setUpdateFlag((prev) => !prev)
+    setUpdateFlag(prev => !prev)
   }
 
   // display plan information on load, and on update
@@ -47,7 +47,7 @@ function PlanList() {
           if (response.data.unauth === "login") {
             appDispatch({
               type: "logout",
-              message: "Logged out",
+              message: "Logged out"
             })
             navigate("/login")
           } else if (response.data.unauth === "role") {
@@ -78,7 +78,7 @@ function PlanList() {
   return (
     <Container class="bgclr-light1 content-container">
       <div className="breadcrumb">
-        <span onClick={(e) => navigate("/apps")}>Apps</span> / <span onClick={(e) => navigate(pathname.split("/plans")[0])}>App Dashboard</span> / Plans
+        <span onClick={e => navigate("/apps")}>Apps</span> / <span onClick={e => navigate(pathname.split("/plans")[0])}>App Dashboard</span> / Plans
       </div>
       <div className="flex-row" style={{ whiteSpace: "nowrap" }}>
         <h2>{appid} - Plan List</h2>
@@ -88,6 +88,7 @@ function PlanList() {
           <strong>Plan Name</strong>
           <strong>Start Date</strong>
           <strong>End Date</strong>
+          <strong>Colour Display</strong>
         </div>
         <div className="list-card-container">
           <PlanCard plan={{ Plan_MVP_name: "", Plan_startDate: "", Plan_endDate: "" }} create={true} update={updatePlanList} planlist={planList} updateflag={updateFlag} />
