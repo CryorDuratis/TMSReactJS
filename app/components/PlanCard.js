@@ -59,14 +59,14 @@ function PlanCard(props) {
   }, [props.editing, props.planlist])
 
   // change text colour to white if the background is dark
-  const isColorDark = hexColor => {
-    const r = parseInt(hexColor.slice(1, 3), 16)
-    const g = parseInt(hexColor.slice(3, 5), 16)
-    const b = parseInt(hexColor.slice(5, 7), 16)
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-    return luminance < 0.5 // Adjust the threshold as needed
-  }
-  const textColor = formData.Plan_colour ? (isColorDark(formData.Plan_colour) ? "white" : "black") : "black"
+  // const isColorDark = hexColor => {
+  //   const r = parseInt(hexColor.slice(1, 3), 16)
+  //   const g = parseInt(hexColor.slice(3, 5), 16)
+  //   const b = parseInt(hexColor.slice(5, 7), 16)
+  //   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  //   return luminance < 0.5 // Adjust the threshold as needed
+  // }
+  // const textColor = formData.Plan_colour ? (isColorDark(formData.Plan_colour) ? "white" : "black") : "black"
 
   // set editing to this item
   const handleClick = async e => {
@@ -201,6 +201,11 @@ function PlanCard(props) {
     setFormData(defaultplan)
     if (!props.create) {
       props.setEditing(0)
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        ["Plan_colour"]: generateRandomColor()
+      }))
     }
   }
 
@@ -228,7 +233,7 @@ function PlanCard(props) {
       {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 
       <div className={props.editing !== editkey && !props.create ? "chromepicker-container" : "chromepicker-container active"}>
-        <div style={{ padding: "5px", backgroundColor: formData.Plan_colour, color: textColor }}>{formData.Plan_colour}</div>
+        <div style={{ padding: "5px", backgroundColor: formData.Plan_colour, color: "transparent" }}>{formData.Plan_colour}</div>
         <ChromePicker className="chromepicker-popup" color={formData.Plan_colour} disabled={props.editing !== editkey && !props.create} onChange={e => handleColourChange(e)} />
       </div>
 
