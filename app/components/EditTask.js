@@ -51,6 +51,16 @@ function EditTask(props) {
         return
       }
 
+      // if task does not exist
+      if (response.data.error) {
+        props.update()
+        props.onClose()
+        appDispatch({
+          type: "btoast",
+          message: "Task does not exist"
+        })
+      }
+
       // set task details
       setTaskData(response.data.taskData)
       setTaskData(prev => ({

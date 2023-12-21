@@ -131,7 +131,7 @@ function CreateTask(props) {
       setError(false)
       appDispatch({
         type: "gtoast",
-        message: "Task successfully created"
+        message: `Task successfully created with Task ID: ${response.data.taskid}`
       })
       props.update()
       // props.onClose()
@@ -153,8 +153,8 @@ function CreateTask(props) {
         <label htmlFor="Task_name">Task Name*</label>
         <input type="text" name="Task_name" value={formData.Task_name} onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} />
 
-        <label htmlFor="Task_id">Task ID</label>
-        <input type="text" name="Task_id" value={formData.Task_id} disabled />
+        {/* <label htmlFor="Task_id">Task ID</label>
+        <input type="text" name="Task_id" value={formData.Task_id} disabled /> */}
 
         <label htmlFor="Task_app_Acronym">App Acronym</label>
         <input type="text" name="Task_app_Acronym" value={props.appid} disabled />
