@@ -403,6 +403,10 @@ textarea {
 .taskinfo-content h2 {
   margin-bottom: 0;
 }
+.taskinfo-content span {
+  max-height: 20vh;
+  overflow-y: auto;
+}
 .taskinfo-log {
   border: 1px solid #ddd;
   white-space: pre-wrap;

@@ -276,6 +276,9 @@ function EditTask(props) {
       console.log("error is ", error)
     }
   }
+  console.log("edit plan check: ", !(taskData.Task_state === "Done" && selectedplan === taskData.Task_plan))
+  console.log("selectedplan: ", selectedplan)
+  console.log("database plan: ", taskData.Task_plan)
 
   return (
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
@@ -310,12 +313,12 @@ function EditTask(props) {
               <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={e => handleSubmit(e, "demote")}>
                 Demote and Save
               </button>
-              <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={e => handleSubmit(e, "promote")}>
+              <button type="button" className={isAuth && taskData.Task_state !== "Closed" && !(taskData.Task_state === "Done" && selectedplan === taskData.Task_plan) ? "gobutton" : "hidden"} onClick={e => handleSubmit(e, "promote")}>
                 Promote and Save
               </button>
             </div>
             <div className="flex-row" style={{ flexDirection: "row-reverse" }}>
-              {isAuth && (
+              {isAuth && !(taskData.Task_state === "Done" && selectedplan === taskData.Task_plan) && (
                 <button type="button" className="gobutton" onClick={e => handleSubmit(e, "edit")}>
                   Save
                 </button>
