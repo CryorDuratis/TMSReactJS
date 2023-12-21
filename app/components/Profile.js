@@ -84,7 +84,7 @@ function Profile() {
 
       // if request fails
       if (response.data.error) {
-        appDispatch({ type: "logerror", error: response.data.error })
+        appDispatch({ type: "error", error: response.data.error })
         return
       }
       // if edit fails

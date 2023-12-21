@@ -109,7 +109,7 @@ function PlanCard(props) {
 
         // if request fails
         if (response.data.error) {
-          appDispatch({ type: "logerror", error: response.data.error })
+          appDispatch({ type: "error", error: response.data.error })
           props.update()
           return
         }
@@ -169,7 +169,7 @@ function PlanCard(props) {
 
         // if request fails
         if (response.data.error) {
-          appDispatch({ type: "logerror", error: response.data.error })
+          appDispatch({ type: "error", error: response.data.error })
           props.update()
           return
         }

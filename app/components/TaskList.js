@@ -170,8 +170,8 @@ const TaskList = props => {
         <span onClick={e => navigate("/apps")}>Apps</span> / App Dashboard
       </div>
       {isModalOpen && (ModalMode === "create" ? <CreateTask onClose={handleCloseModal} update={updateTaskList} appid={appid} setIsAuth={setIsAuth} /> : <EditTask onClose={handleCloseModal} update={updateTaskList} appid={appid} taskid={taskid} setIsAuth={setIsAuth} />)}
-      <div className="flex-row" style={{ justifyContent: "space-between" }}>
-        <h2>{appid}</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "60vw auto", justifyContent: "space-between" }}>
+        <h2 style={{ wordWrap: "break-word" }}>{appid}</h2>
         <div className="flex-row">
           {isAuth.Plan && (
             <button className="gobutton" onClick={e => navigate(pathname + "/plans")}>

@@ -21,7 +21,7 @@ function Login() {
   const [error, setError] = useState(false) // for login page error rendering
 
   // const ourRequest = Axios.CancelToken.source()
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault()
     setError(false)
     try {
@@ -31,7 +31,7 @@ function Login() {
 
       // if request fails
       if (response.data.error) {
-        appDispatch({ type: "logerror", error: response.data.error })
+        appDispatch({ type: "error", error: response.data.error })
         return
       }
       // if login fails
@@ -47,7 +47,7 @@ function Login() {
       appDispatch({
         type: "login",
         user: response.data.username,
-        message: "Logged in",
+        message: "Logged in"
       })
       navigate("/apps")
     } catch (e) {
@@ -62,9 +62,9 @@ function Login() {
           <h1>Log In</h1>
           <div className="login-form-group">
             <label htmlFor="username">Username: </label>
-            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
             <label htmlFor="password">Password: </label>
-            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            <input className={error ? "error-outline" : undefined} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
           </div>
           <div className={error ? "login-error error-box" : "login-error"}>Invalid login details.</div>
           <button className="login-btn">Log in</button>

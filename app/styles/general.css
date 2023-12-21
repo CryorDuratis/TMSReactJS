@@ -141,9 +141,13 @@ textarea {
 }
 .form-acronym {
   grid-area: acronym;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .form-rnumber {
   grid-area: rnumber;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .form-startdate {
   grid-area: startdate;

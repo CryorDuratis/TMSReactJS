@@ -104,8 +104,9 @@ function CreateTask(props) {
 
       // if request fails
       if (response.data.error) {
-        appDispatch({ type: "logerror", error: response.data.error })
+        appDispatch({ type: "btoast", message: response.data.error })
         props.update()
+        props.onClose()
         return
       }
       // if create fails

@@ -91,9 +91,12 @@ function AppList() {
     const { App_Acronym, App_Rnumber, App_startDate, App_endDate } = props.app
     return (
       <div className="app-card" onClick={e => handleNavigate(App_Acronym)}>
-        <span className="form-acronym">{App_Acronym}</span>
-        <span className="form-rnumber">{App_Rnumber}</span>
-        <span className="form-rnumber">{App_Rnumber}</span>
+        <span className="form-acronym" title={App_Acronym}>
+          {App_Acronym}
+        </span>
+        <span className="form-rnumber" title={App_Rnumber}>
+          {App_Rnumber}
+        </span>
         {App_startDate ? <input type="date" className="form-startdate" value={App_startDate} disabled /> : <span className="form-startdate">No date set</span>}
         {App_endDate ? <input type="date" className="form-enddate" value={App_endDate} disabled /> : <span className="form-enddate">No date set</span>}
         <button className="form-details gobutton" onClick={e => editModal(e, App_Acronym)}>
@@ -124,7 +127,6 @@ function AppList() {
       <Container class="list-container">
         <div className="app-grid-header">
           <strong>App Acronym</strong>
-          <strong>App Rnumber</strong>
           <strong>App Rnumber</strong>
           <strong>App Start Date</strong>
           <strong>App End Date</strong>
