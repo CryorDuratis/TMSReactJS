@@ -191,8 +191,8 @@ textarea {
 }
 .app-card {
   display: grid;
-  grid-template-areas: "acronym startdate enddate .";
-  grid-template-columns: 150px 150px 150px minmax(100px, 2fr);
+  grid-template-areas: "acronym rnumber startdate enddate .";
+  grid-template-columns: 150px 150px 150px 150px minmax(100px, 1fr);
   gap: 10px 10px;
   width: 100%;
   margin: 0;
