@@ -184,7 +184,7 @@ textarea {
 /* app list */
 .app-grid-header {
   display: grid;
-  grid-template-columns: 150px 150px 150px minmax(20px, 2fr);
+  grid-template-columns: 150px 150px 150px 150px minmax(20px, 2fr);
   gap: 10px 10px;
   align-items: center;
   padding: 0 10px;
@@ -317,16 +317,16 @@ textarea {
 .task span {
   display: grid;
   grid-template-columns: auto auto;
+  gap: 5px;
   color: #aaa;
   margin-top: 5px;
 }
 .task-owner {
-  text-wrap: nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow-x: hidden;
   width: -webkit-fill-available;
   text-align: end;
-  margin-left: 10px;
 }
 @media (max-width: 1100px) {
   .task span {
@@ -337,12 +337,11 @@ textarea {
     margin-top: 5px;
   }
   .task-owner {
-    text-wrap: wrap;
+    white-space: wrap;
     text-overflow: clip;
     overflow-x: hidden;
     width: -webkit-fill-available;
     text-align: start;
-    margin-left: 0;
   }
 }
 .create-task-form {
