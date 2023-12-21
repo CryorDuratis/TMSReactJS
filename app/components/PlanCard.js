@@ -109,7 +109,7 @@ function PlanCard(props) {
 
         // if request fails
         if (response.data.error) {
-          appDispatch({ type: "error", error: response.data.error })
+          appDispatch({ type: "btoast", message: response.data.error })
           props.update()
           return
         }
@@ -226,7 +226,7 @@ function PlanCard(props) {
 
   return (
     <form className="plan-form">
-      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} />
+      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} maxLength={255} />
 
       {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 

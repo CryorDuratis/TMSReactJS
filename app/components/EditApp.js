@@ -25,49 +25,50 @@ function EditApp(props) {
   const [isAuth, setIsAuth] = useState(false)
   const [error, setError] = useState("")
 
+  const fetchApp = async () => {
+    console.log("fetch single app is loaded")
+    try {
+      // Make authorization request to the server
+      const token = Cookies.get("token")
+      var response = await Axios.post("/app", { App_Acronym: props.appacro, token })
+
+      // if not logged in
+      if (response.data.unauth) {
+        console.log("user is unauth")
+        appDispatch({
+          type: "logout",
+          message: "Logged out"
+        })
+        navigate("/login")
+        return
+      }
+
+      // set apps
+      setFormData(response.data.appData)
+      setCreatePermit(response.data.appData.App_permit_Create ? response.data.appData.App_permit_Create : grouplist[0])
+      setOpenPermit(response.data.appData.App_permit_Open ? response.data.appData.App_permit_Open : grouplist[0])
+      setTodolistPermit(response.data.appData.App_permit_toDoList ? response.data.appData.App_permit_toDoList : grouplist[0])
+      setDoingPermit(response.data.appData.App_permit_Doing ? response.data.appData.App_permit_Doing : grouplist[0])
+      setDonePermit(response.data.appData.App_permit_Done ? response.data.appData.App_permit_Done : grouplist[0])
+      console.log("app obtained: ", response.data.appData)
+
+      // check if authorised to edit
+      response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
+
+      if (response.data.unauth) {
+        setIsAuth(false)
+      } else {
+        setIsAuth(true)
+      }
+
+      setIsLoading(false)
+    } catch (error) {
+      console.log("error: ", error)
+    }
+  }
+
   // set default formdata on load, and check if user is permitted
   useEffect(() => {
-    const fetchApp = async () => {
-      console.log("fetch single app is loaded")
-      try {
-        // Make authorization request to the server
-        const token = Cookies.get("token")
-        var response = await Axios.post("/app", { App_Acronym: props.appacro, token })
-
-        // if not logged in
-        if (response.data.unauth) {
-          console.log("user is unauth")
-          appDispatch({
-            type: "logout",
-            message: "Logged out"
-          })
-          navigate("/login")
-          return
-        }
-
-        // set apps
-        setFormData(response.data.appData)
-        setCreatePermit(response.data.appData.App_permit_Create ? response.data.appData.App_permit_Create : grouplist[0])
-        setOpenPermit(response.data.appData.App_permit_Open ? response.data.appData.App_permit_Open : grouplist[0])
-        setTodolistPermit(response.data.appData.App_permit_toDoList ? response.data.appData.App_permit_toDoList : grouplist[0])
-        setDoingPermit(response.data.appData.App_permit_Doing ? response.data.appData.App_permit_Doing : grouplist[0])
-        setDonePermit(response.data.appData.App_permit_Done ? response.data.appData.App_permit_Done : grouplist[0])
-        console.log("app obtained: ", response.data.appData)
-
-        // check if authorised to edit
-        response = await Axios.post("/checkgroup", { groupname: "Project Lead", token })
-
-        if (response.data.unauth) {
-          setIsAuth(false)
-        } else {
-          setIsAuth(true)
-        }
-
-        setIsLoading(false)
-      } catch (error) {
-        console.log("error: ", error)
-      }
-    }
     fetchApp()
   }, [])
 
@@ -149,12 +150,18 @@ function EditApp(props) {
       const response = await Axios.post("/app/edit", { groupname: "Project Lead", formData, createPermit, openPermit, todolistPermit, doingPermit, donePermit, token })
 
       // if not logged in
-      if (response.data.unauth === "login") {
-        appDispatch({
-          type: "logout",
-          message: "Logged out"
-        })
-        navigate("/login")
+      if (response.data.unauth) {
+        if (response.data.unauth === "login") {
+          appDispatch({
+            type: "logout",
+            message: "Logged out"
+          })
+          navigate("/login")
+        } else if (response.data.unauth === "role") {
+          appDispatch({ type: "btoast", message: "Unauthorized" })
+          props.update()
+          fetchApp()
+        }
         return
       }
 

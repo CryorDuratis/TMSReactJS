@@ -80,8 +80,8 @@ function PlanList() {
       <div className="breadcrumb">
         <span onClick={e => navigate("/apps")}>Apps</span> / <span onClick={e => navigate(pathname.split("/plans")[0])}>App Dashboard</span> / Plans
       </div>
-      <div className="flex-row" style={{ whiteSpace: "nowrap" }}>
-        <h2>{appid} - Plan List</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "80vw", justifyContent: "space-between" }}>
+        <h2 style={{ wordWrap: "break-word" }}>{appid}</h2>
       </div>
       <Container class="create-form-container">
         <div className="plan-grid-header">

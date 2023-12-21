@@ -226,12 +226,17 @@ function EditTask(props) {
       const response = await Axios.post(submittype, { token, Task_note, Task_id, Task_state, Task_app_Acronym, selectedplan })
 
       // if not logged in
-      if (response.data.unauth === "login") {
-        appDispatch({
-          type: "logout",
-          message: "Logged out"
-        })
-        navigate("/login")
+      if (response.data.unauth) {
+        if (response.data.unauth === "login") {
+          appDispatch({
+            type: "logout",
+            message: "Logged out"
+          })
+          navigate("/login")
+        } else if (response.data.unauth === "role") {
+          appDispatch({ type: "btoast", message: "Unauthorized" })
+          fetchTask()
+        }
         return
       }
 
