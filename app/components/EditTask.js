@@ -31,6 +31,7 @@ function EditTask(props) {
   const [planlist, setplanlist] = useState([])
   const [plancol, setPlancol] = useState("#eee")
   const [isAuth, setIsAuth] = useState(false)
+  const [editplanpermit, setEditplanpermit] = useState(true)
   const [error, setError] = useState("")
 
   const fetchTask = async () => {
@@ -63,7 +64,7 @@ function EditTask(props) {
 
       // set task details
       setTaskData(response.data.taskData)
-      setTaskData(prev => ({
+      setTaskData((prev) => ({
         ...prev,
         ["Task_notes"]: response.data.taskDatanotes
       }))
@@ -162,7 +163,7 @@ function EditTask(props) {
     if (!selectedplan) {
       return
     }
-    const displayplan = planlist.filter(plan => plan.Plan_MVP_name === selectedplan)
+    const displayplan = planlist.filter((plan) => plan.Plan_MVP_name === selectedplan)
     if (displayplan.length < 1) {
       return
     }
@@ -179,7 +180,7 @@ function EditTask(props) {
 
   // render taskplan colour
   useEffect(() => {
-    const taskplan = planlist.find(plan => plan.Plan_MVP_name === selectedplan)
+    const taskplan = planlist.find((plan) => plan.Plan_MVP_name === selectedplan)
     if (taskplan) {
       const adjustedcol =
         taskplan.Plan_colour +
@@ -190,14 +191,19 @@ function EditTask(props) {
     } else {
       setPlancol("#eee")
     }
+    if (taskData.Task_state === "Done" && selectedplan !== taskData.Task_plan) {
+      setEditplanpermit(false)
+    } else {
+      setEditplanpermit(true)
+    }
   }, [selectedplan, planlist])
 
   // change notes on input change
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setNotes(e.target.value)
   }
   // change plan on input change
-  const handlePlanChange = e => {
+  const handlePlanChange = (e) => {
     setselectedplan(e.target.value)
   }
 
@@ -276,9 +282,9 @@ function EditTask(props) {
       console.log("error is ", error)
     }
   }
-  console.log("edit plan check: ", !(taskData.Task_state === "Done" && selectedplan === taskData.Task_plan))
-  console.log("selectedplan: ", selectedplan)
-  console.log("database plan: ", taskData.Task_plan)
+  // console.log("edit plan check: ", !(taskData.Task_state === "Done" && selectedplan !== taskData.Task_plan))
+  // console.log("selectedplan: ", selectedplan)
+  // console.log("database plan: ", taskData.Task_plan)
 
   return (
     <Popup class="info-container" onClose={props.onClose} condition={props.onClose}>
@@ -297,7 +303,7 @@ function EditTask(props) {
           <b>Owner</b>
           <span>{taskData.Task_owner}</span>
           <b>Plan</b>
-          <select name="Task_plan" value={selectedplan} onChange={e => handlePlanChange(e)} disabled={!isAuth || (taskData.Task_state !== "Open" && taskData.Task_state !== "Done")}>
+          <select name="Task_plan" value={selectedplan} onChange={(e) => handlePlanChange(e)} disabled={!isAuth || (taskData.Task_state !== "Open" && taskData.Task_state !== "Done")}>
             <option value="">{isAuth && (taskData.Task_state === "Open" || taskData.Task_state === "Done") ? "-Select a Plan-" : "None"}</option>
             {renderplanlist()}
           </select>
@@ -309,17 +315,19 @@ function EditTask(props) {
           {renderplanDate()}
 
           <div className="taskinfo-buttons">
-            <div className="flex-row" style={{ marginBottom: "10px" }}>
-              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={e => handleSubmit(e, "demote")}>
+            <div className="flex-row" style={{ marginBottom: "10px", flexDirection: "row-reverse" }}>
+              {editplanpermit && (
+                <button type="button" className={isAuth && taskData.Task_state !== "Closed" ? "gobutton" : "hidden"} onClick={(e) => handleSubmit(e, "promote")}>
+                  Promote and Save
+                </button>
+              )}
+              <button type="button" className={isAuth && (taskData.Task_state === "Doing" || taskData.Task_state === "Done") ? "backbutton" : "hidden"} onClick={(e) => handleSubmit(e, "demote")}>
                 Demote and Save
-              </button>
-              <button type="button" className={isAuth && taskData.Task_state !== "Closed" && !(taskData.Task_state === "Done" && selectedplan === taskData.Task_plan) ? "gobutton" : "hidden"} onClick={e => handleSubmit(e, "promote")}>
-                Promote and Save
               </button>
             </div>
             <div className="flex-row" style={{ flexDirection: "row-reverse" }}>
-              {isAuth && !(taskData.Task_state === "Done" && selectedplan === taskData.Task_plan) && (
-                <button type="button" className="gobutton" onClick={e => handleSubmit(e, "edit")}>
+              {isAuth && editplanpermit && (
+                <button type="button" className="gobutton" onClick={(e) => handleSubmit(e, "edit")}>
                   Save
                 </button>
               )}
@@ -335,7 +343,7 @@ function EditTask(props) {
             <b>Description:</b> {taskData.Task_description}
           </span>
           <div className="taskinfo-log">{taskData.Task_notes}</div>
-          {isAuth && <textarea name="Task_notes" placeholder="Add New Note" value={notes} onChange={e => handleInputChange(e)}></textarea>}
+          {isAuth && <textarea name="Task_notes" placeholder="Add New Note" value={notes} onChange={(e) => handleInputChange(e)}></textarea>}
         </div>
       </form>
     </Popup>
