@@ -156,8 +156,8 @@ function CreateTask(props) {
         {/* <label htmlFor="Task_id">Task ID</label>
         <input type="text" name="Task_id" value={formData.Task_id} disabled /> */}
 
-        <label htmlFor="Task_app_Acronym">App Acronym</label>
-        <input type="text" name="Task_app_Acronym" value={props.appid} disabled />
+        {/* <label htmlFor="Task_app_Acronym">App Acronym</label>
+        <input type="text" name="Task_app_Acronym" value={props.appid} disabled /> */}
 
         <label>Task Description</label>
         <textarea name="Task_description" value={formData.Task_description} onChange={e => handleInputChange(e)}></textarea>
