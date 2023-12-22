@@ -51,7 +51,7 @@ function PlanCard(props) {
       }
       // close popup
     } else if (!formData.Plan_colour) {
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         ["Plan_colour"]: generateRandomColor()
       }))
@@ -69,13 +69,13 @@ function PlanCard(props) {
   // const textColor = formData.Plan_colour ? (isColorDark(formData.Plan_colour) ? "white" : "black") : "black"
 
   // set editing to this item
-  const handleClick = async (e) => {
+  const handleClick = async e => {
     e.preventDefault()
     props.setEditing(editkey)
   }
 
   // submit to backend and update user list state
-  const handleUpdate = async (e) => {
+  const handleUpdate = async e => {
     e.preventDefault()
 
     // submit edit
@@ -121,7 +121,7 @@ function PlanCard(props) {
         })
 
         // update formdata
-        setFormData((prev) => ({
+        setFormData(prev => ({
           ...prev,
           ["Plan_startDate"]: Plan_startDate,
           ["Plan_endDate"]: Plan_endDate
@@ -185,12 +185,12 @@ function PlanCard(props) {
         }
         // else on success
         setError(false)
-        setFormData((prev) => ({
-          ...prev,
+        setFormData({
           ["Plan_MVP_name"]: "",
           ["Plan_startDate"]: "",
-          ["Plan_endDate"]: ""
-        }))
+          ["Plan_endDate"]: "",
+          ["Plan_colour"]: generateRandomColor()
+        })
         appDispatch({
           type: "gtoast",
           message: "New plan created successfully"
@@ -203,12 +203,12 @@ function PlanCard(props) {
   }
 
   // set default form data if canceled or cleared
-  const handleCancel = (e) => {
+  const handleCancel = e => {
     setFormData(defaultplan)
     if (!props.create) {
       props.setEditing(0)
     } else {
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         ["Plan_colour"]: generateRandomColor()
       }))
@@ -216,15 +216,15 @@ function PlanCard(props) {
   }
 
   // updates form values for axios submission since single page react cant use default form actions
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value
     }))
   }
-  const handleColourChange = (e) => {
-    setFormData((prevData) => ({
+  const handleColourChange = e => {
+    setFormData(prevData => ({
       ...prevData,
       ["Plan_colour"]: e.hex
     }))
@@ -232,25 +232,25 @@ function PlanCard(props) {
 
   return (
     <form className="plan-form">
-      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={(e) => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} maxLength={255} />
+      <input type="text" name="Plan_MVP_name" value={formData.Plan_MVP_name} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.Plan_MVP_name} className={error ? "error-outline" : undefined} maxLength={255} />
 
-      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_startDate || props.editing === editkey || props.create ? <input type="date" name="Plan_startDate" value={formData.Plan_startDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 
-      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleInputChange(e)} /> : <span>No Date Set</span>}
+      {formData.Plan_endDate || props.editing === editkey || props.create ? <input type="date" name="Plan_endDate" value={formData.Plan_endDate} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} /> : <span>No Date Set</span>}
 
       <div className={props.editing !== editkey && !props.create ? "chromepicker-container" : "chromepicker-container active"}>
         <div style={{ padding: "5px", backgroundColor: formData.Plan_colour, color: "transparent" }}>{formData.Plan_colour}</div>
-        <ChromePicker className="chromepicker-popup" color={formData.Plan_colour} disabled={props.editing !== editkey && !props.create} onChange={(e) => handleColourChange(e)} />
+        <ChromePicker className="chromepicker-popup" color={formData.Plan_colour} disabled={props.editing !== editkey && !props.create} onChange={e => handleColourChange(e)} />
       </div>
 
       <div className="form-cancel">
         {props.editing === editkey ? (
-          <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
+          <button type="reset" onClick={e => handleCancel(e)} className="backbutton">
             Cancel
           </button>
         ) : (
           props.create && (
-            <button type="reset" onClick={(e) => handleCancel(e)} className="backbutton">
+            <button type="reset" onClick={e => handleCancel(e)} className="backbutton">
               Clear
             </button>
           )
@@ -259,11 +259,11 @@ function PlanCard(props) {
 
       <div className="form-edit">
         {props.editing === editkey ? (
-          <button type="submit" onClick={(e) => handleUpdate(e)} className="gobutton">
+          <button type="submit" onClick={e => handleUpdate(e)} className="gobutton">
             Update
           </button>
         ) : (
-          <button type="button" onClick={props.create ? (e) => handleUpdate(e) : (e) => handleClick(e)} className="gobutton">
+          <button type="button" onClick={props.create ? e => handleUpdate(e) : e => handleClick(e)} className="gobutton">
             {props.create ? "Create" : "Edit"}
           </button>
         )}

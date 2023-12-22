@@ -74,7 +74,6 @@ function CreateApp(props) {
 
   // change formdata on input change
   const handleInputChange = e => {
-    console.log(e.target.value)
     const { name, value } = e.target
     setFormData(prevData => ({
       ...prevData,
@@ -165,7 +164,7 @@ function CreateApp(props) {
       <h2 style={{ width: "max-content" }}>Create App Details</h2>
       <form onSubmit={handleSubmit} className="appinfo-form">
         <label style={{ gridArea: "acronym-title" }}>App Acronym*</label>
-        <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={e => handleInputChange(e)} maxLength="100" />
+        <input style={{ gridArea: "acronym" }} type="text" name="App_Acronym" onChange={e => handleInputChange(e)} maxLength="235" />
 
         <label style={{ gridArea: "rnumber-title" }}>App Rnumber*</label>
         <input
@@ -174,10 +173,10 @@ function CreateApp(props) {
           name="App_Rnumber"
           min="0"
           step="1"
-          max="9223372036854775807"
+          max="18446744073709551615"
           onInput={e => {
             if (!/^[0-9]+$/.test(e.target.value) && e.target.value !== "") e.target.value = formData.App_Rnumber
-            if (e.target.value > 9223372036854775807n) e.target.value = 9223372036854775807n
+            if (e.target.value > 18446744073709551615n) e.target.value = 18446744073709551615n
           }}
           onChange={e => handleInputChange(e)}
         />

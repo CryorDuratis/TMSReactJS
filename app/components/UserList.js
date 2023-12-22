@@ -162,7 +162,7 @@ function UserList() {
         <h2>User List</h2>
         <form className="flex-row" onSubmit={e => createGroup(e)}>
           <label htmlFor="group">Create User Group: </label>
-          <input className={error === "conflict" ? "error-outline" : undefined} type="text" name="group" value={group} onChange={e => setGroup(e.target.value)} />
+          <input className={error === "conflict" ? "error-outline" : undefined} type="text" name="group" value={group} onChange={e => setGroup(e.target.value)} maxLength={255} />
           <button type="button" onClick={e => createGroup(e)} className="gobutton">
             Create Group
           </button>

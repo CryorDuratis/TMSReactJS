@@ -255,11 +255,11 @@ function UserCard(props) {
 
   return (
     <form className="user-form">
-      <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.username} className={error ? "form-username error-outline" : "form-username"} />
+      <input type="text" name="username" value={formData.username} disabled={!props.create} onChange={e => handleInputChange(e)} title={formData.username} className={error ? "form-username error-outline" : "form-username"} maxLength={255} />
 
-      <input type="password" name="password" value={password} placeholder="********" disabled={props.editing !== editkey && !props.create} onChange={e => setPassword(e.target.value)} className={error ? "form-password error-outline" : "form-password"} />
+      <input type="password" name="password" value={password} placeholder="********" disabled={props.editing !== editkey && !props.create} onChange={e => setPassword(e.target.value)} className={error ? "form-password error-outline" : "form-password"} maxLength={10} />
 
-      <input type="text" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-email" />
+      <input type="text" name="email" value={formData.email} disabled={props.editing !== editkey && !props.create} onChange={e => handleInputChange(e)} className="form-email" maxLength={255} />
 
       <div className="form-role">
         <button type="button" name="role" value={selectedRoles !== "" ? selectedRoles : "user"} disabled={props.editing !== editkey && !props.create} onClick={e => togglePopup(e)}>

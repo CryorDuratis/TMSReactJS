@@ -152,7 +152,7 @@ function CreateTask(props) {
       <h2 style={{ width: "max-content" }}>Create Task</h2>
       <form onSubmit={handleSubmit} className="create-task-form">
         <label htmlFor="Task_name">Task Name*</label>
-        <input type="text" name="Task_name" value={formData.Task_name} onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} maxLength={100} />
+        <input type="text" name="Task_name" value={formData.Task_name} onChange={e => handleInputChange(e)} className={error ? "error-outline" : undefined} maxLength={255} />
 
         {/* <label htmlFor="Task_id">Task ID</label>
         <input type="text" name="Task_id" value={formData.Task_id} disabled /> */}
