@@ -330,7 +330,7 @@ function EditTask(props) {
               </button>
             </div>
             <div className="flex-row" style={{ flexDirection: "row-reverse" }}>
-              {isAuth && editplanpermit && (
+              {isAuth && taskData.Task_state !== "Done" && (
                 <button type="button" className="gobutton" onClick={e => handleSubmit(e, "edit")}>
                   Save
                 </button>
